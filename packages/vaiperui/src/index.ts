@@ -6,6 +6,7 @@ export type {
     ButtonColors,
     ButtonHover,
     ButtonProps,
+    ButtonRadius,
     ButtonSize,
     ButtonVariant,
 } from "./components/Button/types";

@@ -16,6 +16,7 @@ const meta = {
             options: ["primary", "success", "warning", "danger"],
         },
         size: { control: "select", options: ["sm", "md", "lg"] },
+        radius: { control: "select", options: ["none", "sm", "md", "lg", "full"] },
         hover: { control: "select", options: ["none", "lift", "scale", "glow"] },
         animation: {
             control: "select",
@@ -157,6 +158,19 @@ export const Sizes: Story = {
             <Button size="sm">Small</Button>
             <Button size="md">Medium</Button>
             <Button size="lg">Large</Button>
+        </div>
+    ),
+};
+
+export const Radius: Story = {
+    args: { children: undefined },
+    render: () => (
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <Button radius="none">None</Button>
+            <Button radius="sm">Small</Button>
+            <Button radius="md">Medium</Button>
+            <Button radius="lg">Large</Button>
+            <Button radius="full">Full</Button>
         </div>
     ),
 };

@@ -20,6 +20,22 @@ describe("Button", () => {
         expect(button.className).toContain("h-12");
     });
 
+    it("applies the default md radius", () => {
+        render(<Button>Radius</Button>);
+        expect(screen.getByRole("button", { name: "Radius" }).className).toContain("rounded-md");
+    });
+
+    it.each([
+        ["none", "rounded-none"],
+        ["sm", "rounded-sm"],
+        ["md", "rounded-md"],
+        ["lg", "rounded-lg"],
+        ["full", "rounded-full"],
+    ] as const)("applies the %s radius", (radius, className) => {
+        render(<Button radius={radius}>{radius}</Button>);
+        expect(screen.getByRole("button", { name: radius }).className).toContain(className);
+    });
+
     it("forwards the disabled state", () => {
         render(<Button disabled>Disabled</Button>);
         expect(screen.getByRole("button", { name: "Disabled" })).toBeDisabled();
