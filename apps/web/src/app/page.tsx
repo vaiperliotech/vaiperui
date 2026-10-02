@@ -8,9 +8,11 @@ export default function Home() {
                 <p className="text-neutral-600">Playground da biblioteca de componentes.</p>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-3">
-                <Button>Primary</Button>
-                <Button variant="secondary">Secondary</Button>
-                <Button variant="ghost">Ghost</Button>
+                <Button variant="default">Default</Button>
+                <Button variant="primary">Primary</Button>
+                <Button variant="success">Success</Button>
+                <Button variant="warning">Warning</Button>
+                <Button variant="danger">Danger</Button>
             </div>
         </main>
     );

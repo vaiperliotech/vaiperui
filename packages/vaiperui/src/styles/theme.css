@@ -1,14 +1,58 @@
 @theme {
-    --color-brand-50: #eef4ff;
-    --color-brand-100: #d9e6ff;
-    --color-brand-200: #bcd3ff;
-    --color-brand-300: #8eb5ff;
-    --color-brand-400: #598cff;
-    --color-brand-500: #3366ff;
-    --color-brand-600: #1f47f5;
-    --color-brand-700: #1836e1;
-    --color-brand-800: #1a2fb6;
-    --color-brand-900: #1b2e8f;
+    --color-primary-50: #eef4ff;
+    --color-primary-100: #d9e6ff;
+    --color-primary-200: #bcd3ff;
+    --color-primary-300: #8eb5ff;
+    --color-primary-400: #598cff;
+    --color-primary-500: #3366ff;
+    --color-primary-600: #1f47f5;
+    --color-primary-700: #1836e1;
+    --color-primary-800: #1a2fb6;
+    --color-primary-900: #1b2e8f;
+
+    --color-success-50: #ebfff3;
+    --color-success-100: #c5fcdb;
+    --color-success-200: #99f5be;
+    --color-success-300: #55e790;
+    --color-success-400: #18dc67;
+    --color-success-500: #00c950;
+    --color-success-600: #00a341;
+    --color-success-700: #008535;
+    --color-success-800: #006b2b;
+    --color-success-900: #005221;
+
+    --color-warning-50: #fffbf0;
+    --color-warning-100: #fcecc0;
+    --color-warning-200: #f4db94;
+    --color-warning-300: #eac96c;
+    --color-warning-400: #e9bb3a;
+    --color-warning-500: #f0b100;
+    --color-warning-600: #cb9600;
+    --color-warning-700: #a67a00;
+    --color-warning-800: #815f00;
+    --color-warning-900: #5c4400;
+
+    --color-danger-50: #fff0f1;
+    --color-danger-100: #fbcbce;
+    --color-danger-200: #f5aaad;
+    --color-danger-300: #ec8b8f;
+    --color-danger-400: #eb646b;
+    --color-danger-500: #fb2c36;
+    --color-danger-600: #f00510;
+    --color-danger-700: #be040d;
+    --color-danger-800: #8c0309;
+    --color-danger-900: #5a0206;
+
+    --color-default-50: #f6f7f9;
+    --color-default-100: #d8dde3;
+    --color-default-200: #bcc3cd;
+    --color-default-300: #9fa9b6;
+    --color-default-400: #818fa2;
+    --color-default-500: #62748e;
+    --color-default-600: #536278;
+    --color-default-700: #445062;
+    --color-default-800: #353e4c;
+    --color-default-900: #252c36;
 
     --radius-card: 0.75rem;
 }

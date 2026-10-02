@@ -12,7 +12,7 @@ describe("cn", () => {
     });
 
     it("resolves conflicts across custom theme tokens", () => {
-        expect(cn("bg-brand-600", "bg-red-500")).toBe("bg-red-500");
+        expect(cn("bg-primary-600", "bg-danger-500")).toBe("bg-danger-500");
     });
 
     it("ignores falsy values and supports clsx objects", () => {

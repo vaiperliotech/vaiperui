@@ -11,18 +11,29 @@ describe("Button", () => {
 
     it("applies the variant and size classes", () => {
         render(
-            <Button variant="secondary" size="lg">
+            <Button variant="primary" size="lg">
                 Big
             </Button>,
         );
         const button = screen.getByRole("button", { name: "Big" });
-        expect(button.className).toContain("bg-neutral-100");
+        expect(button.className).toContain("bg-primary-500");
         expect(button.className).toContain("h-12");
     });
 
     it("forwards the disabled state", () => {
         render(<Button disabled>Disabled</Button>);
         expect(screen.getByRole("button", { name: "Disabled" })).toBeDisabled();
+    });
+
+    it.each([
+        ["default", "bg-default-500"],
+        ["primary", "bg-primary-500"],
+        ["success", "bg-success-500"],
+        ["warning", "bg-warning-500"],
+        ["danger", "bg-danger-500"],
+    ] as const)("applies the %s variant color", (variant, className) => {
+        render(<Button variant={variant}>Semantic</Button>);
+        expect(screen.getByRole("button", { name: "Semantic" }).className).toContain(className);
     });
 
     it("lets className override the size typography", () => {
@@ -37,9 +48,9 @@ describe("Button", () => {
     });
 
     it("lets className override the variant styles", () => {
-        render(<Button className="bg-red-500">Override</Button>);
+        render(<Button className="bg-danger-500">Override</Button>);
         const button = screen.getByRole("button", { name: "Override" });
-        expect(button.className).toContain("bg-red-500");
-        expect(button.className).not.toContain("bg-brand-600");
+        expect(button.className).toContain("bg-danger-500");
+        expect(button.className).not.toContain("bg-primary-500");
     });
 });
