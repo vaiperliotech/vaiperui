@@ -1,0 +1,4 @@
+@import "tailwindcss";
+@import "vaiperui/theme.css";
+
+@source "../../../packages/vaiperui/src";
