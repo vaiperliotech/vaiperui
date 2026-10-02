@@ -1,14 +1,14 @@
 @theme {
-  --color-brand-50: #eef4ff;
-  --color-brand-100: #d9e6ff;
-  --color-brand-200: #bcd3ff;
-  --color-brand-300: #8eb5ff;
-  --color-brand-400: #598cff;
-  --color-brand-500: #3366ff;
-  --color-brand-600: #1f47f5;
-  --color-brand-700: #1836e1;
-  --color-brand-800: #1a2fb6;
-  --color-brand-900: #1b2e8f;
+    --color-brand-50: #eef4ff;
+    --color-brand-100: #d9e6ff;
+    --color-brand-200: #bcd3ff;
+    --color-brand-300: #8eb5ff;
+    --color-brand-400: #598cff;
+    --color-brand-500: #3366ff;
+    --color-brand-600: #1f47f5;
+    --color-brand-700: #1836e1;
+    --color-brand-800: #1a2fb6;
+    --color-brand-900: #1b2e8f;
 
-  --radius-card: 0.75rem;
+    --radius-card: 0.75rem;
 }

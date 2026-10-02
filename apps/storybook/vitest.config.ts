@@ -8,14 +8,14 @@ import { defineConfig } from "vitest/config";
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  plugins: [storybookTest({ configDir: path.join(dirname, ".storybook") })],
-  test: {
-    name: "storybook",
-    browser: {
-      enabled: true,
-      headless: true,
-      provider: playwright(),
-      instances: [{ browser: "chromium" }],
+    plugins: [storybookTest({ configDir: path.join(dirname, ".storybook") })],
+    test: {
+        name: "storybook",
+        browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright(),
+            instances: [{ browser: "chromium" }],
+        },
     },
-  },
 });

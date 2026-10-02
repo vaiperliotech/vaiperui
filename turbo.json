@@ -1,27 +1,27 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "ui": "tui",
-  "globalDependencies": ["packages/config/**", "pnpm-workspace.yaml"],
-  "tasks": {
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "storybook-static/**"]
-    },
-    "typecheck": {
-      "outputs": []
-    },
-    "lint": {
-      "outputs": []
-    },
-    "test": {
-      "outputs": []
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "clean": {
-      "cache": false
+    "$schema": "https://turbo.build/schema.json",
+    "ui": "tui",
+    "globalDependencies": ["packages/config/**", "pnpm-workspace.yaml"],
+    "tasks": {
+        "build": {
+            "dependsOn": ["^build"],
+            "outputs": ["dist/**", ".next/**", "!.next/cache/**", "storybook-static/**"]
+        },
+        "typecheck": {
+            "outputs": []
+        },
+        "lint": {
+            "outputs": []
+        },
+        "test": {
+            "outputs": []
+        },
+        "dev": {
+            "cache": false,
+            "persistent": true
+        },
+        "clean": {
+            "cache": false
+        }
     }
-  }
 }

@@ -1,41 +1,41 @@
 {
-  "name": "@vaiperui/storybook",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "storybook dev -p 6006",
-    "build": "storybook build",
-    "test": "vitest run",
-    "typecheck": "tsc --noEmit",
-    "lint": "biome check .",
-    "format": "biome format --write .",
-    "clean": "rm -rf storybook-static .turbo"
-  },
-  "dependencies": {
-    "react": "catalog:",
-    "react-dom": "catalog:",
-    "vaiperui": "catalog:"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "catalog:",
-    "@storybook/addon-a11y": "catalog:",
-    "@storybook/addon-docs": "catalog:",
-    "@storybook/addon-vitest": "catalog:",
-    "@storybook/react-vite": "catalog:",
-    "@tailwindcss/vite": "catalog:",
-    "@types/node": "catalog:",
-    "@types/react": "catalog:",
-    "@types/react-dom": "catalog:",
-    "@vaiperui/config": "catalog:",
-    "@vitejs/plugin-react": "catalog:",
-    "@vitest/browser": "catalog:",
-    "@vitest/browser-playwright": "catalog:",
-    "playwright": "catalog:",
-    "storybook": "catalog:",
-    "tailwindcss": "catalog:",
-    "typescript": "catalog:",
-    "vite": "catalog:",
-    "vitest": "catalog:"
-  }
+    "name": "@vaiperui/storybook",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "storybook dev -p 6006",
+        "build": "storybook build",
+        "test": "vitest run",
+        "typecheck": "tsc --noEmit",
+        "lint": "biome check .",
+        "format": "biome format --write .",
+        "clean": "rm -rf storybook-static .turbo"
+    },
+    "dependencies": {
+        "react": "catalog:",
+        "react-dom": "catalog:",
+        "vaiperui": "catalog:"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "catalog:",
+        "@storybook/addon-a11y": "catalog:",
+        "@storybook/addon-docs": "catalog:",
+        "@storybook/addon-vitest": "catalog:",
+        "@storybook/react-vite": "catalog:",
+        "@tailwindcss/vite": "catalog:",
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "@vaiperui/config": "catalog:",
+        "@vitejs/plugin-react": "catalog:",
+        "@vitest/browser": "catalog:",
+        "@vitest/browser-playwright": "catalog:",
+        "playwright": "catalog:",
+        "storybook": "catalog:",
+        "tailwindcss": "catalog:",
+        "typescript": "catalog:",
+        "vite": "catalog:",
+        "vitest": "catalog:"
+    }
 }

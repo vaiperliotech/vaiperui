@@ -1,8 +1,8 @@
 {
-  "extends": "@vaiperui/config/tsconfig.base.json",
-  "compilerOptions": {
-    "types": ["@testing-library/jest-dom", "node"]
-  },
-  "include": ["src", "vitest.config.ts", "vitest.setup.ts", "tsup.config.ts"],
-  "exclude": ["dist", "node_modules"]
+    "extends": "@vaiperui/config/tsconfig.base.json",
+    "compilerOptions": {
+        "types": ["@testing-library/jest-dom", "node"]
+    },
+    "include": ["src", "vitest.config.ts", "vitest.setup.ts", "tsup.config.ts"],
+    "exclude": ["dist", "node_modules"]
 }

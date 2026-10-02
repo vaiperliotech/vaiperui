@@ -1,10 +1,10 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "jsx": "preserve",
-    "allowJs": true,
-    "incremental": true,
-    "plugins": [{ "name": "next" }]
-  }
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "jsx": "preserve",
+        "allowJs": true,
+        "incremental": true,
+        "plugins": [{ "name": "next" }]
+    }
 }
