@@ -2,7 +2,8 @@
     "extends": "@vaiperui/config/tsconfig.nextjs.json",
     "compilerOptions": {
         "paths": {
-            "@/*": ["./src/*"]
+            "@/*": ["./src/*"],
+            "vaiperui": ["../../packages/vaiperui/src/index.ts"]
         }
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
