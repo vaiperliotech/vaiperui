@@ -52,4 +52,98 @@ describe("Button", () => {
         expect(button.className).toContain("bg-danger-500");
         expect(button.className).not.toContain("bg-primary-500");
     });
+
+    it("applies no hover effect by default", () => {
+        render(<Button>Static</Button>);
+        const button = screen.getByRole("button", { name: "Static" });
+        expect(button.className).not.toContain("hover:-translate-y-0.5");
+        expect(button.className).not.toContain("hover:scale-105");
+    });
+
+    it.each([
+        ["lift", "hover:-translate-y-0.5"],
+        ["scale", "hover:scale-105"],
+        ["glow", "hover:shadow-lg"],
+    ] as const)("applies the %s hover effect", (hover, className) => {
+        render(<Button hover={hover}>{hover}</Button>);
+        expect(screen.getByRole("button", { name: hover }).className).toContain(className);
+    });
+
+    it("glows with the variant color", () => {
+        render(
+            <Button hover="glow" variantColor="danger">
+                Delete
+            </Button>,
+        );
+        expect(screen.getByRole("button", { name: "Delete" }).className).toContain(
+            "hover:shadow-danger-500/60",
+        );
+    });
+
+    it("runs no animation by default", () => {
+        render(<Button>Still</Button>);
+        expect(screen.getByRole("button", { name: "Still" }).className).not.toContain("animate-");
+    });
+
+    it.each([
+        ["float", "motion-safe:animate-float"],
+        ["pulse", "motion-safe:animate-pulse-soft"],
+        ["wiggle", "motion-safe:animate-wiggle"],
+        ["wobble", "motion-safe:animate-wobble"],
+        ["nudge", "motion-safe:animate-nudge"],
+        ["jelly", "motion-safe:animate-jelly"],
+        ["heartbeat", "motion-safe:animate-heartbeat"],
+        ["jump", "motion-safe:animate-jump"],
+        ["glow", "motion-safe:animate-glow"],
+        ["gradient", "motion-safe:animate-gradient"],
+        ["shine", "motion-safe:before:animate-shine"],
+    ] as const)("applies the %s animation", (animation, className) => {
+        render(<Button animation={animation}>{animation}</Button>);
+        expect(screen.getByRole("button", { name: animation }).className).toContain(className);
+    });
+
+    it("uses the variant color for the gradient animation", () => {
+        render(
+            <Button animation="gradient" variantColor="success">
+                Gradient
+            </Button>,
+        );
+        const button = screen.getByRole("button", { name: "Gradient" });
+        expect(button.className).toContain("from-success-400");
+        expect(button.className).toContain("via-success-500");
+        expect(button.className).toContain("to-success-600");
+    });
+
+    it("uses the variant color for the glow animation", () => {
+        render(
+            <Button animation="glow" variantColor="danger">
+                Glow
+            </Button>,
+        );
+        expect(screen.getByRole("button", { name: "Glow" }).className).toContain(
+            "[--btn-glow:var(--color-danger-500)]",
+        );
+    });
+
+    it("renders no icons by default", () => {
+        render(<Button>Save</Button>);
+        expect(
+            screen.getByRole("button", { name: "Save" }).querySelector("[data-testid]"),
+        ).toBeNull();
+    });
+
+    it("renders start and end icons around the label", () => {
+        render(
+            <Button
+                iconStart={<span data-testid="icon-start">+</span>}
+                iconEnd={<span data-testid="icon-end">-</span>}
+            >
+                Save
+            </Button>,
+        );
+        const button = screen.getByRole("button");
+        expect(button).toContainElement(screen.getByTestId("icon-start"));
+        expect(button).toContainElement(screen.getByTestId("icon-end"));
+        expect(button).toHaveTextContent("+Save-");
+    });
 });

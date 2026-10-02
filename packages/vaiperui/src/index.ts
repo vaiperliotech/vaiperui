@@ -1,10 +1,12 @@
 "use client";
 
-export {
-    Button,
-    type ButtonColors,
-    type ButtonProps,
-    type ButtonSize,
-    type ButtonVariant,
-} from "./components/Button/Button";
+export { Button } from "./components/Button/Button";
+export type {
+    ButtonAnimation,
+    ButtonColors,
+    ButtonHover,
+    ButtonProps,
+    ButtonSize,
+    ButtonVariant,
+} from "./components/Button/types";
 export { cn } from "./lib/cn";
