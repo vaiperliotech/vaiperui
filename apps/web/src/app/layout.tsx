@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
@@ -13,6 +14,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <html lang="pt-BR">
             <body className="min-h-screen bg-neutral-50 text-neutral-900 antialiased">
                 {children}
+                <Analytics />
             </body>
         </html>
     );
