@@ -11,7 +11,7 @@ describe("Button", () => {
 
     it("applies the variant and size classes", () => {
         render(
-            <Button variant="primary" size="lg">
+            <Button variantColor="primary" size="lg">
                 Big
             </Button>,
         );
@@ -26,13 +26,12 @@ describe("Button", () => {
     });
 
     it.each([
-        ["default", "bg-default-500"],
         ["primary", "bg-primary-500"],
         ["success", "bg-success-500"],
         ["warning", "bg-warning-500"],
         ["danger", "bg-danger-500"],
-    ] as const)("applies the %s variant color", (variant, className) => {
-        render(<Button variant={variant}>Semantic</Button>);
+    ] as const)("applies the %s variant color", (variantColor, className) => {
+        render(<Button variantColor={variantColor}>Semantic</Button>);
         expect(screen.getByRole("button", { name: "Semantic" }).className).toContain(className);
     });
 

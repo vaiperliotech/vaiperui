@@ -2,6 +2,7 @@
 
 export {
     Button,
+    type ButtonColors,
     type ButtonProps,
     type ButtonSize,
     type ButtonVariant,

@@ -9,7 +9,11 @@ const meta = {
     argTypes: {
         variant: {
             control: "select",
-            options: ["default", "primary", "success", "warning", "danger"],
+            options: ["solid", "solid-inverse", "outlined", "outlined2", "transparent"],
+        },
+        variantColor: {
+            control: "select",
+            options: ["primary", "success", "warning", "danger"],
         },
         size: { control: "select", options: ["sm", "md", "lg"] },
     },
@@ -18,25 +22,112 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = { args: { variant: "default" } };
+export const Default: Story = {};
 
-export const Primary: Story = { args: { variant: "primary" } };
+export const Primary: Story = { args: { variantColor: "primary" } };
 
-export const Success: Story = { args: { variant: "success" } };
+export const Success: Story = { args: { variantColor: "success" } };
 
-export const Warning: Story = { args: { variant: "warning" } };
+export const Warning: Story = { args: { variantColor: "warning" } };
 
-export const Danger: Story = { args: { variant: "danger" } };
+export const Danger: Story = { args: { variantColor: "danger" } };
+
+export const Outlined: Story = { args: { variant: "outlined", variantColor: "primary" } };
+
+export const SolidInverse: Story = { args: { variant: "solid-inverse", variantColor: "primary" } };
+
+export const Outlined2: Story = { args: { variant: "outlined2", variantColor: "primary" } };
+
+export const Transparent: Story = { args: { variant: "transparent", variantColor: "primary" } };
 
 export const Variants: Story = {
     args: { children: undefined },
     render: () => (
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Button variant="default">Default</Button>
-            <Button variant="primary">Primary</Button>
-            <Button variant="success">Success</Button>
-            <Button variant="warning">Warning</Button>
-            <Button variant="danger">Danger</Button>
+            <Button variantColor="primary">Primary</Button>
+            <Button variantColor="success">Success</Button>
+            <Button variantColor="warning">Warning</Button>
+            <Button variantColor="danger">Danger</Button>
+        </div>
+    ),
+};
+
+export const OutlinedVariants: Story = {
+    args: { children: undefined },
+    render: () => (
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <Button variant="outlined" variantColor="primary">
+                Primary
+            </Button>
+            <Button variant="outlined" variantColor="success">
+                Success
+            </Button>
+            <Button variant="outlined" variantColor="warning">
+                Warning
+            </Button>
+            <Button variant="outlined" variantColor="danger">
+                Danger
+            </Button>
+        </div>
+    ),
+};
+
+export const SolidInverseVariants: Story = {
+    args: { children: undefined },
+    render: () => (
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <Button variant="solid-inverse" variantColor="primary">
+                Primary
+            </Button>
+            <Button variant="solid-inverse" variantColor="success">
+                Success
+            </Button>
+            <Button variant="solid-inverse" variantColor="warning">
+                Warning
+            </Button>
+            <Button variant="solid-inverse" variantColor="danger">
+                Danger
+            </Button>
+        </div>
+    ),
+};
+
+export const Outlined2Variants: Story = {
+    args: { children: undefined },
+    render: () => (
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <Button variant="outlined2" variantColor="primary">
+                Primary
+            </Button>
+            <Button variant="outlined2" variantColor="success">
+                Success
+            </Button>
+            <Button variant="outlined2" variantColor="warning">
+                Warning
+            </Button>
+            <Button variant="outlined2" variantColor="danger">
+                Danger
+            </Button>
+        </div>
+    ),
+};
+
+export const TransparentVariants: Story = {
+    args: { children: undefined },
+    render: () => (
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <Button variant="transparent" variantColor="primary">
+                Primary
+            </Button>
+            <Button variant="transparent" variantColor="success">
+                Success
+            </Button>
+            <Button variant="transparent" variantColor="warning">
+                Warning
+            </Button>
+            <Button variant="transparent" variantColor="danger">
+                Danger
+            </Button>
         </div>
     ),
 };
