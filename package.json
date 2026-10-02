@@ -24,6 +24,7 @@
         "lint": "turbo run lint",
         "format": "biome format --write .",
         "format:check": "biome ci .",
+        "imports": "biome check --write --formatter-enabled=false --linter-enabled=false .",
         "clean": "turbo run clean"
     },
     "devDependencies": {
