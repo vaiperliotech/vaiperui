@@ -24,4 +24,22 @@ describe("Button", () => {
     render(<Button disabled>Disabled</Button>);
     expect(screen.getByRole("button", { name: "Disabled" })).toBeDisabled();
   });
+
+  it("lets className override the size typography", () => {
+    render(
+      <Button size="sm" className="text-base">
+        Override
+      </Button>,
+    );
+    const button = screen.getByRole("button", { name: "Override" });
+    expect(button.className).toContain("text-base");
+    expect(button.className).not.toContain("text-sm");
+  });
+
+  it("lets className override the variant styles", () => {
+    render(<Button className="bg-red-500">Override</Button>);
+    const button = screen.getByRole("button", { name: "Override" });
+    expect(button.className).toContain("bg-red-500");
+    expect(button.className).not.toContain("bg-brand-600");
+  });
 });

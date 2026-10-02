@@ -6,3 +6,4 @@ export {
   type ButtonSize,
   type ButtonVariant,
 } from "./components/Button/Button";
+export { cn } from "./lib/cn";

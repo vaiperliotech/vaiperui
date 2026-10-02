@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { cn } from "../../lib/cn";
+
 export type ButtonVariant = "primary" | "secondary" | "ghost";
 export type ButtonSize = "sm" | "md" | "lg";
 
@@ -27,9 +29,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   { className, variant = "primary", size = "md", type = "button", ...props },
   ref,
 ) {
-  const classes = [baseStyles, variantStyles[variant], sizeStyles[size], className]
-    .filter(Boolean)
-    .join(" ");
+  const classes = cn(baseStyles, variantStyles[variant], sizeStyles[size], className);
 
   return <button ref={ref} type={type} className={classes} {...props} />;
 });

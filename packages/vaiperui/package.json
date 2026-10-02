@@ -28,6 +28,10 @@
     "format": "biome format --write .",
     "clean": "rm -rf dist .turbo"
   },
+  "dependencies": {
+    "clsx": "catalog:",
+    "tailwind-merge": "catalog:"
+  },
   "peerDependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
