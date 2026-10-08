@@ -1,0 +1,142 @@
+"use client";
+
+import type { ReactNode } from "react";
+import { useState } from "react";
+
+import { CodeBlock } from "@/components/CodeBlock";
+import { MoonIcon, SunIcon } from "@/components/icons";
+import { TerminalWindow } from "@/components/TerminalWindow";
+import { getComponent } from "@/data/components";
+import { variations } from "@/data/variations";
+
+function ThemeToggle({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
+    return (
+        <button
+            type="button"
+            onClick={onToggle}
+            aria-label={dark ? "Alternar para claro" : "Alternar para escuro"}
+            aria-pressed={dark}
+            title={dark ? "Alternar para claro" : "Alternar para escuro"}
+            className="flex size-7 items-center justify-center rounded-md border border-line-strong bg-bg-0 text-ink-faint transition-colors hover:border-accent-blue hover:text-ink"
+        >
+            {dark ? <SunIcon className="size-3.5" /> : <MoonIcon className="size-3.5" />}
+        </button>
+    );
+}
+
+function PreviewWindow({
+    children,
+    contentClassName = "",
+}: {
+    children: ReactNode;
+    contentClassName?: string;
+}) {
+    const [dark, setDark] = useState(false);
+
+    return (
+        <TerminalWindow
+            title="preview"
+            bodyClassName="p-0"
+            actions={<ThemeToggle dark={dark} onToggle={() => setDark((value) => !value)} />}
+        >
+            <div className={dark ? "dark" : ""}>
+                <div
+                    className={`flex flex-wrap items-center justify-center p-6 ${
+                        dark ? "bg-neutral-950" : "bg-white"
+                    } ${contentClassName}`}
+                >
+                    {children}
+                </div>
+            </div>
+        </TerminalWindow>
+    );
+}
+
+export function ComponentDoc({ slug }: { slug: string }) {
+    const component = getComponent(slug);
+    if (!component) return null;
+
+    const gallery = variations[slug] ?? [];
+
+    return (
+        <article>
+            <p className="font-mono text-xs text-ink-faint">componentes / {component.slug}</p>
+            <h1 className="mt-2 font-display text-3xl font-semibold text-ink">{component.name}</h1>
+            <p className="mt-3 max-w-xl text-ink-dim">{component.blurb}</p>
+
+            <section className="mt-10">
+                <h2 className="font-display text-lg font-semibold text-ink">Como usar</h2>
+                <p className="mt-3 max-w-2xl text-ink-dim">{component.usage}</p>
+                <div className="mt-5 space-y-4">
+                    <PreviewWindow contentClassName="min-h-40 gap-4">
+                        {component.demo}
+                    </PreviewWindow>
+                    <TerminalWindow title={`${component.name}.tsx`} bodyClassName="p-4">
+                        <CodeBlock code={component.code} />
+                    </TerminalWindow>
+                </div>
+            </section>
+
+            {gallery.map((group) => (
+                <section key={group.title} className="mt-16">
+                    <h2 className="font-display text-lg font-semibold text-ink">{group.title}</h2>
+                    {group.description ? (
+                        <p className="mt-2 max-w-2xl text-ink-dim">{group.description}</p>
+                    ) : null}
+                    <div className="mt-5 space-y-4">
+                        <PreviewWindow contentClassName="gap-x-8 gap-y-6">
+                            {group.items.map((item) => (
+                                <figure
+                                    key={item.label}
+                                    className="flex flex-col items-center gap-2.5"
+                                >
+                                    <div className="flex min-h-12 items-center justify-center">
+                                        {item.node}
+                                    </div>
+                                    <figcaption className="font-mono text-xs text-ink-faint">
+                                        {item.label}
+                                    </figcaption>
+                                </figure>
+                            ))}
+                        </PreviewWindow>
+                        <TerminalWindow title={group.file} bodyClassName="p-4">
+                            <CodeBlock code={group.code} />
+                        </TerminalWindow>
+                    </div>
+                </section>
+            ))}
+
+            <h2 className="mt-16 font-display text-lg font-semibold text-ink">Props</h2>
+            <div className="mt-4 overflow-x-auto rounded-xl border border-line">
+                <table className="w-full min-w-160 border-collapse text-sm">
+                    <thead>
+                        <tr className="border-b border-line bg-bg-2 text-left font-mono text-xs text-ink-faint">
+                            <th className="px-4 py-2.5 font-medium">Prop</th>
+                            <th className="px-4 py-2.5 font-medium">Valores</th>
+                            <th className="px-4 py-2.5 font-medium">Padrão</th>
+                            <th className="px-4 py-2.5 font-medium">Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {component.props.map((row) => (
+                            <tr key={row.prop} className="border-b border-line last:border-0">
+                                <td className="px-4 py-3 align-top font-mono text-xs text-accent-blue">
+                                    {row.prop}
+                                </td>
+                                <td className="px-4 py-3 align-top font-mono text-xs text-ink-dim">
+                                    {row.values}
+                                </td>
+                                <td className="px-4 py-3 align-top font-mono text-xs text-ink-dim">
+                                    {row.defaultValue}
+                                </td>
+                                <td className="px-4 py-3 align-top text-ink-dim">
+                                    {row.description}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </article>
+    );
+}

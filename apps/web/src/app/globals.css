@@ -2,3 +2,226 @@
 @import "vaiperui/theme.css";
 
 @source "../../../../packages/vaiperui/src";
+
+:root {
+    --bg-0: #05070d;
+    --bg-1: #0a0e18;
+    --bg-2: #111726;
+    --bg-3: #1a2234;
+
+    --ink: #eef2fb;
+    --ink-dim: #9fb0c9;
+    --ink-faint: #7d8fac;
+
+    --line: #ffffff14;
+    --line-strong: #ffffff26;
+
+    --accent-blue: #4da3ff;
+    --accent-blue-soft: #4da3ff1a;
+    --accent-blue-ring: #4da3ff61;
+    --accent-purple: #a78bfa;
+    --accent-purple-soft: #a78bfa1a;
+
+    --mac-red: #ff5f57;
+    --mac-yellow: #febc2e;
+    --mac-green: #28c840;
+}
+
+@theme inline {
+    --color-bg-0: var(--bg-0);
+    --color-bg-1: var(--bg-1);
+    --color-bg-2: var(--bg-2);
+    --color-bg-3: var(--bg-3);
+    --color-ink: var(--ink);
+    --color-ink-dim: var(--ink-dim);
+    --color-ink-faint: var(--ink-faint);
+    --color-line: var(--line);
+    --color-line-strong: var(--line-strong);
+    --color-accent-blue: var(--accent-blue);
+    --color-accent-purple: var(--accent-purple);
+    --color-mac-red: var(--mac-red);
+    --color-mac-yellow: var(--mac-yellow);
+    --color-mac-green: var(--mac-green);
+
+    --font-sans: var(--font-display);
+    --font-display: var(--font-display);
+    --font-mono: var(--font-mono);
+}
+
+body {
+    background: var(--bg-0);
+    color: var(--ink);
+    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+    background: var(--accent-blue-soft);
+    color: var(--ink);
+}
+
+* {
+    scrollbar-color: var(--accent-blue) var(--bg-1);
+    scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--bg-3);
+    border-radius: 999px;
+    border: 2px solid var(--bg-1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-blue);
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+.font-mono,
+code,
+pre {
+    font-variant-ligatures: none;
+}
+
+.tabular-nums {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Grade blueprint tênue atrás do hero, esmaecida nas bordas. */
+.blueprint {
+    background-image:
+        linear-gradient(to right, var(--line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(120% 85% at 50% 0%, black 15%, transparent 75%);
+}
+
+/* Título com destaque: um clarão especular "segue" o cursor sobre o texto
+ * (via --mx/--my, escritos pelo HeroTiles em [data-hero]). O ::after duplica
+ * o texto por cima com um radial-gradient recortado pelas glyphs e blend
+ * screen — a luz "varre" as letras sem esconder o título.
+ */
+.hero-title {
+    position: relative;
+    display: inline-block;
+}
+
+.hero-title::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    mix-blend-mode: screen;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-image: radial-gradient(
+        75% 95% at calc(var(--mx, 0.5) * 100%) calc(var(--my, 0.4) * 100%),
+        rgb(255 255 255 / 0.9),
+        rgb(255 255 255 / 0) 60%
+    );
+    pointer-events: none;
+}
+
+@keyframes fade-up {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 20px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.animate-fade-up {
+    animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes halo {
+    0%,
+    100% {
+        opacity: 0.35;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+        opacity: 0.55;
+        transform: translate3d(0, -1%, 0) scale(1.03);
+    }
+}
+
+.animate-halo {
+    animation: halo 12s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* biome-ignore-start lint/complexity/noImportantStyles: última linha de defesa contra movimento para quem pediu ao SO para reduzi-lo */
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    /* biome-ignore-end lint/complexity/noImportantStyles: fim do bloco de reduced-motion */
+}
+
+@keyframes caret-blink {
+    0%,
+    49% {
+        opacity: 1;
+    }
+    50%,
+    100% {
+        opacity: 0;
+    }
+}
+
+.caret-blink {
+    animation: caret-blink 1s step-end infinite;
+}
+
+@keyframes type-install {
+    from {
+        width: 0;
+    }
+    to {
+        width: 35ch;
+    }
+}
+
+.type-install {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: bottom;
+    width: 35ch;
+    animation: type-install 1.6s steps(35, end) 0.4s both;
+}
+
+/*
+ * Tailwind wraps `group-hover/code:` in `:where()` to keep its specificity at
+ * zero, but that ties it with the plain `.opacity-0` utility (both end up at
+ * 0,1,0) — a coin flip decided by generation order, not intent. Two combined
+ * classes here (0,2,0) make the reveal win outright instead of depending on it.
+ */
+.code-copy-btn {
+    opacity: 0;
+}
+
+.group\/code:hover .code-copy-btn,
+.code-copy-btn:focus-visible,
+.code-copy-btn.is-copied {
+    opacity: 1;
+}
