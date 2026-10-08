@@ -69,6 +69,17 @@ describe("Button", () => {
         expect(button.className).not.toContain("bg-primary-500");
     });
 
+    it("adds dark mode styles to outlined variants", () => {
+        render(
+            <Button variant="outlined" variantColor="primary">
+                Dark
+            </Button>,
+        );
+        const button = screen.getByRole("button", { name: "Dark" });
+        expect(button.className).toContain("dark:border-primary-800");
+        expect(button.className).toContain("dark:text-primary-300");
+    });
+
     it("applies no hover effect by default", () => {
         render(<Button>Static</Button>);
         const button = screen.getByRole("button", { name: "Static" });

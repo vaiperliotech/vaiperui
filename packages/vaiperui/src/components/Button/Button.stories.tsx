@@ -234,3 +234,25 @@ export const WithIcons: Story = {
 export const Disabled: Story = {
     args: { disabled: true, children: "Disabled" },
 };
+
+export const DarkMode: Story = {
+    args: { children: undefined },
+    parameters: { layout: "fullscreen" },
+    render: () => (
+        <div className="dark flex min-h-screen flex-wrap items-center justify-center gap-3 bg-neutral-950 p-8">
+            <Button variantColor="primary">Primary</Button>
+            <Button variantColor="success">Success</Button>
+            <Button variantColor="warning">Warning</Button>
+            <Button variantColor="danger">Danger</Button>
+            <Button variant="outlined" variantColor="primary">
+                Outlined
+            </Button>
+            <Button variant="outlined2" variantColor="success">
+                Outlined2
+            </Button>
+            <Button variant="transparent" variantColor="danger">
+                Transparent
+            </Button>
+        </div>
+    ),
+};
