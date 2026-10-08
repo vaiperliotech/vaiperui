@@ -1,3 +1,46 @@
+/*
+ * Dark mode is opt-in via a `.dark` class on any ancestor (e.g. `<html class="dark">`).
+ * Without it, components render exactly as the light default.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Semantic surface tokens. Components read these `--vpd-*` variables instead of
+ * hard-coded colors, so consumers can re-theme any state (including dark) by
+ * overriding the variables in their own CSS:
+ *
+ *   .dark { --vpd-surface: #0b0f19; --vpd-text: #e2e8f0; }
+ */
+:root {
+    --vpd-surface: #ffffff;
+    --vpd-surface-muted: #f5f5f5;
+    --vpd-surface-hover: #f5f5f5;
+    --vpd-text: #171717;
+    --vpd-text-secondary: #404040;
+    --vpd-text-muted: #737373;
+    --vpd-text-placeholder: #a3a3a3;
+    --vpd-text-disabled: #a3a3a3;
+    --vpd-border: #d4d4d4;
+    --vpd-border-strong: #a3a3a3;
+    --vpd-border-soft: #e5e5e5;
+    --vpd-border-subtle: #f5f5f5;
+}
+
+.dark {
+    --vpd-surface: #171717;
+    --vpd-surface-muted: #262626;
+    --vpd-surface-hover: #262626;
+    --vpd-text: #f5f5f5;
+    --vpd-text-secondary: #d4d4d4;
+    --vpd-text-muted: #a3a3a3;
+    --vpd-text-placeholder: #737373;
+    --vpd-text-disabled: #525252;
+    --vpd-border: #404040;
+    --vpd-border-strong: #525252;
+    --vpd-border-soft: #262626;
+    --vpd-border-subtle: #171717;
+}
+
 @theme {
     --color-primary-50: var(--color-blue-50);
     --color-primary-100: var(--color-blue-100);
