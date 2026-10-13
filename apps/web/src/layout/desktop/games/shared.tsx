@@ -33,12 +33,16 @@ export function readStored(key: string): string | null {
     }
 }
 
+export const STORAGE_EVENT = "vaiperui:storage";
+
 export function writeStored(key: string, value: string) {
     try {
         localStorage.setItem(key, value);
     } catch {
         // private mode: it just won't persist
     }
+    // storage events only reach other tabs; the desktop widgets listen to this one
+    window.dispatchEvent(new Event(STORAGE_EVENT));
 }
 
 /** A record kept in the browser. `report` returns true when the score is a new record. */

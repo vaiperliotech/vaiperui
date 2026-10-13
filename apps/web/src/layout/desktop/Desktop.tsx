@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { forwardRef, useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
-
+import { makeT } from "@/data/samples";
 import {
     LOCALE_COOKIE,
     LOCALE_COOKIE_MAX_AGE,
@@ -19,6 +19,7 @@ import { Calculator } from "./apps/Calculator";
 import { Calendar } from "./apps/Calendar";
 import { Changelog } from "./apps/Changelog";
 import { Clock } from "./apps/Clock";
+import { Confetti } from "./apps/Confetti";
 import { Converter } from "./apps/Converter";
 import { CssLab } from "./apps/CssLab";
 import { Installer } from "./apps/Installer";
@@ -26,12 +27,16 @@ import { MaskLab } from "./apps/MaskLab";
 import { Minesweeper, minesWindowSize } from "./apps/Minesweeper";
 import { Notes } from "./apps/Notes";
 import { Playground } from "./apps/Playground";
+import { Readme } from "./apps/Readme";
 import { Settings } from "./apps/Settings";
 import { Snake } from "./apps/Snake";
 import { Terminal } from "./apps/Terminal";
 import { ThemeStudio } from "./apps/ThemeStudio";
+import { Trash } from "./apps/Trash";
 import { Battery } from "./Battery";
 import { ClockMenu } from "./ClockMenu";
+import { ContextMenu, type MenuItem } from "./ContextMenu";
+import { type DesktopIconId, DesktopIcons } from "./DesktopIcons";
 import { Breakout } from "./games/Breakout";
 import { BugHunt } from "./games/BugHunt";
 import { ColorMatch } from "./games/ColorMatch";
@@ -47,9 +52,20 @@ import { Wordle } from "./games/Wordle";
 import { AppIcon } from "./icons";
 import { APP_IDS, type AppId, appName, type UtilityId, WINDOW_SIZES } from "./registry";
 import {
+    hiddenFilesStore,
+    iconsStore,
+    notesStore,
+    trashStore,
+    useStore,
+    widgetsStore,
+} from "./stores";
+import { Widgets } from "./Widgets";
+import {
     getWallpaper,
     loadWallpaper,
+    setWallpaper,
     subscribeWallpaper,
+    WALLPAPERS,
     Wallpaper,
     type WallpaperId,
 } from "./wallpaper";
@@ -90,6 +106,10 @@ export function Desktop({
         getWallpaper,
         () => "blueprint" as WallpaperId,
     );
+    const widgetsOn = useStore(widgetsStore);
+    const trash = useStore(trashStore);
+    const [menu, setMenu] = useState<{ x: number; y: number; items: MenuItem[] } | null>(null);
+    const [party, setParty] = useState(false);
     // the Minesweeper window grows with the difficulty chosen inside it
     const [minesSize, setMinesSize] = useState<[number, number]>(() => minesWindowSize("easy"));
     const z = useRef(10);
@@ -185,6 +205,138 @@ export function Desktop({
         [onRestore, pathname, router],
     );
 
+    const t = makeT(locale);
+    const wallpaperNames: Record<WallpaperId, [string, string, string]> = {
+        blueprint: ["Blueprint", "Planta", "Plano"],
+        aurora: ["Aurora", "Aurora", "Aurora"],
+        violet: ["Violet", "Violeta", "Violeta"],
+        stars: ["Stars", "Estrelas", "Estrellas"],
+        plain: ["Plain", "Liso", "Liso"],
+    };
+
+    const openIcon = (id: DesktopIconId) => {
+        if (id === "docs") openPage("/docs");
+        else launch(id);
+    };
+
+    const trashFile = (id: DesktopIconId) => {
+        const name = appName("readme", locale);
+        trashStore.set((list) => [{ id: Date.now(), kind: "file", name, ref: id }, ...list]);
+        hiddenFilesStore.set((hidden) => (hidden.includes(id) ? hidden : [...hidden, id]));
+    };
+
+    function desktopMenu(event: React.MouseEvent) {
+        event.preventDefault();
+        const items: MenuItem[] = [
+            {
+                kind: "item",
+                label: t("New note", "Nova nota", "Nueva nota"),
+                onSelect: () => {
+                    notesStore.set((list) => [{ id: Date.now(), text: "" }, ...list]);
+                    launch("notes");
+                },
+            },
+            {
+                kind: "item",
+                label: t("Open Terminal", "Abrir Terminal", "Abrir Terminal"),
+                onSelect: () => launch("terminal"),
+            },
+            {
+                kind: "item",
+                label: t("Open Apps", "Abrir Apps", "Abrir Apps"),
+                onSelect: () => launch("apps"),
+            },
+            {
+                kind: "item",
+                label: t("Open Games", "Abrir Jogos", "Abrir Juegos"),
+                onSelect: () => launch("arcade"),
+            },
+            { kind: "separator" },
+            { kind: "label", label: t("Wallpaper", "Papel de parede", "Fondo de pantalla") },
+            ...WALLPAPERS.map(
+                (id): MenuItem => ({
+                    kind: "item",
+                    label: wallpaperNames[id][{ en: 0, pt: 1, es: 2 }[locale]] ?? id,
+                    checked: wallpaper === id,
+                    onSelect: () => setWallpaper(id),
+                }),
+            ),
+            { kind: "separator" },
+            {
+                kind: "item",
+                label: widgetsOn
+                    ? t("Hide widgets", "Ocultar widgets", "Ocultar widgets")
+                    : t("Show widgets", "Mostrar widgets", "Mostrar widgets"),
+                onSelect: () => widgetsStore.set(!widgetsOn),
+            },
+            {
+                kind: "item",
+                label: t("Clean up icons", "Organizar ícones", "Ordenar iconos"),
+                onSelect: () => iconsStore.set({}),
+            },
+            { kind: "separator" },
+            {
+                kind: "item",
+                label: t("Back to the site", "Voltar ao site", "Volver al sitio"),
+                onSelect: onRestore,
+            },
+        ];
+        setMenu({ x: event.clientX, y: event.clientY, items });
+    }
+
+    function iconMenu(event: React.MouseEvent, id: DesktopIconId) {
+        const items: MenuItem[] = [
+            { kind: "item", label: t("Open", "Abrir", "Abrir"), onSelect: () => openIcon(id) },
+        ];
+        if (id === "readme") {
+            items.push({
+                kind: "item",
+                label: t("Move to Trash", "Mover para a lixeira", "Mover a la papelera"),
+                onSelect: () => trashFile(id),
+            });
+        }
+        if (id === "trash") {
+            items.push({
+                kind: "item",
+                label: t("Empty Trash", "Esvaziar lixeira", "Vaciar papelera"),
+                disabled: trash.length === 0,
+                onSelect: () => trashStore.set([]),
+            });
+        }
+        setMenu({ x: event.clientX, y: event.clientY, items });
+    }
+
+    // ↑ ↑ ↓ ↓ ← → ← → B A: confetti, and the wallpaper runs through every color for a moment
+    useEffect(() => {
+        const code = [
+            "arrowup",
+            "arrowup",
+            "arrowdown",
+            "arrowdown",
+            "arrowleft",
+            "arrowright",
+            "arrowleft",
+            "arrowright",
+            "b",
+            "a",
+        ];
+        let typed: string[] = [];
+        let timer: number | undefined;
+        const onKey = (event: KeyboardEvent) => {
+            typed = [...typed, event.key.toLowerCase()].slice(-code.length);
+            if (typed.join() !== code.join()) return;
+            typed = [];
+            setParty(true);
+            window.clearTimeout(timer);
+            timer = window.setTimeout(() => setParty(false), 5200);
+        };
+        document.addEventListener("keydown", onKey);
+        return () => {
+            document.removeEventListener("keydown", onKey);
+            window.clearTimeout(timer);
+        };
+    }, []);
+
     // dock magnification: icons grow near the pointer, straight on the DOM (no re-render per move)
     function onDockMove(event: React.MouseEvent<HTMLDivElement>) {
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -258,6 +410,10 @@ export function Desktop({
                 return <Converter active={isOn(id)} locale={locale} />;
             case "cssgen":
                 return <CssLab active={isOn(id)} locale={locale} />;
+            case "trash":
+                return <Trash active={isOn(id)} locale={locale} />;
+            case "readme":
+                return <Readme active={isOn(id)} locale={locale} />;
             case "settings":
                 return <Settings active={isOn(id)} locale={locale} onSwitchLocale={switchLocale} />;
             case "snake":
@@ -293,10 +449,33 @@ export function Desktop({
         }
     }
 
+    // overflow-clip, not -hidden: a hidden box can still be scrolled by the browser when something
+    // inside it takes the focus, which pushes the menu bar out of view for good
     return createPortal(
-        <div className="desktop-in fixed inset-0 z-[100] overflow-hidden bg-bg-0 text-ink">
-            {/* wallpaper (chosen in Settings) */}
-            <Wallpaper id={wallpaper} />
+        <div className="desktop-in fixed inset-0 z-[100] overflow-clip bg-bg-0 text-ink">
+            {/* wallpaper (chosen in Settings); a right click on it opens the desktop menu, which a
+                keyboard user reaches through the dock and the icons */}
+            {/* biome-ignore lint/a11y/noStaticElementInteractions: right click is a pointer shortcut */}
+            <div
+                className={`absolute inset-0 ${party ? "wp-rainbow" : ""}`}
+                onContextMenu={desktopMenu}
+            >
+                <Wallpaper id={wallpaper} />
+            </div>
+
+            <DesktopIcons
+                entries={[
+                    { id: "docs", label: "Docs" },
+                    { id: "apps", label: "Apps" },
+                    { id: "arcade", label: d.games.title },
+                    { id: "readme", label: appName("readme", locale) },
+                    { id: "trash", label: appName("trash", locale) },
+                ]}
+                onOpen={openIcon}
+                onContext={iconMenu}
+                onTrash={trashFile}
+            />
+            {widgetsOn ? <Widgets locale={locale} names={d.games.names} /> : null}
 
             {/* menu bar */}
             <div
@@ -384,6 +563,34 @@ export function Desktop({
                     ))}
                 </div>
             </div>
+
+            {menu ? (
+                <ContextMenu
+                    x={menu.x}
+                    y={menu.y}
+                    items={menu.items}
+                    onClose={() => setMenu(null)}
+                />
+            ) : null}
+
+            {party ? (
+                <>
+                    <div className="pointer-events-none fixed inset-0 z-[5400]">
+                        <Confetti run />
+                    </div>
+                    <p
+                        role="status"
+                        className="toast-in pointer-events-none fixed bottom-28 left-1/2 z-[5400] -translate-x-1/2 rounded-full border border-white/10 bg-bg-1/85 px-4 py-2 font-mono text-ink text-xs backdrop-blur-xl"
+                    >
+                        ↑↑↓↓←→←→ B A ·{" "}
+                        {t(
+                            "cheat code unlocked: +30 lives",
+                            "código secreto liberado: +30 vidas",
+                            "código secreto desbloqueado: +30 vidas",
+                        )}
+                    </p>
+                </>
+            ) : null}
         </div>,
         document.body,
     );

@@ -30,7 +30,8 @@ export type UtilityId =
     | "calendar"
     | "converter"
     | "cssgen";
-export type AppId = "terminal" | "apps" | "arcade" | GameId | UtilityId;
+export type SystemId = "trash" | "readme";
+export type AppId = "terminal" | "apps" | "arcade" | GameId | UtilityId | SystemId;
 
 type Names = [en: string, pt: string, es: string];
 
@@ -119,6 +120,8 @@ export const APP_IDS: AppId[] = [
     "arcade",
     ...GAME_LIST.map((game) => game.id),
     ...UTILITY_LIST.map((app) => app.id),
+    "trash",
+    "readme",
 ];
 
 export const WINDOW_SIZES: Record<AppId, [number, number]> = {
@@ -133,6 +136,8 @@ export const WINDOW_SIZES: Record<AppId, [number, number]> = {
         UtilityId,
         [number, number]
     >),
+    trash: [480, 420],
+    readme: [540, 440],
 };
 
 /** What the terminal accepts after `play`, and as a command of its own. */
@@ -172,7 +177,13 @@ export const APP_SLUGS: Record<string, UtilityId> = {
     settings: "settings",
 };
 
-export const appName = (id: UtilityId, locale: "en" | "pt" | "es"): string => {
-    const names = UTILITY_LIST.find((app) => app.id === id)?.names ?? ["", "", ""];
+const SYSTEM_NAMES: Record<SystemId, Names> = {
+    trash: ["Trash", "Lixeira", "Papelera"],
+    readme: ["readme.txt", "leia-me.txt", "léame.txt"],
+};
+
+export const appName = (id: UtilityId | SystemId, locale: "en" | "pt" | "es"): string => {
+    const names = SYSTEM_NAMES[id as SystemId] ??
+        UTILITY_LIST.find((app) => app.id === id)?.names ?? ["", "", ""];
     return names[{ en: 0, pt: 1, es: 2 }[locale]] ?? "";
 };

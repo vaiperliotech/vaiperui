@@ -3,16 +3,16 @@
 import { useState } from "react";
 
 import { makeT } from "@/data/samples";
-import { usePersistedState } from "../games/shared";
+import { notesStore, trashStore, useStore } from "../stores";
 import { type AppProps, Pane } from "./kit";
-
-type Note = { id: number; text: string };
 
 // Several notes, saved in the browser as you type.
 export function Notes({ locale }: AppProps) {
     const t = makeT(locale);
-    const [notes, setNotes] = usePersistedState<Note[]>("notes", [{ id: 1, text: "" }]);
-    const [selected, setSelected] = useState(1);
+    const notes = useStore(notesStore);
+    const setNotes = notesStore.set;
+    // nothing picked yet means the newest note, so "New note" from the desktop opens that one
+    const [selected, setSelected] = useState<number | null>(null);
     const note = notes.find((item) => item.id === selected) ?? notes[0];
     const text = note?.text ?? "";
     const words = text.trim() ? text.trim().split(/\s+/).length : 0;
@@ -25,6 +25,11 @@ export function Notes({ locale }: AppProps) {
 
     function remove() {
         if (!note) return;
+        // deleted notes wait in the Trash, where they can be restored
+        trashStore.set((list) => [
+            { id: note.id, kind: "note", name: "note", text: note.text },
+            ...list,
+        ]);
         const rest = notes.filter((item) => item.id !== note.id);
         const next = rest.length > 0 ? rest : [{ id: Date.now(), text: "" }];
         setNotes(next);

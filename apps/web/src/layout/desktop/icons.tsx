@@ -4,7 +4,7 @@ const tile =
     "flex size-11 items-center justify-center overflow-hidden rounded-[10px] border border-line-strong";
 
 // Dock and Games-window icons, drawn with primitives so they stay crisp at any size.
-export function AppIcon({ id }: { id: AppId | "page" }) {
+export function AppIcon({ id }: { id: AppId | "page" | "docs" | "trash-full" }) {
     switch (id) {
         case "page":
             return (
@@ -236,6 +236,68 @@ export function AppIcon({ id }: { id: AppId | "page" }) {
                             strokeWidth="1.6"
                         />
                     </svg>
+                </span>
+            );
+        case "docs":
+            return (
+                <span className={`${tile} bg-bg-1`}>
+                    <svg viewBox="0 0 32 32" className="size-8" aria-hidden="true">
+                        <path
+                            d="M5 9a2 2 0 0 1 2-2h6l2.5 3H25a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z"
+                            fill="#3a86f0"
+                        />
+                        <path d="M5 13h22v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z" fill="#4da3ff" />
+                        <path
+                            d="M12 18h8M12 21h5"
+                            stroke="#05070d"
+                            strokeWidth="1.6"
+                            strokeLinecap="round"
+                        />
+                    </svg>
+                </span>
+            );
+        case "trash":
+        case "trash-full":
+            return (
+                <span className={`${tile} bg-bg-1`}>
+                    <svg viewBox="0 0 32 32" className="size-8" aria-hidden="true">
+                        <path
+                            d="M9 11h14l-1.2 15a2 2 0 0 1-2 1.8h-7.6a2 2 0 0 1-2-1.8Z"
+                            fill="#2a3550"
+                            stroke="#7d8fac"
+                            strokeWidth="1.5"
+                            strokeLinejoin="round"
+                        />
+                        <path
+                            d="M7 11h18M13 11V8.5A1.5 1.5 0 0 1 14.5 7h3A1.5 1.5 0 0 1 19 8.5V11"
+                            fill="none"
+                            stroke="#7d8fac"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                        />
+                        <path
+                            d="M13 15v8M16 15v8M19 15v8"
+                            stroke="#5b6a88"
+                            strokeWidth="1.4"
+                            strokeLinecap="round"
+                        />
+                        {id === "trash-full" ? (
+                            <path d="M11 11l2-3 3 2 3-3 2 4Z" fill="#febc2e" />
+                        ) : null}
+                    </svg>
+                </span>
+            );
+        case "readme":
+            return (
+                <span
+                    className={`${tile} flex-col items-start justify-start gap-[3px] bg-[#eef2fb] p-1.5 pt-2`}
+                >
+                    <span className="h-[2px] w-full rounded-full bg-[#05070d]/40" />
+                    <span className="h-[2px] w-full rounded-full bg-[#05070d]/40" />
+                    <span className="h-[2px] w-2/3 rounded-full bg-[#05070d]/40" />
+                    <span className="mt-auto font-bold font-mono text-[8px] text-[#05070d]/70 leading-none">
+                        TXT
+                    </span>
                 </span>
             );
         case "snake":

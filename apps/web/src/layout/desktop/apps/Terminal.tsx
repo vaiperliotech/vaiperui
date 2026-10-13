@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { COMPONENT_NAMES } from "@/data/guides";
 import { isLocale, type Locale, locales } from "@/i18n/config";
+import { RECORDS, readRecord } from "../records";
 import { APP_SLUGS, type AppId, GAME_SLUGS } from "../registry";
 
 type Line = { kind: "in" | "out" | "err"; text: string };
@@ -47,53 +48,21 @@ const COMMANDS = [
 const PAGES = ["docs", "home", ...Object.keys(COMPONENT_NAMES)];
 const MASKS = 9;
 
-// every record the games keep in the browser; `scores` prints them, `scores clear` wipes them
-const RECORDS: Array<[label: string, key: string]> = [
-    ["tic-tac-toe", "tictactoe-score"],
-    ["memory 4x4 (moves)", "memory-best:small"],
-    ["memory 6x6 (moves)", "memory-best:large"],
-    ["color match", "colormatch-best"],
-    ["2048", "2048-best"],
-    ["wordle", "wordle-stats"],
-    ["snake, small map", "snake-best:small"],
-    ["snake, large map", "snake-best:large"],
-    ["minesweeper easy (s)", "mines-best:easy"],
-    ["minesweeper medium (s)", "mines-best:medium"],
-    ["minesweeper hard (s)", "mines-best:hard"],
-    ["minesweeper very hard (s)", "mines-best:veryHard"],
-    ["bug hunt", "bughunt-best"],
-    ["flappy", "flappy-best"],
-    ["dino run", "dino-best"],
-    ["pong (wins)", "pong-wins"],
-    ["breakout", "breakout-best"],
-    ["stack the buttons", "stack-best"],
-    ["space invaders", "invaders-best"],
-];
-
-function readRecord(key: string): string {
-    let raw: string | null = null;
-    try {
-        raw = localStorage.getItem(`vaiperui:${key}`);
-    } catch {
-        // storage blocked: shown as empty
-    }
+function describeRecord(key: string): string {
+    const raw = readRecord(key);
     if (raw === null) return "–";
-    try {
-        if (key === "tictactoe-score") {
-            const s = JSON.parse(raw) as { you: number; draw: number; cpu: number };
-            return `you ${s.you} · draw ${s.draw} · cpu ${s.cpu}`;
-        }
-        if (key === "wordle-stats") {
-            const s = JSON.parse(raw) as {
-                played: number;
-                wins: number;
-                streak: number;
-                bestStreak: number;
-            };
-            return `${s.wins}/${s.played} won · streak ${s.streak} (best ${s.bestStreak})`;
-        }
-    } catch {
-        return "–";
+    if (key === "tictactoe-score") {
+        const [you, draw, cpu] = raw.split("-");
+        return `you ${you} · draw ${draw} · cpu ${cpu}`;
+    }
+    if (key === "wordle-stats") {
+        const stats = JSON.parse(localStorage.getItem("vaiperui:wordle-stats") ?? "{}") as {
+            played?: number;
+            wins?: number;
+            streak?: number;
+            bestStreak?: number;
+        };
+        return `${stats.wins ?? 0}/${stats.played ?? 0} won · streak ${stats.streak ?? 0} (best ${stats.bestStreak ?? 0})`;
     }
     return raw;
 }
@@ -227,7 +196,7 @@ export function Terminal({
                 } else {
                     print(
                         ...RECORDS.map(([label, key]) =>
-                            out(`${label.padEnd(27)}${readRecord(key)}`),
+                            out(`${label.padEnd(27)}${describeRecord(key)}`),
                         ),
                     );
                 }

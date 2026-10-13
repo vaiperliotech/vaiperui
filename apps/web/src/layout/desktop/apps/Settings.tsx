@@ -84,7 +84,7 @@ export function Settings({
                                         : "border-line-strong group-hover:border-ink-faint"
                                 }`}
                             >
-                                <Wallpaper id={id} scale={0.25} />
+                                <Wallpaper id={id} scale={0.25} animated={false} />
                             </span>
                             <span
                                 className={`font-mono text-[11px] ${current === id ? "text-accent-blue" : "text-ink-dim"}`}
