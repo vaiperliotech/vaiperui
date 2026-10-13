@@ -2,7 +2,7 @@
     "name": "vaiperui-monorepo",
     "version": "1.0.0-beta",
     "private": true,
-    "description": "Monorepo do vaiperui: biblioteca de componentes React + apps.",
+    "description": "vaiperui monorepo: the React component library and its apps.",
     "license": "MIT",
     "type": "module",
     "packageManager": "pnpm@12.8.1",

@@ -1,7 +1,28 @@
 {
     "name": "vaiperui",
     "version": "1.0.0-beta",
-    "description": "Biblioteca de componentes React do vaiperui.",
+    "description": "React component library for Tailwind CSS: accessible Button, Input and Select with built-in masks, ripple and a single customColor prop.",
+    "keywords": [
+        "react",
+        "react-components",
+        "component-library",
+        "ui-library",
+        "design-system",
+        "tailwindcss",
+        "typescript",
+        "input-mask",
+        "accessibility",
+        "dark-mode"
+    ],
+    "homepage": "https://vaiperui.vercel.app",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/vaiperliotech/vaiperui.git",
+        "directory": "packages/vaiperui"
+    },
+    "bugs": {
+        "url": "https://github.com/vaiperliotech/vaiperui/issues"
+    },
     "license": "MIT",
     "type": "module",
     "main": "./dist/index.js",
