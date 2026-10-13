@@ -16,6 +16,7 @@
         "@vercel/analytics": "^2.0.1",
         "@vercel/speed-insights": "^2.0.0",
         "next": "catalog:",
+        "peerjs": "^1.5.5",
         "react": "catalog:",
         "react-dom": "catalog:",
         "vaiperui": "catalog:"
