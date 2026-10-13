@@ -28,6 +28,10 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+      # The Storybook tests run in a real Chromium through Vitest browser mode
+      - name: Install Playwright browsers
+        run: pnpm --filter @vaiperui/storybook exec playwright install --with-deps chromium
+
       - name: Test
         run: pnpm test
 
