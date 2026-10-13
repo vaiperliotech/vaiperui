@@ -18,7 +18,17 @@ export type VariationGroup = {
 const COLORS = ["primary", "success", "warning", "danger"] as const;
 const SIZES = ["sm", "md", "lg"] as const;
 const RADII = ["none", "sm", "md", "lg", "full"] as const;
-const MASKS = ["cpf", "cnpj", "cei", "cep", "telefone"] as const;
+const MASKS = [
+    "cpf",
+    "cnpj",
+    "cei",
+    "cep",
+    "phone",
+    "creditCard",
+    "cardExpiry",
+    "date",
+    "time",
+] as const;
 
 const BUTTON_VARIANTS = ["solid", "solid-inverse", "outlined", "outlined2", "transparent"] as const;
 
@@ -27,7 +37,7 @@ const BUTTON_HOVERS = ["none", "lift", "scale", "glow"] as const;
 const SELECT_OPTIONS = [
     { value: "br", label: "Brasil" },
     { value: "us", label: "Estados Unidos" },
-    { value: "pt", label: "Portugal", disabled: true },
+    { value: "pt", label: "Portugal" },
 ];
 
 const SELECT_DETAILED_OPTIONS = [
@@ -198,7 +208,11 @@ export const variations: Record<string, VariationGroup[]> = {
 <Input mask="cnpj" label="CNPJ" />
 <Input mask="cei" label="CEI" />
 <Input mask="cep" label="CEP" />
-<Input mask="telefone" label="Telefone" />`,
+<Input mask="phone" label="Telefone" />
+<Input mask="creditCard" label="Credit card" />
+<Input mask="cardExpiry" label="Expiry" />
+<Input mask="date" label="Date" />
+<Input mask="time" label="Time" />`,
             items: MASKS.map((mask) => ({
                 label: mask,
                 node: <Input mask={mask} label={mask} />,
@@ -387,6 +401,7 @@ export const variations: Record<string, VariationGroup[]> = {
             file: "busca.tsx",
             description: "`searchable` adiciona um campo para filtrar as opções por texto.",
             code: `<Select searchable label="País" options={options} />
+<Select searchable searchStyle="full" label="País" options={options} />
 <Select label="País" options={options} />`,
             items: [
                 {
@@ -394,6 +409,18 @@ export const variations: Record<string, VariationGroup[]> = {
                     node: (
                         <Select
                             searchable
+                            label="País"
+                            placeholder="Escolha"
+                            options={SELECT_OPTIONS}
+                        />
+                    ),
+                },
+                {
+                    label: "searchStyle full",
+                    node: (
+                        <Select
+                            searchable
+                            searchStyle="full"
                             label="País"
                             placeholder="Escolha"
                             options={SELECT_OPTIONS}
@@ -409,8 +436,29 @@ export const variations: Record<string, VariationGroup[]> = {
         {
             title: "Estados",
             file: "estados.tsx",
-            code: `<Select label="País" options={options} disabled />`,
+            description:
+                "`disabled` bloqueia o select inteiro. Uma opção com `disabled: true` aparece bloqueada e não pode ser escolhida.",
+            code: `<Select label="País" options={options} disabled />
+
+const options = [
+  { value: "br", label: "Brasil" },
+  { value: "pt", label: "Portugal", disabled: true },
+]`,
             items: [
+                {
+                    label: "opção desabilitada",
+                    node: (
+                        <Select
+                            label="País"
+                            placeholder="Escolha"
+                            options={[
+                                { value: "br", label: "Brasil" },
+                                { value: "us", label: "Estados Unidos" },
+                                { value: "pt", label: "Portugal", disabled: true },
+                            ]}
+                        />
+                    ),
+                },
                 {
                     label: "disabled",
                     node: (

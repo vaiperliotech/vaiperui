@@ -99,8 +99,8 @@ export const components: ComponentEntry[] = [
     {
         slug: "input",
         name: "Input",
-        blurb: "Todas as props nativas de <input>, mais o diferencial da lib: máscaras BR (cpf, cnpj, cei, cep, telefone).",
-        usage: "Todas as props nativas de `<input>`, mais `mask`, que formata cpf/cnpj/cei/cep/telefone em tempo real enquanto o usuário digita. O foco pode ser um `ring` (padrão) ou apenas um `outline`.",
+        blurb: "Todas as props nativas de <input>, mais o diferencial da lib: máscaras BR (cpf, cnpj, cei, cep) e globais (phone, creditCard, cardExpiry, date, time).",
+        usage: "Todas as props nativas de `<input>`, mais `mask`, que formata cpf/cnpj/cei/cep (BR) e phone/creditCard/cardExpiry/date/time (globais) em tempo real enquanto o usuário digita. O foco pode ser um `ring` (padrão) ou apenas um `outline`.",
         code: `import { Input } from "vaiperui";
 
 <Input label="CPF" mask="cpf" />
@@ -185,7 +185,7 @@ export const components: ComponentEntry[] = [
             },
             {
                 prop: "mask",
-                values: "cpf | cnpj | cei | cep | telefone",
+                values: "cpf | cnpj | cei | cep | phone | creditCard | cardExpiry | date | time",
                 defaultValue: "—",
                 description:
                     "Formata o valor automaticamente enquanto o usuário digita (controlado ou não); o onChange emite a string já mascarada",
@@ -213,6 +213,7 @@ export const components: ComponentEntry[] = [
   options={[
     { value: "br", label: "Brasil" },
     { value: "us", label: "Estados Unidos" },
+    { value: "pt", label: "Portugal" },
   ]}
 />`,
         demo: (
@@ -223,7 +224,7 @@ export const components: ComponentEntry[] = [
                     options={[
                         { value: "br", label: "Brasil" },
                         { value: "us", label: "Estados Unidos" },
-                        { value: "pt", label: "Portugal", disabled: true },
+                        { value: "pt", label: "Portugal" },
                     ]}
                 />
                 <Select
@@ -281,6 +282,13 @@ export const components: ComponentEntry[] = [
                 values: "string",
                 defaultValue: '"Search..."',
                 description: "Placeholder do campo de busca",
+            },
+            {
+                prop: "searchStyle",
+                values: '"boxed" | "full"',
+                defaultValue: '"boxed"',
+                description:
+                    "`boxed`: campo recuado e arredondado. `full`: campo ocupa toda a largura do topo do menu, com divisória",
             },
             {
                 prop: "variant",

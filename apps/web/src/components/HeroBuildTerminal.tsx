@@ -17,14 +17,18 @@ import { TerminalWindow } from "./TerminalWindow";
  * "live" é um `Input` de verdade, focável, com label associado, e os chips
  * são botões reais navegáveis por teclado.
  */
-const MASKS: InputMask[] = ["cpf", "cnpj", "cep", "telefone"];
+const MASKS: InputMask[] = ["cpf", "cnpj", "cep", "phone"];
 
 const MASK_LABEL: Record<InputMask, string> = {
     cpf: "CPF",
     cnpj: "CNPJ",
     cei: "CEI",
     cep: "CEP",
-    telefone: "Telefone",
+    phone: "Telefone",
+    creditCard: "Cartão",
+    cardExpiry: "Validade",
+    date: "Data",
+    time: "Hora",
 };
 
 const DEFAULT_COLOR = "#a78bfa";
