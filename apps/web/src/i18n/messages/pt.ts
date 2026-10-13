@@ -32,6 +32,16 @@ export const pt: Dictionary = {
     },
     header: {
         githubLabel: "Repositório no GitHub",
+        window: {
+            group: "Controles da janela",
+            close: "Fechar janela",
+            minimize: "Minimizar janela",
+            fullscreen: "Tela cheia",
+            exitFullscreen: "Sair da tela cheia",
+            exited: "Processo encerrado com código 0",
+            reopen: "Pressione qualquer tecla para reabrir",
+            restore: "Restaurar vaiperui",
+        },
         languageLabel: "Idioma",
     },
     home: {

@@ -235,3 +235,131 @@ pre {
         scroll-behavior: smooth;
     }
 }
+
+/* ---- Header traffic lights: the page behaves like a macOS window (see layout/TrafficLights) ---- */
+
+[data-window] {
+    transform-origin: 50% var(--win-center, 50vh);
+}
+
+/* opacity, not visibility: components with `transition-all` would keep a hidden parent visible for a moment */
+html[data-window-state="closed"] [data-window],
+html[data-window-state="minimized"] [data-window] {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* red: CRT switching off, the picture collapses to a line, then to a dot */
+html[data-window-state="closing"] [data-window] {
+    animation: crt-off 520ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+html[data-window-state="opening"] [data-window] {
+    animation: crt-on 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* yellow: minimizing into the dock, then growing back out of it */
+html[data-window-state="minimizing"] [data-window] {
+    transform-origin: 50% var(--win-bottom, 100vh);
+    animation: minimize 620ms cubic-bezier(0.55, 0, 0.8, 0.4) forwards;
+}
+
+html[data-window-state="restoring"] [data-window] {
+    transform-origin: 50% var(--win-bottom, 100vh);
+    animation: restore 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes crt-off {
+    0% {
+        transform: scale(1, 1);
+        filter: brightness(1);
+    }
+    55% {
+        transform: scale(1, 0.006);
+        filter: brightness(2.4);
+    }
+    82% {
+        transform: scale(0.004, 0.006);
+        filter: brightness(3);
+    }
+    100% {
+        transform: scale(0, 0);
+        filter: brightness(3);
+        opacity: 0;
+    }
+}
+
+@keyframes crt-on {
+    0% {
+        transform: scale(0.004, 0.006);
+        filter: brightness(3);
+    }
+    45% {
+        transform: scale(1, 0.006);
+        filter: brightness(2.4);
+    }
+    100% {
+        transform: scale(1, 1);
+        filter: brightness(1);
+    }
+}
+
+@keyframes minimize {
+    0% {
+        transform: scale(1, 1);
+        opacity: 1;
+    }
+    55% {
+        transform: scale(0.45, 0.3);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(0.02, 0.025);
+        opacity: 0;
+    }
+}
+
+@keyframes restore {
+    0% {
+        transform: scale(0.02, 0.025);
+        opacity: 0;
+    }
+    40% {
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1, 1);
+        opacity: 1;
+    }
+}
+
+/* the dock bounces in, as macOS does */
+.dock-in {
+    animation: dock-in 560ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes dock-in {
+    from {
+        transform: translate(-50%, 140%);
+    }
+    to {
+        transform: translate(-50%, 0);
+    }
+}
+
+.blink {
+    animation: blink 1.05s steps(1) infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dock-in,
+    .blink {
+        animation: none;
+    }
+}

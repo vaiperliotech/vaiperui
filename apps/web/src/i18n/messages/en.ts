@@ -30,6 +30,16 @@ export const en = {
     },
     header: {
         githubLabel: "GitHub repository",
+        window: {
+            group: "Window controls",
+            close: "Close window",
+            minimize: "Minimize window",
+            fullscreen: "Enter fullscreen",
+            exitFullscreen: "Exit fullscreen",
+            exited: "Process exited with code 0",
+            reopen: "Press any key to reopen",
+            restore: "Restore vaiperui",
+        },
         languageLabel: "Language",
     },
     home: {
