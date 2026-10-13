@@ -1,6 +1,6 @@
 {
     "name": "vaiperui-monorepo",
-    "version": "0.0.0",
+    "version": "1.0.0-beta",
     "private": true,
     "description": "Monorepo do vaiperui: biblioteca de componentes React + apps.",
     "license": "MIT",
