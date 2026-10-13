@@ -5,6 +5,7 @@ import { type Locale, localePath } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { GITHUB_URL } from "@/lib/site";
 import { LocaleSwitcher } from "./LocaleSwitcher";
+import { SearchDialog } from "./SearchDialog";
 
 export function Header({ locale }: { locale: Locale }) {
     const dict = getDictionary(locale).header;
@@ -24,6 +25,7 @@ export function Header({ locale }: { locale: Locale }) {
                     vaiper<span className="text-accent-blue">ui</span>
                 </Link>
                 <div className="flex items-center gap-4">
+                    <SearchDialog locale={locale} labels={getDictionary(locale).search} />
                     <LocaleSwitcher locale={locale} label={dict.languageLabel} />
                     <a
                         href={GITHUB_URL}

@@ -228,3 +228,10 @@ pre {
 .code-copy-btn.is-copied {
     opacity: 1;
 }
+
+/* Smooth jumps from the "On this page" outline, unless the user asked for less motion */
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}

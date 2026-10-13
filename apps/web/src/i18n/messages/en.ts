@@ -66,6 +66,20 @@ export const en = {
         copy: "copy",
         copied: "copied",
     },
+    search: {
+        trigger: "Search",
+        placeholder: "Search the docs…",
+        empty: "No results for “{query}”",
+        hint: "Type to search components, props and guides",
+        kinds: {
+            page: "Page",
+            component: "Component",
+            section: "Section",
+            prop: "Prop",
+            example: "Example",
+        },
+        keys: { navigate: "navigate", open: "open", close: "close" },
+    },
     docs: {
         sidebarAria: "Documentation",
         components: "components",
@@ -77,6 +91,7 @@ export const en = {
             installation: "Installation",
             gettingStarted: "Getting started",
         },
+        onThisPage: "On this page",
         howToUse: "How to use",
         props: "Props",
         propsCols: {

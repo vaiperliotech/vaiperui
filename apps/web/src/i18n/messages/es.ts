@@ -68,6 +68,20 @@ export const es: Dictionary = {
         copy: "copiar",
         copied: "copiado",
     },
+    search: {
+        trigger: "Buscar",
+        placeholder: "Buscar en la documentación…",
+        empty: "Sin resultados para “{query}”",
+        hint: "Escribe para buscar componentes, props y guías",
+        kinds: {
+            page: "Página",
+            component: "Componente",
+            section: "Sección",
+            prop: "Prop",
+            example: "Ejemplo",
+        },
+        keys: { navigate: "navegar", open: "abrir", close: "cerrar" },
+    },
     docs: {
         sidebarAria: "Documentación",
         components: "componentes",
@@ -79,6 +93,7 @@ export const es: Dictionary = {
             installation: "Instalación",
             gettingStarted: "Primeros pasos",
         },
+        onThisPage: "En esta página",
         howToUse: "Cómo usar",
         props: "Props",
         propsCols: {
