@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { GUIDES } from "@/data/guides";
+import { GUIDE_PATHS } from "@/data/guides";
+import { type Locale, localePath } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 import { CodeBlock } from "./CodeBlock";
 import { TerminalWindow } from "./TerminalWindow";
 
@@ -54,22 +56,28 @@ export function CodePanel({ title, code }: { title: string; code: string }) {
     );
 }
 
-export function GuidePagination({ current }: { current: string }) {
-    const index = GUIDES.findIndex((guide) => guide.href === current);
-    const prev = index > 0 ? GUIDES[index - 1] : null;
-    const next = index !== -1 && index < GUIDES.length - 1 ? GUIDES[index + 1] : null;
+export function GuidePagination({ locale, current }: { locale: Locale; current: string }) {
+    const dict = getDictionary(locale).docs;
+    const guides = GUIDE_PATHS.map((guide) => ({
+        href: localePath(locale, guide.href),
+        path: guide.href,
+        title: dict.guides[guide.key],
+    }));
+    const index = guides.findIndex((guide) => guide.path === current);
+    const prev = index > 0 ? guides[index - 1] : null;
+    const next = index !== -1 && index < guides.length - 1 ? guides[index + 1] : null;
 
     if (!prev && !next) return null;
 
     return (
         <nav
-            aria-label="Navegação entre guias"
+            aria-label={dict.paginationAria}
             className="flex items-stretch justify-between gap-4 border-t border-line pt-8"
         >
             {prev ? (
                 <Link href={prev.href} className="group flex flex-col items-start gap-1">
                     <span className="flex items-center gap-1.5 font-mono text-xs text-ink-faint transition-colors group-hover:text-accent-blue">
-                        <span aria-hidden="true">←</span> anterior
+                        <span aria-hidden="true">←</span> {dict.previous}
                     </span>
                     <span className="font-display text-sm font-semibold text-ink-dim transition-colors group-hover:text-ink">
                         {prev.title}
@@ -81,7 +89,7 @@ export function GuidePagination({ current }: { current: string }) {
             {next ? (
                 <Link href={next.href} className="group flex flex-col items-end gap-1 text-right">
                     <span className="flex items-center gap-1.5 font-mono text-xs text-ink-faint transition-colors group-hover:text-accent-blue">
-                        próximo <span aria-hidden="true">→</span>
+                        {dict.next} <span aria-hidden="true">→</span>
                     </span>
                     <span className="font-display text-sm font-semibold text-ink-dim transition-colors group-hover:text-ink">
                         {next.title}

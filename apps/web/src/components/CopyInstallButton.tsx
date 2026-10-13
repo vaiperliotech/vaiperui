@@ -13,7 +13,15 @@ const COMMANDS = {
 type PackageManager = keyof typeof COMMANDS;
 const PACKAGE_MANAGERS = Object.keys(COMMANDS) as PackageManager[];
 
-export function CopyInstallButton({ compact = false }: { compact?: boolean }) {
+export type InstallLabels = { packageManager: string; copy: string; copied: string };
+
+export function CopyInstallButton({
+    labels,
+    compact = false,
+}: {
+    labels: InstallLabels;
+    compact?: boolean;
+}) {
     const [pm, setPm] = useState<PackageManager>("npm");
     const [copied, setCopied] = useState(false);
     const command = COMMANDS[pm];
@@ -49,7 +57,7 @@ export function CopyInstallButton({ compact = false }: { compact?: boolean }) {
     return (
         <div className="w-full overflow-hidden rounded-lg border border-line-strong bg-bg-1">
             <fieldset className="m-0 flex items-center gap-0.5 border-0 border-line border-b px-2 py-1.5 font-mono text-xs">
-                <legend className="sr-only">Gerenciador de pacotes</legend>
+                <legend className="sr-only">{labels.packageManager}</legend>
                 {PACKAGE_MANAGERS.map((key) => (
                     <button
                         key={key}
@@ -81,11 +89,11 @@ export function CopyInstallButton({ compact = false }: { compact?: boolean }) {
                 >
                     {copied ? (
                         <>
-                            <CheckIcon className="size-3.5" /> copiado
+                            <CheckIcon className="size-3.5" /> {labels.copied}
                         </>
                     ) : (
                         <>
-                            <CopyIcon className="size-3.5" /> copiar
+                            <CopyIcon className="size-3.5" /> {labels.copy}
                         </>
                     )}
                 </span>

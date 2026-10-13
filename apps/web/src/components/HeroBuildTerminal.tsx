@@ -19,37 +19,42 @@ import { TerminalWindow } from "./TerminalWindow";
  */
 const MASKS: InputMask[] = ["cpf", "cnpj", "cep", "phone"];
 
-const MASK_LABEL: Record<InputMask, string> = {
-    cpf: "CPF",
-    cnpj: "CNPJ",
-    cei: "CEI",
-    cep: "CEP",
-    phone: "Telefone",
-    creditCard: "Cartão",
-    cardExpiry: "Validade",
-    date: "Data",
-    time: "Hora",
+export type HeroLabels = {
+    color: string;
+    mask: string;
+    colors: { orange: string; green: string; violet: string };
+    viewCode: string;
+    viewLive: string;
+    masks: Record<InputMask, string>;
 };
 
 const DEFAULT_COLOR = "#a78bfa";
 
-const COLORS = [
-    { label: "laranja", value: "#ff6600" },
-    { label: "verde", value: "#22c55e" },
-    { label: "violeta", value: DEFAULT_COLOR },
-];
+const COLOR_VALUES = [
+    { key: "orange", value: "#ff6600" },
+    { key: "green", value: "#22c55e" },
+    { key: "violet", value: DEFAULT_COLOR },
+] as const;
 
 type View = "code" | "live";
 
-const VIEW_OPTIONS: Array<{ id: View; label: string; icon: typeof CodeIcon }> = [
-    { id: "code", label: "Ver código", icon: CodeIcon },
-    { id: "live", label: "Ver preview ao vivo", icon: EyeIcon },
-];
+function ViewToggle({
+    view,
+    onChange,
+    labels,
+}: {
+    view: View;
+    onChange: (view: View) => void;
+    labels: HeroLabels;
+}) {
+    const options: Array<{ id: View; label: string; icon: typeof CodeIcon }> = [
+        { id: "code", label: labels.viewCode, icon: CodeIcon },
+        { id: "live", label: labels.viewLive, icon: EyeIcon },
+    ];
 
-function ViewToggle({ view, onChange }: { view: View; onChange: (view: View) => void }) {
     return (
         <div className="flex items-center gap-0.5 rounded-md border border-line-strong bg-bg-0 p-0.5">
-            {VIEW_OPTIONS.map((option) => (
+            {options.map((option) => (
                 <button
                     key={option.id}
                     type="button"
@@ -113,7 +118,7 @@ function ControlGroup({ legend, children }: { legend: string; children: ReactNod
     );
 }
 
-export function HeroBuildTerminal() {
+export function HeroBuildTerminal({ labels }: { labels: HeroLabels }) {
     const [view, setView] = useState<View>("live");
     const [mask, setMask] = useState<InputMask>("cpf");
     const [color, setColor] = useState(DEFAULT_COLOR);
@@ -123,19 +128,19 @@ export function HeroBuildTerminal() {
             <TerminalWindow
                 title={view === "code" ? "Input.tsx" : "preview"}
                 bodyClassName={view === "code" ? "p-4" : "p-6"}
-                actions={<ViewToggle view={view} onChange={setView} />}
+                actions={<ViewToggle view={view} onChange={setView} labels={labels} />}
             >
                 {view === "code" ? (
                     <CodeBlock
                         code={`import { Input } from "vaiperui";
 
-<Input label="${MASK_LABEL[mask]}" mask="${mask}" customColor="${color}" />`}
+<Input label="${labels.masks[mask]}" mask="${mask}" customColor="${color}" />`}
                     />
                 ) : (
                     <div className="dark preview-theme">
                         <Input
                             key={`${mask}-${color}`}
-                            label={MASK_LABEL[mask]}
+                            label={labels.masks[mask]}
                             mask={mask}
                             customColor={color}
                             className="w-full"
@@ -145,22 +150,22 @@ export function HeroBuildTerminal() {
             </TerminalWindow>
 
             <div className="flex flex-wrap items-center gap-x-5 gap-y-3 rounded-lg border border-line-strong bg-bg-1 px-4 py-3">
-                <ControlGroup legend="Cor">
-                    {COLORS.map((option) => (
+                <ControlGroup legend={labels.color}>
+                    {COLOR_VALUES.map((option) => (
                         <Chip
                             key={option.value}
-                            label={option.label}
+                            label={labels.colors[option.key]}
                             swatch={option.value}
                             active={color === option.value}
                             onClick={() => setColor(option.value)}
                         />
                     ))}
                 </ControlGroup>
-                <ControlGroup legend="Máscara">
+                <ControlGroup legend={labels.mask}>
                     {MASKS.map((option) => (
                         <Chip
                             key={option}
-                            label={MASK_LABEL[option]}
+                            label={labels.masks[option]}
                             active={mask === option}
                             onClick={() => setMask(option)}
                         />

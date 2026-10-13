@@ -1,0 +1,178 @@
+import type { Dictionary } from "./en";
+
+export const es: Dictionary = {
+    meta: {
+        title: "vaiperui · Biblioteca de componentes React con Tailwind CSS",
+        description:
+            "Biblioteca de componentes React para Tailwind CSS: Button, Input y Select tipados y accesibles, con máscaras (teléfono, tarjeta, fecha, CPF, CNPJ, código postal), ripple y una única prop de color para personalizar toda la interfaz.",
+        keywords: [
+            "vaiperui",
+            "biblioteca de componentes React",
+            "componentes React",
+            "librería de UI para React",
+            "Tailwind CSS",
+            "componentes Tailwind",
+            "sistema de diseño",
+            "TypeScript",
+            "componentes accesibles",
+            "input con máscara",
+            "máscara de input React",
+            "máscara de teléfono React",
+            "input de tarjeta de crédito",
+            "React Select",
+            "React Button",
+            "customColor",
+            "modo oscuro",
+            "efecto ripple",
+            "npm",
+        ],
+        ogTagline: "Componentes React listos para producción",
+        ogFeatures: "Tailwind CSS · Máscaras · customColor · Accesible · TypeScript",
+        componentTitle: "componente React",
+    },
+    header: {
+        githubLabel: "Repositorio en GitHub",
+        languageLabel: "Idioma",
+    },
+    home: {
+        tagline:
+            "Componentes listos para ti, con una gramática visual que crece junto con tu producto.",
+        viewDocs: "Ver documentación",
+        stats: {
+            downloads: ["descarga total en npm", "descargas totales en npm"],
+            stars: ["estrella en GitHub", "estrellas en GitHub"],
+            forks: ["fork en GitHub", "forks en GitHub"],
+            version: "versión actual en npm",
+        },
+    },
+    hero: {
+        color: "Color",
+        mask: "Máscara",
+        colors: { orange: "naranja", green: "verde", violet: "violeta" },
+        viewCode: "Ver código",
+        viewLive: "Ver vista previa en vivo",
+        masks: {
+            cpf: "CPF",
+            cnpj: "CNPJ",
+            cei: "CEI",
+            cep: "Cód. postal",
+            phone: "Teléfono",
+            creditCard: "Tarjeta",
+            cardExpiry: "Vencimiento",
+            date: "Fecha",
+            time: "Hora",
+        },
+    },
+    install: {
+        packageManager: "Gestor de paquetes",
+        copy: "copiar",
+        copied: "copiado",
+    },
+    docs: {
+        sidebarAria: "Documentación",
+        components: "componentes",
+        paginationAria: "Navegación entre guías",
+        previous: "anterior",
+        next: "siguiente",
+        guides: {
+            intro: "Introducción",
+            installation: "Instalación",
+            gettingStarted: "Primeros pasos",
+        },
+        howToUse: "Cómo usar",
+        props: "Props",
+        propsCols: {
+            prop: "Prop",
+            values: "Valores",
+            default: "Predeterminado",
+            description: "Descripción",
+        },
+        themeToLight: "Cambiar a claro",
+        themeToDark: "Cambiar a oscuro",
+    },
+    guides: {
+        intro: {
+            crumb: "docs / introducción",
+            description:
+                "Biblioteca de componentes React con estilos de Tailwind CSS. Máscaras listas en el Input y un único color para personalizar cualquier componente.",
+            whatIs: {
+                title: "Qué es",
+                body: "Componentes accesibles y listos para usar. El <c>Input</c> formatea teléfonos, tarjetas, fechas y documentos mientras escribes, el <c>Select</c> es un combobox con búsqueda y navegación por teclado, y un único color pinta el borde, el foco y el icono en cualquiera de ellos.",
+            },
+            startHere: {
+                title: "Empieza aquí",
+                body: "Instala el paquete, importa el CSS una vez y usa tu primer componente.",
+            },
+            components: {
+                title: "Componentes",
+                body: "La referencia de <c>Button</c>, <c>Input</c> y <c>Select</c> está en la barra lateral. Cada página trae ejemplos en vivo, el código y la tabla de props.",
+            },
+        },
+        installation: {
+            crumb: "docs / instalación",
+            description:
+                "El paquete se instala con un comando; solo necesitas React y Tailwind CSS v4.",
+            install: {
+                title: "Instalar",
+                body: "Instala el paquete desde npm (publicado como <c>vaiperui</c>):",
+            },
+            requirements: {
+                title: "Requisitos",
+                body: "<c>react</c> y <c>react-dom</c> son peer dependencies (versión <c>>=19</c>); tu proyecto ya debe tener ambos instalados. La librería usa Tailwind CSS v4, así que tu proyecto también necesita Tailwind configurado.",
+            },
+            css: {
+                title: "Importar el CSS",
+                body: "Importa la hoja de estilos de la librería una sola vez, junto con Tailwind, en tu CSS raíz:",
+            },
+            components: {
+                title: "Importar componentes",
+                body: "Todo se exporta desde la raíz del paquete. Importa el componente que necesites y úsalo:",
+                code: `import { Button } from "vaiperui";
+
+export function Ejemplo() {
+  return <Button variantColor="primary">Haz clic aquí</Button>;
+}`,
+            },
+            dark: {
+                title: "Modo oscuro",
+                intro: "El modo oscuro es opt-in: agrega la clase <c>dark</c> a cualquier ancestro (normalmente el <c><html></c>). Sin ella, los componentes se ven exactamente como en el modo claro. La variante <c>dark</c> ya viene definida en <c>vaiperui/theme.css</c>.",
+                variables:
+                    "Los colores de superficie, texto y borde vienen de variables CSS (<c>--vpd-surface</c>, <c>--vpd-surface-muted</c>, <c>--vpd-text</c>, <c>--vpd-text-placeholder</c>, <c>--vpd-border</c>…). Para usar otra paleta en modo oscuro, sobrescribe las variables en tu CSS:",
+            },
+        },
+        gettingStarted: {
+            crumb: "docs / primeros pasos",
+            description:
+                "De cero a tu primera pantalla: CSS importado, un componente renderizado y la variante que quieras.",
+            first: {
+                title: "Tu primer componente",
+                body: "Con el CSS importado, usar un componente es una línea. Aquí, un <c>Button</c> con la variante primaria:",
+                demoLabel: "Guardar",
+                code: `import { Button } from "vaiperui";
+
+export function Guardar() {
+  return <Button variantColor="primary">Guardar</Button>;
+}`,
+            },
+            variants: {
+                title: "Variantes",
+                body: "Los componentes comparten las mismas props de diseño — <c>variantColor</c>, <c>size</c>, <c>radius</c> y <c>animation</c>. El <c>Button</c> suma además <c>variant</c> y <c>hover</c>; consulta la referencia de cada componente para la lista completa.",
+                confirm: "Confirmar",
+                review: "Revisar",
+                remove: "Eliminar",
+            },
+            masks: {
+                title: "El diferencial: máscaras",
+                body: "El <c>Input</c> formatea teléfonos, tarjetas, fechas y documentos automáticamente mientras el usuario escribe. Basta con pasar <c>mask</c>.",
+                label: "Teléfono",
+                mask: "phone",
+                component: "Telefono",
+            },
+            next: {
+                title: "A dónde ir ahora",
+                callout: "siguiente paso",
+                body: "Esta guía cubrió lo esencial con <c>Button</c> e <c>Input</c>, pero la librería no se detiene ahí. Consulta la referencia completa de <link:button>Button</link>, <link:input>Input</link> o <link:select>Select</link>.",
+            },
+        },
+    },
+};

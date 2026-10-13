@@ -7,16 +7,29 @@ import { CodeBlock } from "@/components/CodeBlock";
 import { MoonIcon, SunIcon } from "@/components/icons";
 import { TerminalWindow } from "@/components/TerminalWindow";
 import { getComponent } from "@/data/components";
-import { variations } from "@/data/variations";
+import { getVariations } from "@/data/variations";
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionaries";
 
-function ThemeToggle({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
+type DocsLabels = Dictionary["docs"];
+
+function ThemeToggle({
+    dark,
+    onToggle,
+    labels,
+}: {
+    dark: boolean;
+    onToggle: () => void;
+    labels: DocsLabels;
+}) {
+    const label = dark ? labels.themeToLight : labels.themeToDark;
     return (
         <button
             type="button"
             onClick={onToggle}
-            aria-label={dark ? "Alternar para claro" : "Alternar para escuro"}
+            aria-label={label}
             aria-pressed={dark}
-            title={dark ? "Alternar para claro" : "Alternar para escuro"}
+            title={label}
             className="flex size-7 items-center justify-center rounded-md border border-line-strong bg-bg-0 text-ink-faint transition-colors hover:border-accent-blue hover:text-ink"
         >
             {dark ? <SunIcon className="size-3.5" /> : <MoonIcon className="size-3.5" />}
@@ -26,9 +39,11 @@ function ThemeToggle({ dark, onToggle }: { dark: boolean; onToggle: () => void }
 
 function PreviewWindow({
     children,
+    labels,
     contentClassName = "",
 }: {
     children: ReactNode;
+    labels: DocsLabels;
     contentClassName?: string;
 }) {
     const [dark, setDark] = useState(false);
@@ -37,7 +52,13 @@ function PreviewWindow({
         <TerminalWindow
             title="preview"
             bodyClassName="p-0"
-            actions={<ThemeToggle dark={dark} onToggle={() => setDark((value) => !value)} />}
+            actions={
+                <ThemeToggle
+                    dark={dark}
+                    onToggle={() => setDark((value) => !value)}
+                    labels={labels}
+                />
+            }
         >
             <div className={dark ? "dark" : ""}>
                 <div
@@ -52,23 +73,33 @@ function PreviewWindow({
     );
 }
 
-export function ComponentDoc({ slug }: { slug: string }) {
-    const component = getComponent(slug);
+export function ComponentDoc({
+    slug,
+    locale,
+    labels,
+}: {
+    slug: string;
+    locale: Locale;
+    labels: DocsLabels;
+}) {
+    const component = getComponent(locale, slug);
     if (!component) return null;
 
-    const gallery = variations[slug] ?? [];
+    const gallery = getVariations(locale)[slug] ?? [];
 
     return (
         <article>
-            <p className="font-mono text-xs text-ink-faint">componentes / {component.slug}</p>
+            <p className="font-mono text-xs text-ink-faint">
+                {labels.components} / {component.slug}
+            </p>
             <h1 className="mt-2 font-display text-3xl font-semibold text-ink">{component.name}</h1>
             <p className="mt-3 max-w-xl text-ink-dim">{component.blurb}</p>
 
             <section className="mt-10">
-                <h2 className="font-display text-lg font-semibold text-ink">Como usar</h2>
+                <h2 className="font-display text-lg font-semibold text-ink">{labels.howToUse}</h2>
                 <p className="mt-3 max-w-2xl text-ink-dim">{component.usage}</p>
                 <div className="mt-5 space-y-4">
-                    <PreviewWindow contentClassName="min-h-40 gap-4">
+                    <PreviewWindow labels={labels} contentClassName="min-h-40 gap-4">
                         {component.demo}
                     </PreviewWindow>
                     <TerminalWindow title={`${component.name}.tsx`} bodyClassName="p-4">
@@ -84,7 +115,7 @@ export function ComponentDoc({ slug }: { slug: string }) {
                         <p className="mt-2 max-w-2xl text-ink-dim">{group.description}</p>
                     ) : null}
                     <div className="mt-5 space-y-4">
-                        <PreviewWindow contentClassName="gap-x-8 gap-y-6">
+                        <PreviewWindow labels={labels} contentClassName="gap-x-8 gap-y-6">
                             {group.items.map((item) => (
                                 <figure
                                     key={item.label}
@@ -106,15 +137,17 @@ export function ComponentDoc({ slug }: { slug: string }) {
                 </section>
             ))}
 
-            <h2 className="mt-16 font-display text-lg font-semibold text-ink">Props</h2>
+            <h2 className="mt-16 font-display text-lg font-semibold text-ink">{labels.props}</h2>
             <div className="mt-4 overflow-x-auto rounded-xl border border-line">
                 <table className="w-full min-w-160 border-collapse text-sm">
                     <thead>
                         <tr className="border-b border-line bg-bg-2 text-left font-mono text-xs text-ink-faint">
-                            <th className="px-4 py-2.5 font-medium">Prop</th>
-                            <th className="px-4 py-2.5 font-medium">Valores</th>
-                            <th className="px-4 py-2.5 font-medium">Padrão</th>
-                            <th className="px-4 py-2.5 font-medium">Descrição</th>
+                            <th className="px-4 py-2.5 font-medium">{labels.propsCols.prop}</th>
+                            <th className="px-4 py-2.5 font-medium">{labels.propsCols.values}</th>
+                            <th className="px-4 py-2.5 font-medium">{labels.propsCols.default}</th>
+                            <th className="px-4 py-2.5 font-medium">
+                                {labels.propsCols.description}
+                            </th>
                         </tr>
                     </thead>
                     <tbody>

@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { GithubIcon } from "@/components/GithubIcon";
+import { type Locale, localePath } from "@/i18n/config";
 import { getVaiperUiVersion } from "@/lib/vaiper-version";
 
-export function Footer() {
+export function Footer({ locale }: { locale: Locale }) {
     return (
         <footer className="border-t border-line">
             <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-10">
@@ -18,7 +19,7 @@ export function Footer() {
                     </a>
                 </p>
                 <div className="flex items-center gap-5 font-mono text-xs text-ink-dim">
-                    <Link href="/docs" className="hover:text-ink">
+                    <Link href={localePath(locale, "/docs")} className="hover:text-ink">
                         docs
                     </Link>
                     <a

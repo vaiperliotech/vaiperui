@@ -1,0 +1,178 @@
+export const en = {
+    meta: {
+        title: "vaiperui · React component library for Tailwind CSS",
+        description:
+            "React component library for Tailwind CSS: typed, accessible Button, Input and Select with masks (phone, credit card, date, CPF, CNPJ, ZIP), ripple and a single color prop to customize the whole interface.",
+        keywords: [
+            "vaiperui",
+            "React component library",
+            "React components",
+            "React UI library",
+            "Tailwind CSS",
+            "Tailwind components",
+            "design system",
+            "TypeScript",
+            "accessible components",
+            "input mask",
+            "React input mask",
+            "phone input mask",
+            "credit card input",
+            "React Select",
+            "React Button",
+            "customColor",
+            "dark mode",
+            "ripple effect",
+            "npm",
+        ],
+        ogTagline: "Production-ready React components",
+        ogFeatures: "Tailwind CSS · Masks · customColor · Accessible · TypeScript",
+        componentTitle: "React component",
+    },
+    header: {
+        githubLabel: "GitHub repository",
+        languageLabel: "Language",
+    },
+    home: {
+        tagline:
+            "Ready-made components for you, with a visual grammar that grows with your product.",
+        viewDocs: "View documentation",
+        stats: {
+            downloads: ["total download on npm", "total downloads on npm"],
+            stars: ["GitHub star", "GitHub stars"],
+            forks: ["GitHub fork", "GitHub forks"],
+            version: "current version on npm",
+        },
+    },
+    hero: {
+        color: "Color",
+        mask: "Mask",
+        colors: { orange: "orange", green: "green", violet: "violet" },
+        viewCode: "View code",
+        viewLive: "View live preview",
+        masks: {
+            cpf: "CPF",
+            cnpj: "CNPJ",
+            cei: "CEI",
+            cep: "ZIP",
+            phone: "Phone",
+            creditCard: "Card",
+            cardExpiry: "Expiry",
+            date: "Date",
+            time: "Time",
+        },
+    },
+    install: {
+        packageManager: "Package manager",
+        copy: "copy",
+        copied: "copied",
+    },
+    docs: {
+        sidebarAria: "Documentation",
+        components: "components",
+        paginationAria: "Guide navigation",
+        previous: "previous",
+        next: "next",
+        guides: {
+            intro: "Introduction",
+            installation: "Installation",
+            gettingStarted: "Getting started",
+        },
+        howToUse: "How to use",
+        props: "Props",
+        propsCols: {
+            prop: "Prop",
+            values: "Values",
+            default: "Default",
+            description: "Description",
+        },
+        themeToLight: "Switch to light",
+        themeToDark: "Switch to dark",
+    },
+    guides: {
+        intro: {
+            crumb: "docs / introduction",
+            description:
+                "React component library styled with Tailwind CSS. Ready-made masks in the Input and a single color to customize any component.",
+            whatIs: {
+                title: "What it is",
+                body: "Accessible, ready-to-use components. The <c>Input</c> formats phones, cards, dates and documents as you type, the <c>Select</c> is a combobox with search and keyboard navigation, and a single color paints the border, focus and icon on any of them.",
+            },
+            startHere: {
+                title: "Start here",
+                body: "Install the package, import the CSS once and use your first component.",
+            },
+            components: {
+                title: "Components",
+                body: "The reference for <c>Button</c>, <c>Input</c> and <c>Select</c> is in the sidebar. Each page has live examples, the code and the props table.",
+            },
+        },
+        installation: {
+            crumb: "docs / installation",
+            description:
+                "The package installs with one command; you only need React and Tailwind CSS v4.",
+            install: {
+                title: "Install",
+                body: "Install the package from npm (published as <c>vaiperui</c>):",
+            },
+            requirements: {
+                title: "Requirements",
+                body: "<c>react</c> and <c>react-dom</c> are peer dependencies (version <c>>=19</c>); your project must already have both installed. The library is styled with Tailwind CSS v4, so your project also needs Tailwind configured.",
+            },
+            css: {
+                title: "Import the CSS",
+                body: "Import the library stylesheet once, next to Tailwind, in your root CSS:",
+            },
+            components: {
+                title: "Import components",
+                body: "Everything is exported from the package root. Import the component you need and use it:",
+                code: `import { Button } from "vaiperui";
+
+export function Example() {
+  return <Button variantColor="primary">Click here</Button>;
+}`,
+            },
+            dark: {
+                title: "Dark mode",
+                intro: "Dark mode is opt-in: add the <c>dark</c> class to any ancestor (usually the <c><html></c>). Without it, components look exactly like light mode. The <c>dark</c> variant already ships in <c>vaiperui/theme.css</c>.",
+                variables:
+                    "Surface, text and border colors come from CSS variables (<c>--vpd-surface</c>, <c>--vpd-surface-muted</c>, <c>--vpd-text</c>, <c>--vpd-text-placeholder</c>, <c>--vpd-border</c>…). To use another palette in dark mode, override the variables in your CSS:",
+            },
+        },
+        gettingStarted: {
+            crumb: "docs / getting started",
+            description:
+                "From zero to your first screen: CSS imported, a component rendered and the variant you want.",
+            first: {
+                title: "Your first component",
+                body: "With the CSS imported, using a component is one line. Here, a <c>Button</c> with the primary variant:",
+                demoLabel: "Save",
+                code: `import { Button } from "vaiperui";
+
+export function Save() {
+  return <Button variantColor="primary">Save</Button>;
+}`,
+            },
+            variants: {
+                title: "Variants",
+                body: "The components share the same layout props — <c>variantColor</c>, <c>size</c>, <c>radius</c> and <c>animation</c>. The <c>Button</c> adds <c>variant</c> and <c>hover</c>; see each component's reference for the full list.",
+                confirm: "Confirm",
+                review: "Review",
+                remove: "Delete",
+            },
+            masks: {
+                title: "The differentiator: masks",
+                body: "The <c>Input</c> formats phones, cards, dates and documents automatically as the user types. Just pass <c>mask</c>.",
+                label: "Phone",
+                mask: "phone",
+                component: "PhoneField",
+            },
+            next: {
+                title: "Where to go now",
+                callout: "next step",
+                body: "This guide covered the essentials with <c>Button</c> and <c>Input</c>, but the library doesn't stop there. See the full reference for <link:button>Button</link>, <link:input>Input</link> or <link:select>Select</link>.",
+            },
+        },
+    },
+};
+
+export type Dictionary = typeof en;

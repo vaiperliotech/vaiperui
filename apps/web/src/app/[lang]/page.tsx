@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 import { AmbientBackdrop } from "@/components/AmbientBackdrop";
 import { CopyInstallButton } from "@/components/CopyInstallButton";
@@ -13,10 +14,13 @@ import {
     StarIcon,
     TagIcon,
 } from "@/components/icons";
+import { htmlLang, isLocale, localePath } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 import { getGithubStats, getNpmTotalDownloads } from "@/lib/repo-stats";
+import { GITHUB_URL } from "@/lib/site";
 import { getVaiperUiVersion } from "@/lib/vaiper-version";
 
-const pt = (n: number, one: string, many: string) => (n === 1 ? one : many);
+const plural = (n: number, [one, many]: string[]) => (n === 1 ? one : many);
 
 type Stat = {
     value: string;
@@ -24,28 +28,32 @@ type Stat = {
     icon: typeof DownloadIcon;
 };
 
-export default async function Home() {
+export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
+    const { lang } = await params;
+    if (!isLocale(lang)) notFound();
+    const dict = getDictionary(lang);
+    const number = (n: number) => n.toLocaleString(htmlLang[lang]);
     const [github, downloads] = await Promise.all([getGithubStats(), getNpmTotalDownloads()]);
 
     const STATS = [
         downloads !== null && {
-            value: downloads.toLocaleString("pt-BR"),
-            label: pt(downloads, "download total no npm", "downloads totais no npm"),
+            value: number(downloads),
+            label: plural(downloads, dict.home.stats.downloads),
             icon: DownloadIcon,
         },
         github && {
-            value: github.stars.toLocaleString("pt-BR"),
-            label: pt(github.stars, "estrela no GitHub", "estrelas no GitHub"),
+            value: number(github.stars),
+            label: plural(github.stars, dict.home.stats.stars),
             icon: StarIcon,
         },
         github && {
-            value: github.forks.toLocaleString("pt-BR"),
-            label: pt(github.forks, "fork no GitHub", "forks no GitHub"),
+            value: number(github.forks),
+            label: plural(github.forks, dict.home.stats.forks),
             icon: ForkIcon,
         },
         {
             value: `v${getVaiperUiVersion()}`,
-            label: "versão atual no npm",
+            label: dict.home.stats.version,
             icon: TagIcon,
         },
     ].filter((item): item is Stat => Boolean(item));
@@ -66,25 +74,24 @@ export default async function Home() {
                         </h1>
 
                         <p className="mt-7 max-w-xl text-pretty text-base text-ink-dim sm:text-lg">
-                            Componentes prontos para você, com uma gramática visual que cresce junto
-                            com o seu produto.
+                            {dict.home.tagline}
                         </p>
 
                         <div className="mt-9 w-full sm:max-w-108">
-                            <CopyInstallButton />
+                            <CopyInstallButton labels={dict.install} />
                         </div>
 
                         <Link
-                            href="/docs"
+                            href={localePath(lang, "/docs")}
                             className="group mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-blue px-5 py-3 font-mono text-sm font-semibold text-bg-0 shadow-[inset_0_1px_0_rgb(255_255_255/0.35),0_1px_2px_rgb(0_0_0/0.4),0_10px_24px_-10px_var(--accent-blue-ring)] transition-[box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[#6bb4ff] hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.45),0_1px_2px_rgb(0_0_0/0.4),0_14px_28px_-10px_var(--accent-blue-ring)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-blue active:bg-accent-blue active:shadow-[inset_0_1px_0_rgb(255_255_255/0.25),0_1px_2px_rgb(0_0_0/0.4)] motion-safe:animate-float motion-reduce:transition-none sm:w-auto"
                         >
                             <BookIcon className="size-4" />
-                            Ver documentação
+                            {dict.home.viewDocs}
                             <ArrowRightIcon className="size-4 transition-transform duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0" />
                         </Link>
 
                         <a
-                            href="https://github.com/vaiperliotech/vaiperui"
+                            href={GITHUB_URL}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="mt-7 flex items-center gap-1.5 font-mono text-xs text-ink-faint transition-colors hover:text-ink"
@@ -95,7 +102,7 @@ export default async function Home() {
                     </div>
 
                     <div className="flex min-w-0 justify-center animate-fade-up motion-reduce:animate-none [animation-delay:240ms] md:justify-end">
-                        <HeroBuildTerminal />
+                        <HeroBuildTerminal labels={dict.hero} />
                     </div>
                 </div>
 

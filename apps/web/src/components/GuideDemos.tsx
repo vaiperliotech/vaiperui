@@ -2,26 +2,34 @@
 
 import { Button, Input } from "vaiperui";
 
-export function ButtonDemo() {
-    return <Button variantColor="primary">Salvar</Button>;
+export function ButtonDemo({ label }: { label: string }) {
+    return <Button variantColor="primary">{label}</Button>;
 }
 
-export function ButtonVariants() {
+export function ButtonVariants({
+    confirm,
+    review,
+    remove,
+}: {
+    confirm: string;
+    review: string;
+    remove: string;
+}) {
     return (
         <div className="flex flex-wrap gap-3">
             <Button variantColor="success" radius="full">
-                Confirmar
+                {confirm}
             </Button>
             <Button variant="outlined" variantColor="warning">
-                Revisar
+                {review}
             </Button>
             <Button variantColor="danger" hover="lift">
-                Excluir
+                {remove}
             </Button>
         </div>
     );
 }
 
-export function InputDemo() {
-    return <Input label="CPF" mask="cpf" />;
+export function InputDemo({ label, mask }: { label: string; mask: "cpf" | "phone" }) {
+    return <Input label={label} mask={mask} />;
 }
