@@ -18,7 +18,7 @@ export function customColorVars(color: CustomColor): CSSProperties {
     return {
         "--vpd-accent": accent,
         "--vpd-accent-hover": `color-mix(in oklab, ${accent} 85%, black)`,
-        "--vpd-accent-tint": `color-mix(in oklab, ${accent} 12%, white)`,
+        "--vpd-accent-tint": `color-mix(in oklab, ${accent} 12%, var(--vpd-surface))`,
         "--vpd-accent-ring": `color-mix(in oklab, ${accent} 30%, transparent)`,
     } as CSSProperties;
 }
