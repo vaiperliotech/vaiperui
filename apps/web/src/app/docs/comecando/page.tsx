@@ -5,7 +5,8 @@ import { ButtonDemo, ButtonVariants, InputDemo } from "@/components/GuideDemos";
 import { TerminalWindow } from "@/components/TerminalWindow";
 
 export const metadata: Metadata = {
-    title: "Começando · vaiperui",
+    title: "Começando",
+    alternates: { canonical: "/docs/comecando" },
     description: "Monte sua primeira tela com a vaiperui em poucos passos.",
 };
 

@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { Code, CodePanel, Guide, GuidePagination, P, Section } from "@/components/Guide";
 
 export const metadata: Metadata = {
-    title: "Instalação · vaiperui",
+    title: "Instalação",
+    alternates: { canonical: "/docs/instalacao" },
     description:
         "Como instalar a vaiperui: requisitos, import do CSS e primeiro import de componentes.",
 };

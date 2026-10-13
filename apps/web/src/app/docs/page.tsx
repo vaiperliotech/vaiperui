@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { Code, CodePanel, Guide, GuidePagination, P, Section } from "@/components/Guide";
 
 export const metadata: Metadata = {
-    title: "Introdução · vaiperui",
+    title: "Introdução",
+    alternates: { canonical: "/docs" },
     description:
         "Biblioteca de componentes React estilizada com Tailwind CSS. Máscaras de documento prontas no Input e uma única cor para customizar qualquer componente.",
 };
