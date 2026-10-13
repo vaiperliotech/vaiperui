@@ -11,20 +11,21 @@ export const variantStyles: Record<InputVariant, Record<InputColors, string>> = 
         danger: "focus:outline-none focus:border-danger-500 focus:ring-4 focus:ring-danger-500/20",
     },
     outline: {
-        primary: "focus:outline-2 focus:outline-offset-2 focus:outline-primary-500",
-        success: "focus:outline-2 focus:outline-offset-2 focus:outline-success-500",
-        warning: "focus:outline-2 focus:outline-offset-2 focus:outline-warning-500",
-        danger: "focus:outline-2 focus:outline-offset-2 focus:outline-danger-500",
+        primary: "outline-2 outline-offset-2 outline-transparent focus:outline-primary-500",
+        success: "outline-2 outline-offset-2 outline-transparent focus:outline-success-500",
+        warning: "outline-2 outline-offset-2 outline-transparent focus:outline-warning-500",
+        danger: "outline-2 outline-offset-2 outline-transparent focus:outline-danger-500",
     },
 };
 
 /** Focus treatment when `customColor` is set, driven by `--vpd-accent*`. */
 export const customVariantStyles: Record<InputVariant, string> = {
     ring: "focus:outline-none focus:border-[var(--vpd-accent)] focus:ring-4 focus:ring-[var(--vpd-accent-ring)]",
-    outline: "focus:outline-2 focus:outline-offset-2 focus:outline-[var(--vpd-accent)]",
+    outline: "outline-2 outline-offset-2 outline-transparent focus:outline-[var(--vpd-accent)]",
 };
 
 export const errorStyles: Record<InputVariant, string> = {
     ring: "border-danger-500 focus:outline-none focus:border-danger-600 focus:ring-4 focus:ring-danger-500/20",
-    outline: "border-danger-500 focus:outline-2 focus:outline-offset-2 focus:outline-danger-500",
+    outline:
+        "border-danger-500 outline-2 outline-offset-2 outline-transparent focus:outline-danger-500",
 };

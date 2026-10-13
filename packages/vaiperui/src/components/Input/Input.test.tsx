@@ -68,7 +68,7 @@ describe("Input", () => {
     it("draws an outline on focus with the outline variant", () => {
         render(<Input aria-label="Outline" variant="outline" />);
         const input = screen.getByRole("textbox", { name: "Outline" });
-        expect(input.className).toContain("focus:outline-2");
+        expect(input.className).toContain("outline-2");
         expect(input.className).toContain("focus:outline-primary-500");
         expect(input.className).not.toContain("focus:ring-4");
     });
@@ -163,10 +163,28 @@ describe("Input", () => {
         ["cnpj", "12345678000199", "12.345.678/0001-99"],
         ["cei", "123456789012", "12.345.67890/12"],
         ["cep", "12345678", "12345-678"],
-        ["telefone", "11987654321", "(11) 98765-4321"],
+        ["phone", "5511987654321", "+55 (11) 98765-4321"],
+        ["phone", "551134567890", "+55 (11) 3456-7890"],
+        ["phone", "14155552671", "+1 (415) 555-2671"],
+        ["phone", "442079460958", "+442 079 460 958"],
+        ["creditCard", "4111111111111111", "4111 1111 1111 1111"],
+        ["cardExpiry", "1228", "12/28"],
+        ["date", "31122025", "31/12/2025"],
+        ["time", "2359", "23:59"],
     ] as const)("formats %s as the user types", (mask, typed, expected) => {
         render(<Input aria-label="Masked" mask={mask} />);
         const input = screen.getByRole("textbox", { name: "Masked" });
+        fireEvent.change(input, { target: { value: typed } });
+        expect(input).toHaveValue(expected);
+    });
+
+    it.each([
+        ["+55 (11) ", "+55 (11"],
+        ["+1 (415) ", "+1 (415"],
+        ["+55 (", "+55"],
+    ])("lets the user backspace over the separator in the phone mask (%s)", (typed, expected) => {
+        render(<Input aria-label="Phone" mask="phone" />);
+        const input = screen.getByRole("textbox", { name: "Phone" });
         fireEvent.change(input, { target: { value: typed } });
         expect(input).toHaveValue(expected);
     });

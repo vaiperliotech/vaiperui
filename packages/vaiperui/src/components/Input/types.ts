@@ -7,7 +7,18 @@ export type InputVariant = "ring" | "outline";
 export type InputSize = "sm" | "md" | "lg";
 export type InputRadius = "none" | "sm" | "md" | "lg" | "full";
 export type InputAnimation = "none" | "smooth" | "fast" | "bounce";
-export type InputMask = "cpf" | "cnpj" | "cei" | "cep" | "telefone";
+export type InputMask =
+    // Brazil-specific
+    | "cpf"
+    | "cnpj"
+    | "cei"
+    | "cep"
+    // Country-agnostic
+    | "phone"
+    | "creditCard"
+    | "cardExpiry"
+    | "date"
+    | "time";
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "color"> {
     variant?: InputVariant;

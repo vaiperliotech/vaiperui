@@ -15,7 +15,7 @@ const meta = {
         size: { control: "select", options: ["sm", "md", "lg"] },
         radius: { control: "select", options: ["none", "sm", "md", "lg", "full"] },
         animation: { control: "select", options: ["none", "smooth", "fast", "bounce"] },
-        mask: { control: "select", options: ["cpf", "cnpj", "cei", "cep", "telefone"] },
+        mask: { control: "select", options: ["cpf", "cnpj", "cei", "cep", "phone"] },
     },
 } satisfies Meta<typeof Input>;
 
@@ -152,7 +152,7 @@ export const Masks: Story = {
             <Input aria-label="CNPJ" label="CNPJ" mask="cnpj" />
             <Input aria-label="CEI" label="CEI" mask="cei" />
             <Input aria-label="CEP" label="CEP" mask="cep" />
-            <Input aria-label="Telefone" label="Telefone" mask="telefone" />
+            <Input aria-label="Telefone" label="Telefone" mask="phone" />
         </div>
     ),
 };
