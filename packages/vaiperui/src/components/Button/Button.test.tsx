@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 
 import { Button } from "./Button";
 
@@ -105,6 +105,40 @@ describe("Button", () => {
         expect(screen.getByRole("button", { name: "Delete" }).className).toContain(
             "hover:shadow-danger-500/60",
         );
+    });
+
+    it("shows no ripple unless enabled", () => {
+        render(<Button>Plain</Button>);
+        fireEvent.pointerDown(screen.getByRole("button", { name: "Plain" }), { button: 0 });
+        expect(document.querySelector("[aria-hidden=true]")).toBeNull();
+    });
+
+    it("spawns a ripple on press and removes it afterwards", () => {
+        vi.useFakeTimers();
+        render(<Button ripple>Ripple</Button>);
+        const button = screen.getByRole("button", { name: "Ripple" });
+        fireEvent.pointerDown(button, { button: 0, clientX: 5, clientY: 5 });
+        expect(button.querySelector("[aria-hidden=true]")).not.toBeNull();
+        act(() => {
+            vi.advanceTimersByTime(700);
+        });
+        expect(button.querySelector("[aria-hidden=true]")).toBeNull();
+        vi.useRealTimers();
+    });
+
+    it("still calls the consumer's onPointerDown and onClick", () => {
+        const onPointerDown = vi.fn();
+        const onClick = vi.fn();
+        render(
+            <Button ripple onPointerDown={onPointerDown} onClick={onClick}>
+                Cb
+            </Button>,
+        );
+        const button = screen.getByRole("button", { name: "Cb" });
+        fireEvent.pointerDown(button, { button: 0 });
+        fireEvent.click(button);
+        expect(onPointerDown).toHaveBeenCalledTimes(1);
+        expect(onClick).toHaveBeenCalledTimes(1);
     });
 
     it("runs no animation by default", () => {

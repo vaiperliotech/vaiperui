@@ -99,6 +99,18 @@
     --animate-jump: jump 2.8s ease-in-out infinite;
     --animate-gradient: gradient 3s ease infinite;
     --animate-glow: glow 2.4s ease-in-out infinite;
+    --animate-ripple: ripple 600ms ease-out forwards;
+
+    @keyframes ripple {
+        from {
+            transform: scale(0);
+            opacity: 0.35;
+        }
+        to {
+            transform: scale(1);
+            opacity: 0;
+        }
+    }
 
     @keyframes float {
         0%,

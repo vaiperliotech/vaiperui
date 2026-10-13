@@ -164,6 +164,34 @@ export const variations: Record<string, VariationGroup[]> = {
                 node: <Button animation={animation}>{animation}</Button>,
             })),
         },
+        {
+            title: "Ripple",
+            file: "ripple.tsx",
+            description:
+                "`ripple` cria uma onda a partir do ponto do clique. Usa a cor do texto do botão.",
+            code: `<Button ripple>Solid</Button>
+<Button ripple variant="outlined">Outlined</Button>
+<Button ripple variant="transparent" variantColor="success">Transparent</Button>`,
+            items: [
+                { label: "solid", node: <Button ripple>Clique aqui</Button> },
+                {
+                    label: "outlined",
+                    node: (
+                        <Button ripple variant="outlined">
+                            Clique aqui
+                        </Button>
+                    ),
+                },
+                {
+                    label: "transparent",
+                    node: (
+                        <Button ripple variant="transparent" variantColor="success">
+                            Clique aqui
+                        </Button>
+                    ),
+                },
+            ],
+        },
     ],
 
     input: [

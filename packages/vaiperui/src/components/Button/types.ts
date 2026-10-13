@@ -26,6 +26,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     radius?: ButtonRadius;
     hover?: ButtonHover;
     animation?: ButtonAnimation;
+    /** Ink ripple that expands from the click point. */
+    ripple?: boolean;
     iconStart?: ReactNode;
     iconEnd?: ReactNode;
 }

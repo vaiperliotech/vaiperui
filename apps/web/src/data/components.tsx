@@ -82,6 +82,13 @@ export const components: ComponentEntry[] = [
                 description: "Animação contínua do botão; respeita prefers-reduced-motion",
             },
             {
+                prop: "ripple",
+                values: "boolean",
+                defaultValue: "false",
+                description:
+                    "Efeito de onda (ripple) a partir do ponto do clique; também dispara por teclado. Respeita prefers-reduced-motion",
+            },
+            {
                 prop: "iconStart / iconEnd",
                 values: "ReactNode",
                 defaultValue: "—",
