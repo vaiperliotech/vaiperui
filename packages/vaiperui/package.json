@@ -32,6 +32,7 @@
         "clean": "rm -rf dist .turbo"
     },
     "dependencies": {
+        "@floating-ui/react-dom": "catalog:",
         "clsx": "catalog:",
         "tailwind-merge": "catalog:"
     },

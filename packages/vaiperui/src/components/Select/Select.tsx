@@ -1,4 +1,13 @@
+import {
+    autoUpdate,
+    flip,
+    offset,
+    shift,
+    size as sizeMiddleware,
+    useFloating,
+} from "@floating-ui/react-dom";
 import * as React from "react";
+import { createPortal } from "react-dom";
 
 import { cn } from "../../lib/cn";
 import { customColorVars } from "../../lib/customColorVars";
@@ -18,6 +27,7 @@ export function Select({
     emptyMessage = "No options found",
     searchable = false,
     searchPlaceholder = "Search...",
+    searchStyle = "boxed",
     variant = "default",
     variantColor = "primary",
     customColor,
@@ -61,11 +71,29 @@ export function Select({
     const closeTimeout = React.useRef<number | undefined>(undefined);
     const typeahead = React.useRef({ query: "", timeout: 0 });
 
+    const { refs, floatingStyles, placement } = useFloating({
+        open: visible,
+        placement: "bottom-start",
+        strategy: "fixed",
+        whileElementsMounted: autoUpdate,
+        middleware: [
+            offset(variant === "detailed" ? 12 : 8),
+            flip(),
+            shift({ padding: 8 }),
+            sizeMiddleware({
+                apply({ rects, elements }) {
+                    elements.floating.style.width = `${rects.reference.width}px`;
+                },
+            }),
+        ],
+    });
+
     const generatedId = React.useId();
     const selectId = id ?? generatedId;
     const listboxId = `${selectId}-listbox`;
 
     const isDetailed = variant === "detailed";
+    const isFullSearch = isDetailed || searchStyle === "full";
     const color = customColor
         ? customColorClasses
         : isDetailed
@@ -111,11 +139,14 @@ export function Select({
     React.useEffect(() => {
         if (!open) return;
         function handlePointerDown(event: MouseEvent) {
-            if (!rootRef.current?.contains(event.target as Node)) closeList();
+            const target = event.target as Node;
+            if (!rootRef.current?.contains(target) && !refs.floating.current?.contains(target)) {
+                closeList();
+            }
         }
         document.addEventListener("mousedown", handlePointerDown);
         return () => document.removeEventListener("mousedown", handlePointerDown);
-    }, [open, closeList]);
+    }, [open, closeList, refs]);
 
     React.useEffect(() => {
         if (!open) return;
@@ -289,7 +320,10 @@ export function Select({
             ) : null}
             <div className="relative">
                 <button
-                    ref={triggerRef}
+                    ref={(node) => {
+                        triggerRef.current = node;
+                        refs.setReference(node);
+                    }}
                     type="button"
                     id={selectId}
                     role="combobox"
@@ -360,230 +394,249 @@ export function Select({
                     </svg>
                 </button>
 
-                {visible ? (
-                    <div
-                        className={cn(
-                            `absolute z-50 mt-2 w-full origin-top overflow-hidden border border-[var(--vpd-border-soft)] bg-[var(--vpd-surface)] shadow-lg ${animationStyle} ${radiusStyle.menu}`,
-                            isDetailed &&
-                                "mt-3 rounded-2xl border-[var(--vpd-border-soft)] shadow-[0_12px_24px_0_rgba(15,23,42,0.05)]",
-                            open
-                                ? "scale-100 opacity-100"
-                                : "pointer-events-none scale-95 opacity-0",
-                        )}
-                    >
-                        {searchable ? (
-                            <div
-                                className={cn(
-                                    "border-b border-[var(--vpd-border-subtle)] p-1.5",
-                                    isDetailed && "border-[var(--vpd-border-soft)] p-0",
-                                )}
-                            >
-                                <div className="relative">
-                                    <svg
-                                        viewBox="0 0 20 20"
-                                        fill="none"
-                                        aria-hidden="true"
-                                        className={cn(
-                                            "pointer-events-none absolute top-1/2 left-2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--vpd-text-placeholder)]",
-                                            isDetailed &&
-                                                "left-4 h-4.5 w-4.5 text-[var(--vpd-text-muted)]",
-                                        )}
-                                    >
-                                        <circle
-                                            cx="9"
-                                            cy="9"
-                                            r="6"
-                                            stroke="currentColor"
-                                            strokeWidth={1.75}
-                                        />
-                                        <path
-                                            d="M17 17l-4.35-4.35"
-                                            stroke="currentColor"
-                                            strokeWidth={1.75}
-                                            strokeLinecap="round"
-                                        />
-                                    </svg>
-                                    <input
-                                        ref={searchInputRef}
-                                        type="text"
-                                        value={query}
-                                        onChange={handleSearchChange}
-                                        onKeyDown={handleSearchKeyDown}
-                                        placeholder={searchPlaceholder}
-                                        aria-label={searchPlaceholder}
-                                        aria-controls={listboxId}
-                                        aria-activedescendant={
-                                            filteredOptions[activeIndex]
-                                                ? `${listboxId}-option-${activeIndex}`
-                                                : undefined
-                                        }
-                                        className={cn(
-                                            "w-full rounded-sm border-none bg-[var(--vpd-surface-muted)] py-1.5 pr-7 pl-7 text-sm text-[var(--vpd-text-secondary)] outline-none placeholder:text-[var(--vpd-text-placeholder)]",
-                                            isDetailed &&
-                                                "h-13 rounded-none bg-[var(--vpd-surface)] py-0 pr-10 pl-11 text-sm text-[var(--vpd-text)]",
-                                        )}
-                                    />
-                                    {query ? (
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                setQuery("");
-                                                searchInputRef.current?.focus();
-                                            }}
-                                            aria-label="Clear search"
-                                            className={cn(
-                                                "absolute top-1/2 right-1.5 -translate-y-1/2 rounded-sm p-0.5 text-[var(--vpd-text-placeholder)] hover:text-[var(--vpd-text-secondary)]",
-                                                isDetailed && "right-4",
-                                            )}
-                                        >
-                                            <svg
-                                                viewBox="0 0 20 20"
-                                                fill="none"
-                                                aria-hidden="true"
-                                                className="h-3.5 w-3.5"
-                                            >
-                                                <path
-                                                    d="M6 6l8 8M14 6l-8 8"
-                                                    stroke="currentColor"
-                                                    strokeWidth={1.75}
-                                                    strokeLinecap="round"
-                                                />
-                                            </svg>
-                                        </button>
-                                    ) : null}
-                                </div>
-                            </div>
-                        ) : null}
+                {visible
+                    ? createPortal(
+                          // The menu leaves the DOM tree of the component, so it re-applies the
+                          // `.dark` class and custom color vars that it would otherwise inherit.
+                          <div
+                              ref={refs.setFloating}
+                              style={{
+                                  ...floatingStyles,
+                                  ...(customColor ? customColorVars(customColor) : undefined),
+                              }}
+                              className={cn("z-50", rootRef.current?.closest(".dark") && "dark")}
+                          >
+                              <div
+                                  className={cn(
+                                      `w-full overflow-hidden border border-[var(--vpd-border-soft)] bg-[var(--vpd-surface)] text-[var(--vpd-text)] shadow-lg ${animationStyle} ${radiusStyle.menu}`,
+                                      placement.startsWith("top") ? "origin-bottom" : "origin-top",
+                                      isDetailed &&
+                                          "rounded-2xl border-[var(--vpd-border-soft)] shadow-[0_12px_24px_0_rgba(15,23,42,0.05)]",
+                                      open
+                                          ? "scale-100 opacity-100"
+                                          : "pointer-events-none scale-95 opacity-0",
+                                  )}
+                              >
+                                  {searchable ? (
+                                      <div
+                                          className={cn(
+                                              "border-b border-[var(--vpd-border-subtle)] p-1.5",
+                                              isFullSearch && "border-[var(--vpd-border-soft)] p-0",
+                                          )}
+                                      >
+                                          <div className="relative">
+                                              <svg
+                                                  viewBox="0 0 20 20"
+                                                  fill="none"
+                                                  aria-hidden="true"
+                                                  className={cn(
+                                                      "pointer-events-none absolute top-1/2 left-2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--vpd-text-placeholder)]",
+                                                      isFullSearch &&
+                                                          "left-3 h-4 w-4 text-[var(--vpd-text-muted)]",
+                                                      isDetailed && "left-4 h-4.5 w-4.5",
+                                                  )}
+                                              >
+                                                  <circle
+                                                      cx="9"
+                                                      cy="9"
+                                                      r="6"
+                                                      stroke="currentColor"
+                                                      strokeWidth={1.75}
+                                                  />
+                                                  <path
+                                                      d="M17 17l-4.35-4.35"
+                                                      stroke="currentColor"
+                                                      strokeWidth={1.75}
+                                                      strokeLinecap="round"
+                                                  />
+                                              </svg>
+                                              <input
+                                                  ref={searchInputRef}
+                                                  type="text"
+                                                  value={query}
+                                                  onChange={handleSearchChange}
+                                                  onKeyDown={handleSearchKeyDown}
+                                                  placeholder={searchPlaceholder}
+                                                  aria-label={searchPlaceholder}
+                                                  aria-controls={listboxId}
+                                                  aria-activedescendant={
+                                                      filteredOptions[activeIndex]
+                                                          ? `${listboxId}-option-${activeIndex}`
+                                                          : undefined
+                                                  }
+                                                  className={cn(
+                                                      "w-full rounded-sm border-none bg-[var(--vpd-surface-muted)] py-1.5 pr-7 pl-7 text-sm text-[var(--vpd-text-secondary)] outline-none placeholder:text-[var(--vpd-text-placeholder)]",
+                                                      isFullSearch &&
+                                                          "h-10 rounded-none bg-[var(--vpd-surface)] py-0 pr-9 pl-9 text-sm text-[var(--vpd-text)]",
+                                                      isDetailed && "h-13 pr-10 pl-11",
+                                                  )}
+                                              />
+                                              {query ? (
+                                                  <button
+                                                      type="button"
+                                                      onClick={() => {
+                                                          setQuery("");
+                                                          searchInputRef.current?.focus();
+                                                      }}
+                                                      aria-label="Clear search"
+                                                      className={cn(
+                                                          "absolute top-1/2 right-1.5 -translate-y-1/2 rounded-sm p-0.5 text-[var(--vpd-text-placeholder)] hover:text-[var(--vpd-text-secondary)]",
+                                                          isFullSearch && "right-3",
+                                                          isDetailed && "right-4",
+                                                      )}
+                                                  >
+                                                      <svg
+                                                          viewBox="0 0 20 20"
+                                                          fill="none"
+                                                          aria-hidden="true"
+                                                          className="h-3.5 w-3.5"
+                                                      >
+                                                          <path
+                                                              d="M6 6l8 8M14 6l-8 8"
+                                                              stroke="currentColor"
+                                                              strokeWidth={1.75}
+                                                              strokeLinecap="round"
+                                                          />
+                                                      </svg>
+                                                  </button>
+                                              ) : null}
+                                          </div>
+                                      </div>
+                                  ) : null}
 
-                        <div
-                            id={listboxId}
-                            role="listbox"
-                            className={cn(
-                                "max-h-60 overflow-auto p-1",
-                                isDetailed && "flex flex-col gap-1 p-2",
-                            )}
-                        >
-                            {noMatches ? (
-                                <div
-                                    role="presentation"
-                                    className={cn(
-                                        "text-[var(--vpd-text-placeholder)]",
-                                        isDetailed ? detailedSize.option : sizing.option,
-                                    )}
-                                >
-                                    {emptyText}
-                                </div>
-                            ) : (
-                                filteredOptions.map((option, index) => {
-                                    const isSelected = option.value === currentValue;
-                                    const isActive = index === activeIndex;
-                                    return (
-                                        // biome-ignore lint/a11y/useKeyWithClickEvents: selection is driven by keyboard on the combobox trigger (or the search field) via aria-activedescendant; this row is a pointer-only affordance
-                                        <div
-                                            key={option.value}
-                                            id={`${listboxId}-option-${index}`}
-                                            role="option"
-                                            tabIndex={-1}
-                                            aria-selected={isSelected}
-                                            aria-disabled={option.disabled}
-                                            ref={(node) => {
-                                                optionRefs.current[index] = node;
-                                            }}
-                                            onMouseEnter={() =>
-                                                !option.disabled && setActiveIndex(index)
-                                            }
-                                            onClick={() => commitValue(option)}
-                                            className={cn(
-                                                `flex items-center justify-between gap-2 rounded-sm ${sizing.option}`,
-                                                isDetailed && `rounded-xl ${detailedSize.option}`,
-                                                option.disabled
-                                                    ? "cursor-not-allowed text-[var(--vpd-text-disabled)]"
-                                                    : "cursor-pointer",
-                                                !option.disabled &&
-                                                    isActive &&
-                                                    color.optionActiveBg,
-                                                !option.disabled &&
-                                                    isDetailed &&
-                                                    isSelected &&
-                                                    color.optionActiveBg,
-                                                !option.disabled &&
-                                                    isSelected &&
-                                                    !isDetailed &&
-                                                    `font-medium ${color.optionSelectedText}`,
-                                            )}
-                                        >
-                                            <span
-                                                className={cn(
-                                                    "flex min-w-0 items-center gap-2",
-                                                    isDetailed && "gap-3",
-                                                )}
-                                            >
-                                                {isDetailed && option.leading ? (
-                                                    <span
-                                                        className={cn(
-                                                            "flex shrink-0 items-center justify-center",
-                                                            detailedSize.leading,
-                                                        )}
-                                                    >
-                                                        {option.leading}
-                                                    </span>
-                                                ) : null}
-                                                <span className="flex min-w-0 flex-col">
-                                                    <span
-                                                        className={cn(
-                                                            "truncate",
-                                                            isDetailed &&
-                                                                `${detailedSize.label} ${
-                                                                    option.disabled
-                                                                        ? "text-[var(--vpd-text-disabled)]"
-                                                                        : "text-[var(--vpd-text)]"
-                                                                }`,
-                                                        )}
-                                                    >
-                                                        {option.label}
-                                                    </span>
-                                                    {isDetailed && option.description ? (
-                                                        <span
-                                                            className={cn(
-                                                                "truncate",
-                                                                detailedSize.description,
-                                                                option.disabled
-                                                                    ? "text-[var(--vpd-text-disabled)]"
-                                                                    : "text-[var(--vpd-text-muted)]",
-                                                            )}
-                                                        >
-                                                            {option.description}
-                                                        </span>
-                                                    ) : null}
-                                                </span>
-                                            </span>
-                                            {isSelected ? (
-                                                <svg
-                                                    viewBox="0 0 16 16"
-                                                    fill="none"
-                                                    aria-hidden="true"
-                                                    className={cn(
-                                                        "h-3.5 w-3.5 shrink-0",
-                                                        isDetailed &&
-                                                            `h-4.5 w-4.5 ${color.optionSelectedText}`,
-                                                    )}
-                                                >
-                                                    <path
-                                                        d="M3.5 8.5l3 3 6-7"
-                                                        stroke="currentColor"
-                                                        strokeWidth={2}
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                    />
-                                                </svg>
-                                            ) : null}
-                                        </div>
-                                    );
-                                })
-                            )}
-                        </div>
-                    </div>
-                ) : null}
+                                  <div
+                                      id={listboxId}
+                                      role="listbox"
+                                      className={cn(
+                                          "max-h-60 overflow-auto p-1",
+                                          isDetailed && "flex flex-col gap-1 p-2",
+                                      )}
+                                  >
+                                      {noMatches ? (
+                                          <div
+                                              role="presentation"
+                                              className={cn(
+                                                  "text-[var(--vpd-text-placeholder)]",
+                                                  isDetailed ? detailedSize.option : sizing.option,
+                                              )}
+                                          >
+                                              {emptyText}
+                                          </div>
+                                      ) : (
+                                          filteredOptions.map((option, index) => {
+                                              const isSelected = option.value === currentValue;
+                                              const isActive = index === activeIndex;
+                                              return (
+                                                  // biome-ignore lint/a11y/useKeyWithClickEvents: selection is driven by keyboard on the combobox trigger (or the search field) via aria-activedescendant; this row is a pointer-only affordance
+                                                  <div
+                                                      key={option.value}
+                                                      id={`${listboxId}-option-${index}`}
+                                                      role="option"
+                                                      tabIndex={-1}
+                                                      aria-selected={isSelected}
+                                                      aria-disabled={option.disabled}
+                                                      ref={(node) => {
+                                                          optionRefs.current[index] = node;
+                                                      }}
+                                                      onMouseEnter={() =>
+                                                          !option.disabled && setActiveIndex(index)
+                                                      }
+                                                      onClick={() => commitValue(option)}
+                                                      className={cn(
+                                                          `flex items-center justify-between gap-2 rounded-sm ${sizing.option}`,
+                                                          isDetailed &&
+                                                              `rounded-xl ${detailedSize.option}`,
+                                                          option.disabled
+                                                              ? "cursor-not-allowed text-[var(--vpd-text-disabled)]"
+                                                              : "cursor-pointer",
+                                                          !option.disabled &&
+                                                              isActive &&
+                                                              color.optionActiveBg,
+                                                          !option.disabled &&
+                                                              isDetailed &&
+                                                              isSelected &&
+                                                              color.optionActiveBg,
+                                                          !option.disabled &&
+                                                              isSelected &&
+                                                              !isDetailed &&
+                                                              `font-medium ${color.optionSelectedText}`,
+                                                      )}
+                                                  >
+                                                      <span
+                                                          className={cn(
+                                                              "flex min-w-0 items-center gap-2",
+                                                              isDetailed && "gap-3",
+                                                          )}
+                                                      >
+                                                          {isDetailed && option.leading ? (
+                                                              <span
+                                                                  className={cn(
+                                                                      "flex shrink-0 items-center justify-center",
+                                                                      detailedSize.leading,
+                                                                  )}
+                                                              >
+                                                                  {option.leading}
+                                                              </span>
+                                                          ) : null}
+                                                          <span className="flex min-w-0 flex-col">
+                                                              <span
+                                                                  className={cn(
+                                                                      "truncate",
+                                                                      isDetailed &&
+                                                                          `${detailedSize.label} ${
+                                                                              option.disabled
+                                                                                  ? "text-[var(--vpd-text-disabled)]"
+                                                                                  : "text-[var(--vpd-text)]"
+                                                                          }`,
+                                                                  )}
+                                                              >
+                                                                  {option.label}
+                                                              </span>
+                                                              {isDetailed && option.description ? (
+                                                                  <span
+                                                                      className={cn(
+                                                                          "truncate",
+                                                                          detailedSize.description,
+                                                                          option.disabled
+                                                                              ? "text-[var(--vpd-text-disabled)]"
+                                                                              : "text-[var(--vpd-text-muted)]",
+                                                                      )}
+                                                                  >
+                                                                      {option.description}
+                                                                  </span>
+                                                              ) : null}
+                                                          </span>
+                                                      </span>
+                                                      {isSelected ? (
+                                                          <svg
+                                                              viewBox="0 0 16 16"
+                                                              fill="none"
+                                                              aria-hidden="true"
+                                                              className={cn(
+                                                                  "h-3.5 w-3.5 shrink-0",
+                                                                  isDetailed &&
+                                                                      `h-4.5 w-4.5 ${color.optionSelectedText}`,
+                                                              )}
+                                                          >
+                                                              <path
+                                                                  d="M3.5 8.5l3 3 6-7"
+                                                                  stroke="currentColor"
+                                                                  strokeWidth={2}
+                                                                  strokeLinecap="round"
+                                                                  strokeLinejoin="round"
+                                                              />
+                                                          </svg>
+                                                      ) : null}
+                                                  </div>
+                                              );
+                                          })
+                                      )}
+                                  </div>
+                              </div>
+                          </div>,
+                          document.body,
+                      )
+                    : null}
             </div>
             {name ? <input type="hidden" name={name} value={currentValue ?? ""} /> : null}
         </div>

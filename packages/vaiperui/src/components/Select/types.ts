@@ -29,6 +29,12 @@ export interface SelectProps {
     searchable?: boolean;
     searchPlaceholder?: string;
     /**
+     * `boxed`: a padded, rounded input inset in the menu. `full`: the input spans the whole top
+     * edge of the menu, borderless, separated from the options by a divider. The `detailed`
+     * variant always uses `full`.
+     */
+    searchStyle?: "boxed" | "full";
+    /**
      * `default`: the compact single-line dropdown. `detailed`: a richer combobox with a taller
      * trigger/rows, an optional leading slot and secondary line per option (via
      * `SelectOption.leading`/`description`), a persistent tint on the selected row, and its own

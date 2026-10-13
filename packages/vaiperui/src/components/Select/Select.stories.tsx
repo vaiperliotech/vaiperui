@@ -87,6 +87,10 @@ export const Searchable: Story = {
     args: { searchable: true, searchPlaceholder: "Buscar país..." },
 };
 
+export const SearchableFull: Story = {
+    args: { searchable: true, searchStyle: "full", searchPlaceholder: "Buscar país..." },
+};
+
 export const Detailed: Story = {
     args: { variant: "detailed", options: DETAILED_OPTIONS, label: "Destino" },
 };
