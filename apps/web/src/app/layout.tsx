@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
 
-import { Footer } from "@/components/Footer";
+import { Layout } from "@/layout/Layout";
 import {
     GITHUB_URL,
     SITE_DESCRIPTION,
@@ -90,8 +90,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                     // biome-ignore lint/security/noDangerouslySetInnerHtml: static, server-built JSON-LD
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
-                <main className="flex-1">{children}</main>
-                <Footer />
+                <Layout>{children}</Layout>
             </body>
         </html>
     );

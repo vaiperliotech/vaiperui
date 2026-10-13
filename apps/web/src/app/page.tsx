@@ -5,8 +5,14 @@ import { CopyInstallButton } from "@/components/CopyInstallButton";
 import { GithubIcon } from "@/components/GithubIcon";
 import { HeroBuildTerminal } from "@/components/HeroBuildTerminal";
 import { HeroTiles } from "@/components/HeroTiles";
-import { DownloadIcon, ForkIcon, StarIcon, TagIcon } from "@/components/icons";
-import { Nav } from "@/components/Nav";
+import {
+    ArrowRightIcon,
+    BookIcon,
+    DownloadIcon,
+    ForkIcon,
+    StarIcon,
+    TagIcon,
+} from "@/components/icons";
 import { getGithubStats, getNpmTotalDownloads } from "@/lib/repo-stats";
 import { getVaiperUiVersion } from "@/lib/vaiper-version";
 
@@ -46,8 +52,6 @@ export default async function Home() {
 
     return (
         <div data-hero className="relative isolate overflow-hidden border-b border-line bg-bg-1">
-            <Nav />
-
             <AmbientBackdrop />
             <HeroTiles />
 
@@ -72,9 +76,11 @@ export default async function Home() {
 
                         <Link
                             href="/docs"
-                            className="mt-4 inline-flex w-full items-center justify-center rounded-lg bg-accent-blue px-4 py-2.5 font-mono text-sm font-medium text-bg-0 transition-colors duration-150 hover:bg-accent-blue/90 sm:w-auto"
+                            className="group mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-blue px-5 py-3 font-mono text-sm font-semibold text-bg-0 shadow-[inset_0_1px_0_rgb(255_255_255/0.35),0_1px_2px_rgb(0_0_0/0.4),0_10px_24px_-10px_var(--accent-blue-ring)] transition-[box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[#6bb4ff] hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.45),0_1px_2px_rgb(0_0_0/0.4),0_14px_28px_-10px_var(--accent-blue-ring)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-blue active:bg-accent-blue active:shadow-[inset_0_1px_0_rgb(255_255_255/0.25),0_1px_2px_rgb(0_0_0/0.4)] motion-safe:animate-float motion-reduce:transition-none sm:w-auto"
                         >
+                            <BookIcon className="size-4" />
                             Ver documentação
+                            <ArrowRightIcon className="size-4 transition-transform duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0" />
                         </Link>
 
                         <a

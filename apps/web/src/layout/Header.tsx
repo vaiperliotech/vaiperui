@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { GithubIcon } from "./GithubIcon";
 
-export function Nav() {
+import { GithubIcon } from "@/components/GithubIcon";
+
+export function Header() {
     return (
         <header className="sticky top-0 z-40 border-b border-line bg-bg-1/90 backdrop-blur-md">
             <div className="relative flex items-center justify-between px-4 py-2.5 sm:px-6">
@@ -16,23 +17,15 @@ export function Nav() {
                 >
                     vaiper<span className="text-accent-blue">ui</span>
                 </Link>
-                <div className="flex items-center gap-4">
-                    <Link
-                        href="/docs"
-                        className="font-mono text-sm text-ink-dim transition-colors hover:text-ink"
-                    >
-                        docs
-                    </Link>
-                    <a
-                        href="https://github.com/vaiperliotech/vaiperui"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-ink-dim transition-colors hover:text-ink"
-                        aria-label="Repositório no GitHub"
-                    >
-                        <GithubIcon className="size-5" />
-                    </a>
-                </div>
+                <a
+                    href="https://github.com/vaiperliotech/vaiperui"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-ink-dim transition-colors hover:text-ink"
+                    aria-label="Repositório no GitHub"
+                >
+                    <GithubIcon className="size-5" />
+                </a>
             </div>
         </header>
     );

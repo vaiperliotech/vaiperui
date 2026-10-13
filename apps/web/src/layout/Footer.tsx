@@ -1,8 +1,6 @@
 import Link from "next/link";
-
+import { GithubIcon } from "@/components/GithubIcon";
 import { getVaiperUiVersion } from "@/lib/vaiper-version";
-
-import { GithubIcon } from "./GithubIcon";
 
 export function Footer() {
     return (
