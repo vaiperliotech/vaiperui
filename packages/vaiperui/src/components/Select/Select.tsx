@@ -27,6 +27,8 @@ export function Select({
     emptyMessage = "No options found",
     searchable = false,
     searchPlaceholder = "Search...",
+    noResultsMessage = (query) => `No results for "${query}"`,
+    clearSearchLabel = "Clear search",
     searchStyle = "boxed",
     variant = "default",
     variantColor = "primary",
@@ -40,6 +42,7 @@ export function Select({
     className,
     style,
     label,
+    "aria-label": ariaLabel,
 }: SelectProps) {
     const [uncontrolledValue, setUncontrolledValue] = React.useState(defaultValue);
     const isControlled = value !== undefined;
@@ -299,7 +302,7 @@ export function Select({
 
     const noMatches = filteredOptions.length === 0;
     const emptyText =
-        searchable && query.trim() !== "" ? `No results for "${query.trim()}"` : emptyMessage;
+        searchable && query.trim() !== "" ? noResultsMessage(query.trim()) : emptyMessage;
 
     return (
         <div
@@ -328,6 +331,7 @@ export function Select({
                     id={selectId}
                     role="combobox"
                     aria-haspopup="listbox"
+                    aria-label={ariaLabel}
                     aria-expanded={open}
                     aria-controls={listboxId}
                     aria-activedescendant={
@@ -354,11 +358,11 @@ export function Select({
                     )}
                 >
                     <span className={cn("flex min-w-0 items-center gap-2", isDetailed && "gap-3")}>
-                        {isDetailed && selectedOption?.leading ? (
+                        {selectedOption?.leading ? (
                             <span
                                 className={cn(
                                     "flex shrink-0 items-center justify-center",
-                                    detailedSize.triggerLeading,
+                                    isDetailed && detailedSize.triggerLeading,
                                 )}
                             >
                                 {selectedOption.leading}
@@ -478,7 +482,7 @@ export function Select({
                                                           setQuery("");
                                                           searchInputRef.current?.focus();
                                                       }}
-                                                      aria-label="Clear search"
+                                                      aria-label={clearSearchLabel}
                                                       className={cn(
                                                           "absolute top-1/2 right-1.5 -translate-y-1/2 rounded-sm p-0.5 text-[var(--vpd-text-placeholder)] hover:text-[var(--vpd-text-secondary)]",
                                                           isFullSearch && "right-3",
@@ -568,11 +572,12 @@ export function Select({
                                                               isDetailed && "gap-3",
                                                           )}
                                                       >
-                                                          {isDetailed && option.leading ? (
+                                                          {option.leading ? (
                                                               <span
                                                                   className={cn(
                                                                       "flex shrink-0 items-center justify-center",
-                                                                      detailedSize.leading,
+                                                                      isDetailed &&
+                                                                          detailedSize.leading,
                                                                   )}
                                                               >
                                                                   {option.leading}

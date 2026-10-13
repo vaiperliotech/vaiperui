@@ -14,7 +14,7 @@ export interface SelectOption {
     disabled?: boolean;
     /** Secondary line shown under the label. Only rendered by `variant="detailed"`. */
     description?: string;
-    /** Leading visual (avatar, icon...) shown before the text. Only rendered by `variant="detailed"`. */
+    /** Leading visual (flag, avatar, icon...) shown before the text. Larger slot in `variant="detailed"`. */
     leading?: ReactNode;
 }
 
@@ -28,6 +28,12 @@ export interface SelectProps {
     /** Shows a filter input inside the menu so the user can type to narrow the options. */
     searchable?: boolean;
     searchPlaceholder?: string;
+    /** Message for a search with no matches. Receives the trimmed query. */
+    noResultsMessage?: (query: string) => string;
+    /** Accessible name of the button that clears the search field. */
+    clearSearchLabel?: string;
+    /** Accessible name for the combobox when there is no visible `label`. */
+    "aria-label"?: string;
     /**
      * `boxed`: a padded, rounded input inset in the menu. `full`: the input spans the whole top
      * edge of the menu, borderless, separated from the options by a divider. The `detailed`

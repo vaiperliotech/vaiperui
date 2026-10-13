@@ -78,6 +78,41 @@ describe("Select", () => {
         expect(screen.getByText('No results for "zzz"')).toBeInTheDocument();
     });
 
+    it("localizes the no-results message and the clear-search label", () => {
+        render(
+            <Select
+                options={OPTIONS}
+                searchable
+                searchPlaceholder="Buscar..."
+                noResultsMessage={(query) => `Nada para "${query}"`}
+                clearSearchLabel="Limpar busca"
+            />,
+        );
+        fireEvent.click(screen.getByRole("combobox"));
+        fireEvent.change(screen.getByPlaceholderText("Buscar..."), {
+            target: { value: "zzz" },
+        });
+        expect(screen.getByText('Nada para "zzz"')).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Limpar busca" })).toBeInTheDocument();
+    });
+
+    it("renders the leading slot beside the label in the default variant", () => {
+        render(
+            <Select
+                options={[{ value: "br", label: "Brasil", leading: <i data-testid="flag" /> }]}
+                defaultValue="br"
+            />,
+        );
+        expect(screen.getAllByTestId("flag")).toHaveLength(1);
+        fireEvent.click(screen.getByRole("combobox"));
+        expect(screen.getAllByTestId("flag")).toHaveLength(2);
+    });
+
+    it("names the combobox through aria-label", () => {
+        render(<Select options={OPTIONS} aria-label="Language" />);
+        expect(screen.getByRole("combobox", { name: "Language" })).toBeInTheDocument();
+    });
+
     it("does not open when disabled", () => {
         render(<Select options={OPTIONS} disabled />);
         fireEvent.click(screen.getByRole("combobox"));
