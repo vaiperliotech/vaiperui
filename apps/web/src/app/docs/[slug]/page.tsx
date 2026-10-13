@@ -17,7 +17,7 @@ export async function generateMetadata({
     const component = getComponent(slug);
     if (!component) return {};
     return {
-        title: `${component.name} — vaiperui`,
+        title: `${component.name} · vaiperui`,
         description: component.blurb,
     };
 }

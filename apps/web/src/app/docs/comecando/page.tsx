@@ -5,7 +5,7 @@ import { ButtonDemo, ButtonVariants, InputDemo } from "@/components/GuideDemos";
 import { TerminalWindow } from "@/components/TerminalWindow";
 
 export const metadata: Metadata = {
-    title: "Começando — vaiperui",
+    title: "Começando · vaiperui",
     description: "Monte sua primeira tela com a vaiperui em poucos passos.",
 };
 
@@ -64,7 +64,7 @@ export function Salvar() {
             <Section title="O diferencial: máscaras">
                 <P>
                     O <Code>Input</Code> formata documentos brasileiros automaticamente enquanto o
-                    usuário digita — basta passar <Code>mask</Code>.
+                    usuário digita. Basta passar <Code>mask</Code>.
                 </P>
                 <div className="grid gap-6 lg:grid-cols-2">
                     <CodePanel
@@ -86,14 +86,18 @@ export function Cpf() {
 
             <Section title="Onde ir agora">
                 <Callout title="próximo passo">
-                    Este guia mostrou o essencial com <Code>Button</Code> e <Code>Input</Code>. Veja
-                    a referência completa de{" "}
+                    Este guia cobriu o essencial com <Code>Button</Code> e <Code>Input</Code>, mas a
+                    biblioteca não para por aí. Veja a referência completa de{" "}
                     <Link href="/docs/button" className="text-accent-blue hover:text-ink">
                         Button
-                    </Link>{" "}
-                    ou{" "}
+                    </Link>
+                    ,{" "}
                     <Link href="/docs/input" className="text-accent-blue hover:text-ink">
                         Input
+                    </Link>{" "}
+                    ou{" "}
+                    <Link href="/docs/select" className="text-accent-blue hover:text-ink">
+                        Select
                     </Link>
                     .
                 </Callout>

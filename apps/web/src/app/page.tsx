@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { AmbientBackdrop } from "@/components/AmbientBackdrop";
 import { CopyInstallButton } from "@/components/CopyInstallButton";
 import { GithubIcon } from "@/components/GithubIcon";
@@ -60,14 +62,20 @@ export default async function Home() {
                         </h1>
 
                         <p className="mt-7 max-w-xl text-pretty text-base text-ink-dim sm:text-lg">
-                            Máscaras de input com formatação automática enquanto você digita, e uma
-                            única cor pinta a interface inteira — botão, borda, foco e ícone.
-                            Estilizado com Tailwind CSS.
+                            Componentes prontos para você, com uma gramática visual que cresce junto
+                            com o seu produto.
                         </p>
 
                         <div className="mt-9 w-full sm:max-w-108">
                             <CopyInstallButton />
                         </div>
+
+                        <Link
+                            href="/docs"
+                            className="mt-4 inline-flex w-full items-center justify-center rounded-lg bg-accent-blue px-4 py-2.5 font-mono text-sm font-medium text-bg-0 transition-colors duration-150 hover:bg-accent-blue/90 sm:w-auto"
+                        >
+                            Ver documentação
+                        </Link>
 
                         <a
                             href="https://github.com/vaiperliotech/vaiperui"

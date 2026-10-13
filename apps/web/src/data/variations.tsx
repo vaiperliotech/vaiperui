@@ -83,7 +83,7 @@ export const variations: Record<string, VariationGroup[]> = {
             title: "Estilos",
             file: "estilos.tsx",
             description:
-                "Mesma cor (`primary`) em todos — o que muda é o preenchimento e o contorno.",
+                "Mesma cor (`primary`) em todos: o que muda é o preenchimento e o contorno.",
             code: `<Button variant="solid" variantColor="primary">Botão</Button>
 <Button variant="solid-inverse" variantColor="primary">Botão</Button>
 <Button variant="outlined" variantColor="primary">Botão</Button>
@@ -125,7 +125,7 @@ export const variations: Record<string, VariationGroup[]> = {
         {
             title: "Hover",
             file: "hover.tsx",
-            description: "`glow` usa a cor da variante no brilho — passe o mouse para ver.",
+            description: "`glow` usa a cor da variante no brilho. Passe o mouse para ver.",
             code: `<Button hover="none">Botão</Button>
 <Button hover="lift">Botão</Button>
 <Button hover="scale">Botão</Button>
@@ -250,7 +250,7 @@ export const variations: Record<string, VariationGroup[]> = {
             title: "Cor personalizada",
             file: "custom-color.tsx",
             description:
-                "`customColor` sobrescreve `variantColor` e pinta borda e foco a partir de uma única cor — ou de um objeto `{ light, dark }` com uma cor para cada tema.",
+                "`customColor` sobrescreve `variantColor` e pinta borda e foco a partir de uma única cor, ou de um objeto `{ light, dark }` com uma cor para cada tema.",
             code: `<Input customColor="#ff6600" label="Nome" placeholder="Digite seu nome" />
 <Input customColor="#22c55e" label="Nome" placeholder="Digite seu nome" />
 <Input customColor="#a78bfa" label="Nome" placeholder="Digite seu nome" />

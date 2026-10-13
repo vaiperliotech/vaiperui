@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Code, CodePanel, Guide, GuidePagination, P, Section } from "@/components/Guide";
 
 export const metadata: Metadata = {
-    title: "Instalação — vaiperui",
+    title: "Instalação · vaiperui",
     description:
         "Como instalar a vaiperui: requisitos, import do CSS e primeiro import de componentes.",
 };
@@ -25,8 +25,8 @@ export default function InstalacaoPage() {
             <Section title="Requisitos">
                 <P>
                     <Code>react</Code> e <Code>react-dom</Code> são peer dependencies (versão{" "}
-                    <Code>&gt;=19</Code>) — seu projeto precisa já ter as duas instaladas. A lib é
-                    estilizada com Tailwind CSS v4, então seu projeto precisa ter o Tailwind
+                    <Code>&gt;=19</Code>); seu projeto precisa já ter as duas instaladas. A lib é
+                    estilizada com Tailwind CSS v4, então seu projeto também precisa do Tailwind
                     configurado.
                 </P>
             </Section>
@@ -40,14 +40,14 @@ export default function InstalacaoPage() {
                     code={`@import "tailwindcss";
 @import "vaiperui/theme.css";
 
-@source "../node_modules/vaiperui/src";`}
+@source "../node_modules/vaiperui/dist";`}
                 />
             </Section>
 
             <Section title="Importar componentes">
                 <P>
-                    Tudo é exportado a partir da raiz do pacote — importe o componente que precisar
-                    e use:
+                    Tudo é exportado a partir da raiz do pacote. Importe o componente que precisar e
+                    use:
                 </P>
                 <CodePanel
                     title="Button.tsx"

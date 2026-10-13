@@ -19,9 +19,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "vaiperui — componentes React/Next prontos pra produção",
+    title: "vaiperui · componentes React prontos pra produção",
     description:
-        "Biblioteca de componentes React/Next estilizada com Tailwind, com máscaras de input nativas e customização por uma única cor.",
+        "Button, Input e Select tipados e acessíveis para Tailwind CSS, com máscara de documento nativa e uma única prop de cor para toda a interface.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

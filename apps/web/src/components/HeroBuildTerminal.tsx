@@ -1,39 +1,39 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Input } from "vaiperui";
+import { type ReactNode, useState } from "react";
+import { Input, type InputMask } from "vaiperui";
 import { CodeBlock } from "./CodeBlock";
 import { CodeIcon, EyeIcon } from "./icons";
 import { TerminalWindow } from "./TerminalWindow";
 
 /**
- * "Instalação ao vivo": digita o real fluxo de instalação caractere a
- * caractere, como se o pacote estivesse sendo montado ali na hora, e termina
- * revelando um preview de verdade — um `Input` real, interativo, com máscara
- * de CPF e `customColor` — provando os dois diferenciais do PRODUCT.md em
- * vez de só descrevê-los em prosa. As abas "code"/"live" deixam ver os dois
- * lados: o JSX que produz o resultado, e o resultado rodando de verdade.
- * Todo passo do código é verificável (README/build real do pacote) — nada
- * de métrica inventada.
+ * Preview ao vivo: um `Input` real, interativo, com controles de máscara e
+ * `customColor` — provando os dois diferenciais do PRODUCT.md em vez de só
+ * descrevê-los em prosa. As abas "code"/"live" deixam ver os dois lados: o
+ * JSX que produz o resultado, e o resultado rodando de verdade, sincronizados
+ * com os controles abaixo.
  *
- * Acessibilidade: o bloco de instalação é decorativo → aria-hidden (o
- * conteúdo real fica na coluna esquerda). O preview NÃO é decorativo: na
- * aba "live" é um `Input` de verdade, focável, com label associado — nada
- * de aria-hidden nele. prefers-reduced-motion monta o estado final direto,
- * sem animar.
+ * Acessibilidade: o preview e os controles NÃO são decorativos. Na aba
+ * "live" é um `Input` de verdade, focável, com label associado, e os chips
+ * são botões reais navegáveis por teclado.
  */
-const LINES: string[] = [
-    "npm install vaiperui",
-    'import "vaiperui/theme.css"',
-    'import { Input } from "vaiperui"',
+const MASKS: InputMask[] = ["cpf", "cnpj", "cep", "telefone"];
+
+const MASK_LABEL: Record<InputMask, string> = {
+    cpf: "CPF",
+    cnpj: "CNPJ",
+    cei: "CEI",
+    cep: "CEP",
+    telefone: "Telefone",
+};
+
+const DEFAULT_COLOR = "#a78bfa";
+
+const COLORS = [
+    { label: "laranja", value: "#ff6600" },
+    { label: "verde", value: "#22c55e" },
+    { label: "violeta", value: DEFAULT_COLOR },
 ];
-
-const INPUT_CODE = `import { Input } from "vaiperui";
-
-<Input label="CPF" mask="cpf" customColor="#a78bfa" />`;
-
-const CHAR_DELAY = 26;
-const LINE_PAUSE = 420;
 
 type View = "code" | "live";
 
@@ -64,87 +64,105 @@ function ViewToggle({ view, onChange }: { view: View; onChange: (view: View) => 
     );
 }
 
+function Chip({
+    label,
+    active,
+    swatch,
+    onClick,
+}: {
+    label: string;
+    active: boolean;
+    swatch?: string;
+    onClick: () => void;
+}) {
+    return (
+        <button
+            type="button"
+            aria-pressed={active}
+            onClick={onClick}
+            className={`flex cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[11px] transition-colors duration-150 ${
+                active
+                    ? "border-accent-blue bg-accent-blue/10 text-accent-blue"
+                    : "border-line-strong text-ink-faint hover:border-accent-blue/60 hover:text-ink"
+            }`}
+        >
+            {swatch && (
+                <span
+                    aria-hidden="true"
+                    className="size-2 rounded-full"
+                    style={{ backgroundColor: swatch }}
+                />
+            )}
+            {label}
+        </button>
+    );
+}
+
+function ControlGroup({ legend, children }: { legend: string; children: ReactNode }) {
+    return (
+        <fieldset className="m-0 flex min-w-0 flex-wrap items-center gap-1.5 border-0 p-0">
+            <legend className="mr-1 font-mono text-[10px] text-ink-faint uppercase tracking-wider">
+                {legend}
+            </legend>
+            {children}
+        </fieldset>
+    );
+}
+
 export function HeroBuildTerminal() {
-    const [completed, setCompleted] = useState<string[]>([]);
-    const [typing, setTyping] = useState("");
-    const [done, setDone] = useState(false);
     const [view, setView] = useState<View>("live");
-
-    useEffect(() => {
-        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (reduced) {
-            setCompleted(LINES);
-            setDone(true);
-            return;
-        }
-
-        let cancelled = false;
-        let timer: number;
-        const wait = (ms: number) =>
-            new Promise<void>((resolve) => {
-                timer = window.setTimeout(resolve, ms);
-            });
-
-        async function run() {
-            for (const line of LINES) {
-                for (let i = 1; i <= line.length; i++) {
-                    await wait(CHAR_DELAY);
-                    if (cancelled) return;
-                    setTyping(line.slice(0, i));
-                }
-                await wait(LINE_PAUSE);
-                if (cancelled) return;
-                setCompleted((prev) => [...prev, line]);
-                setTyping("");
-            }
-            if (!cancelled) setDone(true);
-        }
-
-        run();
-        return () => {
-            cancelled = true;
-            window.clearTimeout(timer);
-        };
-    }, []);
+    const [mask, setMask] = useState<InputMask>("cpf");
+    const [color, setColor] = useState(DEFAULT_COLOR);
 
     return (
         <div className="flex w-full max-w-lg flex-col gap-4">
-            <div aria-hidden="true">
-                <TerminalWindow title="instalação — zsh">
-                    <div className="font-mono text-[12.5px] leading-relaxed text-ink-dim">
-                        {completed.map((line) => (
-                            <div
-                                key={line}
-                                className="flex min-h-[1.25em] min-w-0 items-baseline gap-2"
-                            >
-                                <span className="select-none text-accent-blue">❯</span>
-                                <span className="min-w-0 wrap-break-word text-ink">{line}</span>
-                            </div>
-                        ))}
-                        {!done && (
-                            <div className="flex min-h-[1.25em] min-w-0 items-baseline gap-2">
-                                <span className="select-none text-accent-blue">❯</span>
-                                <span className="min-w-0 wrap-break-word text-ink">{typing}</span>
-                                <span className="caret-blink select-none text-accent-blue">▍</span>
-                            </div>
-                        )}
-                    </div>
-                </TerminalWindow>
-            </div>
-
             <TerminalWindow
                 title={view === "code" ? "Input.tsx" : "preview"}
                 bodyClassName={view === "code" ? "p-4" : "p-6"}
                 actions={<ViewToggle view={view} onChange={setView} />}
             >
                 {view === "code" ? (
-                    <CodeBlock code={INPUT_CODE} />
+                    <CodeBlock
+                        code={`import { Input } from "vaiperui";
+
+<Input label="${MASK_LABEL[mask]}" mask="${mask}" customColor="${color}" />`}
+                    />
                 ) : (
                     <div className="dark preview-theme">
-                        <Input label="CPF" mask="cpf" customColor="#a78bfa" className="w-full" />
+                        <Input
+                            key={`${mask}-${color}`}
+                            label={MASK_LABEL[mask]}
+                            mask={mask}
+                            customColor={color}
+                            className="w-full"
+                        />
                     </div>
                 )}
             </TerminalWindow>
+
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-3 rounded-lg border border-line-strong bg-bg-1 px-4 py-3">
+                <ControlGroup legend="Cor">
+                    {COLORS.map((option) => (
+                        <Chip
+                            key={option.value}
+                            label={option.label}
+                            swatch={option.value}
+                            active={color === option.value}
+                            onClick={() => setColor(option.value)}
+                        />
+                    ))}
+                </ControlGroup>
+                <ControlGroup legend="Máscara">
+                    {MASKS.map((option) => (
+                        <Chip
+                            key={option}
+                            label={MASK_LABEL[option]}
+                            active={mask === option}
+                            onClick={() => setMask(option)}
+                        />
+                    ))}
+                </ControlGroup>
+            </div>
         </div>
     );
 }

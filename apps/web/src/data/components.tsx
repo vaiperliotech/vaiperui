@@ -24,7 +24,7 @@ export const components: ComponentEntry[] = [
         slug: "button",
         name: "Button",
         blurb: "Todas as props nativas de <button>, mais variante, cor, tamanho, raio, hover e animações prontas.",
-        usage: "Importe de `vaiperui` e use como um `<button>` — todas as props nativas (`onClick`, `disabled`, `type`, `aria-*`…) continuam funcionando. A aparência é controlada pelas props `variant`, `variantColor`, `size`, `radius`, `hover` e `animation`.",
+        usage: "Importe de `vaiperui` e use como um `<button>`: todas as props nativas (`onClick`, `disabled`, `type`, `aria-*`…) continuam funcionando. A aparência é controlada pelas props `variant`, `variantColor`, `size`, `radius`, `hover` e `animation`.",
         code: `import { Button } from "vaiperui";
 
 <Button variantColor="primary" hover="lift">
@@ -138,7 +138,7 @@ export const components: ComponentEntry[] = [
                 values: "cor CSS válida | { light, dark }",
                 defaultValue: "—",
                 description:
-                    "Sobrescreve variantColor — pinta borda e foco a partir de uma única cor, ou de um objeto { light, dark } com uma cor para cada tema",
+                    "Sobrescreve variantColor: pinta borda e foco a partir de uma única cor, ou de um objeto { light, dark } com uma cor para cada tema",
             },
             {
                 prop: "size",
@@ -300,7 +300,7 @@ export const components: ComponentEntry[] = [
                 values: "cor CSS válida | { light, dark }",
                 defaultValue: "—",
                 description:
-                    "Sobrescreve variantColor — pinta foco, borda e destaque a partir de uma única cor, ou de um objeto { light, dark }",
+                    "Sobrescreve variantColor: pinta foco, borda e destaque a partir de uma única cor, ou de um objeto { light, dark }",
             },
             {
                 prop: "size",
