@@ -9,7 +9,7 @@ import { type AppProps, Pane } from "./kit";
 
 type Tab = "world" | "stopwatch" | "timer";
 
-const CITIES: Array<{ zone: string; names: [string, string, string] }> = [
+export const CITIES: Array<{ zone: string; names: [string, string, string] }> = [
     { zone: "America/Sao_Paulo", names: ["São Paulo", "São Paulo", "São Paulo"] },
     { zone: "America/New_York", names: ["New York", "Nova York", "Nueva York"] },
     { zone: "Europe/London", names: ["London", "Londres", "Londres"] },

@@ -546,3 +546,21 @@ html[data-window-state="restoring"] [data-window] {
         animation: none;
     }
 }
+
+/* the clock's panel eases in from the bar it belongs to */
+.clock-panel {
+    animation: clock-panel 160ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes clock-panel {
+    from {
+        opacity: 0;
+        translate: 0 -6px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .clock-panel {
+        animation: none;
+    }
+}

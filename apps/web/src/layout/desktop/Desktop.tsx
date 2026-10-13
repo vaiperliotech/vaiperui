@@ -5,7 +5,6 @@ import { forwardRef, useCallback, useEffect, useRef, useState, useSyncExternalSt
 import { createPortal } from "react-dom";
 
 import {
-    htmlLang,
     LOCALE_COOKIE,
     LOCALE_COOKIE_MAX_AGE,
     type Locale,
@@ -32,6 +31,7 @@ import { Snake } from "./apps/Snake";
 import { Terminal } from "./apps/Terminal";
 import { ThemeStudio } from "./apps/ThemeStudio";
 import { Battery } from "./Battery";
+import { ClockMenu } from "./ClockMenu";
 import { Breakout } from "./games/Breakout";
 import { BugHunt } from "./games/BugHunt";
 import { ColorMatch } from "./games/ColorMatch";
@@ -214,13 +214,6 @@ export function Desktop({
     // pinned apps, then the games that are open right now (like the running apps of a real dock)
     const dockApps = APP_IDS.filter((id) => PINNED.includes(id) || wins[id].open);
     const focusedTitle = focus ? titleOf(focus) : "vaiperui";
-    const clock = now
-        ? new Intl.DateTimeFormat(htmlLang[locale], {
-              weekday: "short",
-              hour: "2-digit",
-              minute: "2-digit",
-          }).format(now)
-        : "";
 
     function content(id: AppId): React.ReactNode {
         const game = { active: isOn(id), t: d.games, locale };
@@ -324,7 +317,7 @@ export function Desktop({
                 </div>
                 <div className="flex items-center gap-4">
                     <Battery locale={locale} />
-                    <time className="text-ink-dim tabular-nums">{clock}</time>
+                    <ClockMenu locale={locale} now={now} />
                 </div>
             </div>
 
