@@ -26,7 +26,9 @@
     --vpd-border-subtle: #f5f5f5;
 }
 
+/* Makes light-dark() (used by customColor) follow the .dark class, not only the OS preference */
 .dark {
+    color-scheme: dark;
     --vpd-surface: #171717;
     --vpd-surface-muted: #262626;
     --vpd-surface-hover: #262626;
