@@ -3,16 +3,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-export type WindowLabels = {
-    group: string;
-    close: string;
-    minimize: string;
-    fullscreen: string;
-    exitFullscreen: string;
-    exited: string;
-    reopen: string;
-    restore: string;
-};
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionaries";
+import { Desktop } from "./desktop/Desktop";
+
+export type WindowLabels = Dictionary["header"]["window"];
 
 // What the page "window" is doing; mirrored on <html data-window-state> so the CSS can animate it.
 type Mode = "idle" | "closing" | "closed" | "opening" | "minimizing" | "minimized" | "restoring";
@@ -26,7 +21,15 @@ const TIMING: Record<"closing" | "opening" | "minimizing" | "restoring", number>
 
 // The header dots do what macOS window buttons do, to the page itself:
 // red switches the "screen" off like a CRT, yellow sends the page to a dock, green goes fullscreen.
-export function TrafficLights({ labels }: { labels: WindowLabels }) {
+export function TrafficLights({
+    labels,
+    locale,
+    version,
+}: {
+    labels: WindowLabels;
+    locale: Locale;
+    version: string;
+}) {
     const [mode, setMode] = useState<Mode>("idle");
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [canFullscreen, setCanFullscreen] = useState(true);
@@ -165,7 +168,15 @@ export function TrafficLights({ labels }: { labels: WindowLabels }) {
             </span>
 
             {mode === "closed" ? <ClosedScreen labels={labels} onReopen={reopen} /> : null}
-            {mode === "minimized" ? <Dock labels={labels} onRestore={restore} /> : null}
+            {mode === "minimized" ? (
+                <Desktop
+                    locale={locale}
+                    version={version}
+                    labels={labels}
+                    onRestore={restore}
+                    onNuke={() => run("closing", "closed")}
+                />
+            ) : null}
         </div>
     );
 }
@@ -199,52 +210,6 @@ function ClosedScreen({ labels, onReopen }: { labels: WindowLabels; onReopen: ()
                     className="blink ml-1 inline-block h-4 w-2 translate-y-0.5 bg-ink"
                 />
             </p>
-        </div>,
-        document.body,
-    );
-}
-
-function Dock({ labels, onRestore }: { labels: WindowLabels; onRestore: () => void }) {
-    const button = useRef<HTMLButtonElement>(null);
-
-    useEffect(() => {
-        button.current?.focus();
-        const onKeyDown = (event: KeyboardEvent) => {
-            if (event.key === "Escape") onRestore();
-        };
-        document.addEventListener("keydown", onKeyDown);
-        return () => document.removeEventListener("keydown", onKeyDown);
-    }, [onRestore]);
-
-    return createPortal(
-        <div className="dock-in fixed bottom-3 left-1/2 z-[100] -translate-x-1/2 rounded-2xl border border-line-strong bg-bg-2/70 p-1.5 shadow-[0_18px_40px_-12px_rgba(0,0,0,0.7)] backdrop-blur-xl">
-            <button
-                ref={button}
-                type="button"
-                onClick={onRestore}
-                aria-label={labels.restore}
-                title={labels.restore}
-                className="group relative flex size-12 cursor-pointer flex-col items-center justify-center rounded-xl transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-1.5 hover:scale-125 focus-visible:outline-2 focus-visible:outline-accent-blue motion-reduce:transition-none"
-            >
-                {/* the minimized window: a tiny copy of the page chrome */}
-                <span
-                    aria-hidden="true"
-                    className="flex h-8 w-10 flex-col overflow-hidden rounded-md border border-line-strong bg-bg-1"
-                >
-                    <span className="flex items-center gap-[2px] border-line border-b bg-bg-2 px-1 py-[3px]">
-                        <span className="size-[3px] rounded-full bg-mac-red" />
-                        <span className="size-[3px] rounded-full bg-mac-yellow" />
-                        <span className="size-[3px] rounded-full bg-mac-green" />
-                    </span>
-                    <span className="flex flex-1 items-center justify-center font-display font-semibold text-[8px] text-ink leading-none">
-                        vaiper<span className="text-accent-blue">ui</span>
-                    </span>
-                </span>
-                <span
-                    aria-hidden="true"
-                    className="absolute -bottom-1 size-1 rounded-full bg-ink-faint"
-                />
-            </button>
         </div>,
         document.body,
     );

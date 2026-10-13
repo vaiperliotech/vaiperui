@@ -4,6 +4,7 @@ import { GithubIcon } from "@/components/GithubIcon";
 import { type Locale, localePath } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { GITHUB_URL } from "@/lib/site";
+import { getVaiperUiVersion } from "@/lib/vaiper-version";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { SearchDialog } from "./SearchDialog";
 import { TrafficLights } from "./TrafficLights";
@@ -14,7 +15,11 @@ export function Header({ locale }: { locale: Locale }) {
     return (
         <header className="sticky top-0 z-40 border-b border-line bg-bg-1/90 backdrop-blur-md">
             <div className="relative flex items-center justify-between px-4 py-2.5 sm:px-6">
-                <TrafficLights labels={dict.window} />
+                <TrafficLights
+                    labels={dict.window}
+                    locale={locale}
+                    version={getVaiperUiVersion()}
+                />
                 <span className="sm:hidden" aria-hidden="true" />
                 <Link
                     href={localePath(locale, "/")}
