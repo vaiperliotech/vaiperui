@@ -7,6 +7,9 @@ export const hovers: Record<ButtonHover, string> = {
     glow: "hover:shadow-lg",
 };
 
+export const customGlowColor =
+    "hover:shadow-[color:color-mix(in_oklab,var(--vpd-accent)_60%,transparent)]";
+
 export const glowColors: Record<ButtonColors, string> = {
     primary: "hover:shadow-primary-500/60",
     success: "hover:shadow-success-500/60",

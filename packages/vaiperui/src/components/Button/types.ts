@@ -1,5 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
+import type { CustomColor } from "../../lib/customColorVars";
+
 export type ButtonColors = "primary" | "success" | "warning" | "danger";
 export type ButtonVariant = "solid" | "solid-inverse" | "outlined" | "outlined2" | "transparent";
 export type ButtonSize = "sm" | "md" | "lg";
@@ -28,6 +30,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     animation?: ButtonAnimation;
     /** Ink ripple that expands from the click point. */
     ripple?: boolean;
+    /** Overrides `variantColor` with any CSS color, or a `{ light, dark }` pair. */
+    customColor?: CustomColor;
     iconStart?: ReactNode;
     iconEnd?: ReactNode;
 }

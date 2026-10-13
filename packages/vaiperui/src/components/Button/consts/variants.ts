@@ -41,3 +41,16 @@ export const variants: Record<ButtonVariant, Record<ButtonColors, string>> = {
         danger: "bg-transparent text-danger-700 hover:bg-danger-500/20 focus-visible:ring-danger-500 dark:text-danger-300",
     },
 };
+
+/** Per-variant styling when `customColor` is set, driven by the `--vpd-accent*` variables. */
+export const customVariants: Record<ButtonVariant, string> = {
+    solid: "bg-[var(--vpd-accent)] text-white hover:bg-[var(--vpd-accent-hover)] focus-visible:ring-[var(--vpd-accent)]",
+    "solid-inverse":
+        "bg-[var(--vpd-accent)] text-white hover:bg-[color-mix(in_oklab,var(--vpd-accent)_80%,white)] focus-visible:ring-[var(--vpd-accent)]",
+    outlined:
+        "border border-[color-mix(in_oklab,var(--vpd-accent)_35%,transparent)] bg-transparent text-[var(--vpd-accent)] hover:bg-[color-mix(in_oklab,var(--vpd-accent)_10%,transparent)] focus-visible:ring-[var(--vpd-accent)]",
+    outlined2:
+        "border border-[var(--vpd-accent)] bg-transparent text-[var(--vpd-accent)] hover:bg-[var(--vpd-accent)] hover:text-white focus-visible:ring-[var(--vpd-accent)]",
+    transparent:
+        "bg-transparent text-[var(--vpd-accent)] hover:bg-[color-mix(in_oklab,var(--vpd-accent)_20%,transparent)] focus-visible:ring-[var(--vpd-accent)]",
+};

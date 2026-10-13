@@ -32,7 +32,15 @@ export const glowColorStyles: Record<ButtonColors, string> = {
 export function animationColors(
     animation: ButtonAnimation,
     variantColor: ButtonColors,
+    custom = false,
 ): string | false {
+    if (custom) {
+        if (animation === "gradient") {
+            return "from-[var(--vpd-accent)] via-[var(--vpd-accent-hover)] to-[var(--vpd-accent)]";
+        }
+        if (animation === "glow") return "[--btn-glow:var(--vpd-accent)]";
+        return false;
+    }
     if (animation === "gradient") return gradientColorStyles[variantColor];
     if (animation === "glow") return glowColorStyles[variantColor];
     return false;

@@ -1,11 +1,12 @@
 import * as React from "react";
 
 import { cn } from "../../lib/cn";
+import { customColorVars } from "../../lib/customColorVars";
 import { animationColors, animations } from "./consts/animations";
-import { glowColors, hovers } from "./consts/hovers";
+import { customGlowColor, glowColors, hovers } from "./consts/hovers";
 import { radiusStyles } from "./consts/radius";
 import { sizeStyles } from "./consts/sizes";
-import { variants } from "./consts/variants";
+import { customVariants, variants } from "./consts/variants";
 import type { ButtonProps } from "./types";
 
 const baseStyles =
@@ -31,6 +32,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
         hover = "none",
         animation = "none",
         ripple = false,
+        customColor,
+        style,
         type = "button",
         iconStart,
         iconEnd,
@@ -74,13 +77,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
     const classes = cn(
         baseStyles,
         ripple && "relative overflow-hidden",
-        variants[variant][variantColor],
+        customColor ? customVariants[variant] : variants[variant][variantColor],
         sizeStyles[size],
         radiusStyles[radius],
         hovers[hover],
-        hover === "glow" && glowColors[variantColor],
+        hover === "glow" && (customColor ? customGlowColor : glowColors[variantColor]),
         animations[animation],
-        animationColors(animation, variantColor),
+        animationColors(animation, variantColor, customColor !== undefined),
         className,
     );
 
@@ -89,6 +92,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
             ref={ref}
             type={type}
             className={classes}
+            style={customColor ? { ...customColorVars(customColor), ...style } : style}
             onPointerDown={handlePointerDown}
             onClick={handleClick}
             {...props}

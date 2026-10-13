@@ -82,6 +82,13 @@ export const components: ComponentEntry[] = [
                 description: "Animação contínua do botão; respeita prefers-reduced-motion",
             },
             {
+                prop: "customColor",
+                values: "string | { light: string; dark: string }",
+                defaultValue: "—",
+                description:
+                    "Sobrescreve variantColor com qualquer cor CSS (ou um par claro/escuro); hover, borda e foco derivam dela",
+            },
+            {
                 prop: "ripple",
                 values: "boolean",
                 defaultValue: "false",

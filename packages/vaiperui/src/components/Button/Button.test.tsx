@@ -141,6 +141,18 @@ describe("Button", () => {
         expect(onClick).toHaveBeenCalledTimes(1);
     });
 
+    it("paints the button from customColor instead of variantColor", () => {
+        render(
+            <Button customColor="#ff6600" variantColor="danger">
+                Custom
+            </Button>,
+        );
+        const button = screen.getByRole("button", { name: "Custom" });
+        expect(button.className).toContain("bg-[var(--vpd-accent)]");
+        expect(button.className).not.toContain("bg-danger-500");
+        expect(button.style.getPropertyValue("--vpd-accent")).toBe("#ff6600");
+    });
+
     it("runs no animation by default", () => {
         render(<Button>Still</Button>);
         expect(screen.getByRole("button", { name: "Still" }).className).not.toContain("animate-");

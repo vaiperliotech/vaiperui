@@ -165,6 +165,34 @@ export const variations: Record<string, VariationGroup[]> = {
             })),
         },
         {
+            title: "Cor personalizada",
+            file: "custom-color.tsx",
+            description:
+                "`customColor` sobrescreve `variantColor` com uma única cor, ou um objeto `{ light, dark }` com uma cor para cada tema.",
+            code: `<Button customColor="#ff6600">Laranja</Button>
+<Button customColor="#a78bfa" variant="outlined">Violeta</Button>
+<Button customColor={{ light: "#a855f7", dark: "#f472b6" }}>Light/dark</Button>`,
+            items: [
+                { label: "laranja", node: <Button customColor="#ff6600">Laranja</Button> },
+                {
+                    label: "violeta",
+                    node: (
+                        <Button customColor="#a78bfa" variant="outlined">
+                            Violeta
+                        </Button>
+                    ),
+                },
+                {
+                    label: "light/dark",
+                    node: (
+                        <Button customColor={{ light: "#a855f7", dark: "#f472b6" }}>
+                            Light/dark
+                        </Button>
+                    ),
+                },
+            ],
+        },
+        {
             title: "Ripple",
             file: "ripple.tsx",
             description:
