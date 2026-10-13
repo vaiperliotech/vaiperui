@@ -1,20 +1,23 @@
 {
     "name": "vaiperui",
-    "version": "0.0.0",
+    "version": "0.0.1-beta",
     "description": "Biblioteca de componentes React do vaiperui.",
-    "license": "ISC",
+    "license": "MIT",
     "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "sideEffects": [
         "**/*.css"
     ],
     "files": [
         "dist",
-        "src"
+        "src/styles"
     ],
     "exports": {
         ".": {
-            "types": "./src/index.ts",
-            "default": "./src/index.ts"
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
         },
         "./theme.css": "./src/styles/theme.css",
         "./package.json": "./package.json"
