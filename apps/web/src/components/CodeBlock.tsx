@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { CheckIcon, CopyIcon } from "./icons";
 
@@ -92,8 +93,26 @@ const TOKEN_CLASS: Record<Token["kind"], string> = {
     plain: "text-ink",
 };
 
-export function CodeBlock({ code, className = "" }: { code: string; className?: string }) {
+// The copy button speaks the language of the page (read from the URL's locale prefix)
+const EN: [copy: string, copied: string, aria: string] = ["copy", "copied", "Copy code"];
+const COPY_LABELS: Record<string, [copy: string, copied: string, aria: string]> = {
+    en: EN,
+    pt: ["copiar", "copiado", "Copiar código"],
+    es: ["copiar", "copiado", "Copiar código"],
+};
+
+export function CodeBlock({
+    code,
+    className = "",
+    alwaysShowCopy = false,
+}: {
+    code: string;
+    className?: string;
+    /** Keeps the copy button visible instead of showing it on hover (for small windows). */
+    alwaysShowCopy?: boolean;
+}) {
     const [copied, setCopied] = useState(false);
+    const [copy, copiedLabel, aria] = COPY_LABELS[usePathname().split("/")[1] ?? ""] ?? EN;
     const lines = code.replace(/\n$/, "").split("\n");
 
     async function handleCopy() {
@@ -111,11 +130,11 @@ export function CodeBlock({ code, className = "" }: { code: string; className?: 
             <button
                 type="button"
                 onClick={handleCopy}
-                aria-label="Copiar código"
-                className={`code-copy-btn absolute top-0 right-0 flex items-center gap-1.5 rounded-md border border-line-strong bg-bg-2 px-2 py-1 font-mono text-xs text-ink-faint transition-opacity duration-150 hover:border-accent-blue hover:text-ink ${copied ? "is-copied text-accent-blue" : ""}`}
+                aria-label={aria}
+                className={`code-copy-btn ${alwaysShowCopy ? "opacity-100!" : ""} absolute top-0 right-0 flex items-center gap-1.5 rounded-md border border-line-strong bg-bg-2 px-2 py-1 font-mono text-xs text-ink-faint transition-opacity duration-150 hover:border-accent-blue hover:text-ink ${copied ? "is-copied text-accent-blue" : ""}`}
             >
                 {copied ? <CheckIcon className="size-3" /> : <CopyIcon className="size-3" />}
-                {copied ? "copiado" : "copiar"}
+                {copied ? copiedLabel : copy}
             </button>
             <pre className={`overflow-x-auto font-mono text-[13px] leading-6 ${className}`}>
                 <code>

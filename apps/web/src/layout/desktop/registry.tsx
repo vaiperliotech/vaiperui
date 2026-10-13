@@ -17,7 +17,83 @@ export type GameId =
     | "breakout"
     | "stack"
     | "invaders";
-export type AppId = "terminal" | "arcade" | GameId;
+export type UtilityId =
+    | "playground"
+    | "masklab"
+    | "theme"
+    | "installer"
+    | "changelog"
+    | "settings"
+    | "notes"
+    | "calculator"
+    | "clock"
+    | "calendar"
+    | "converter"
+    | "cssgen";
+export type AppId = "terminal" | "apps" | "arcade" | GameId | UtilityId;
+
+type Names = [en: string, pt: string, es: string];
+
+/** The Apps window: the ones about the library first, then everyday tools. */
+export const UTILITY_LIST: Array<{
+    id: UtilityId;
+    group: "lib" | "tools";
+    size: [number, number];
+    names: Names;
+}> = [
+    {
+        id: "playground",
+        group: "lib",
+        size: [760, 580],
+        names: ["Playground", "Playground", "Playground"],
+    },
+    {
+        id: "masklab",
+        group: "lib",
+        size: [500, 470],
+        names: ["Mask Lab", "Laboratório de Máscaras", "Laboratorio de Máscaras"],
+    },
+    {
+        id: "theme",
+        group: "lib",
+        size: [800, 580],
+        names: ["Theme Studio", "Estúdio de Cores", "Estudio de Color"],
+    },
+    {
+        id: "installer",
+        group: "lib",
+        size: [640, 580],
+        names: ["Installer", "Instalador", "Instalador"],
+    },
+    {
+        id: "changelog",
+        group: "lib",
+        size: [540, 580],
+        names: ["About vaiperui", "Sobre o vaiperui", "Acerca de vaiperui"],
+    },
+    { id: "notes", group: "tools", size: [680, 460], names: ["Notes", "Notas", "Notas"] },
+    {
+        id: "calculator",
+        group: "tools",
+        size: [310, 470],
+        names: ["Calculator", "Calculadora", "Calculadora"],
+    },
+    { id: "clock", group: "tools", size: [480, 500], names: ["Clock", "Relógio", "Reloj"] },
+    {
+        id: "calendar",
+        group: "tools",
+        size: [440, 480],
+        names: ["Calendar", "Calendário", "Calendario"],
+    },
+    {
+        id: "converter",
+        group: "tools",
+        size: [480, 480],
+        names: ["Converter", "Conversor", "Conversor"],
+    },
+    { id: "cssgen", group: "tools", size: [760, 560], names: ["CSS Lab", "CSS Lab", "CSS Lab"] },
+    { id: "settings", group: "tools", size: [540, 460], names: ["Settings", "Ajustes", "Ajustes"] },
+];
 
 /** Easiest first: the order of the Games window. `level` is 1 (relaxed) to 5 (hard). */
 export const GAME_LIST: Array<{ id: GameId; level: 1 | 2 | 3 | 4 | 5; size: [number, number] }> = [
@@ -37,13 +113,24 @@ export const GAME_LIST: Array<{ id: GameId; level: 1 | 2 | 3 | 4 | 5; size: [num
     { id: "invaders", level: 5, size: [500, 680] },
 ];
 
-export const APP_IDS: AppId[] = ["terminal", "arcade", ...GAME_LIST.map((game) => game.id)];
+export const APP_IDS: AppId[] = [
+    "terminal",
+    "apps",
+    "arcade",
+    ...GAME_LIST.map((game) => game.id),
+    ...UTILITY_LIST.map((app) => app.id),
+];
 
 export const WINDOW_SIZES: Record<AppId, [number, number]> = {
     terminal: [580, 360],
+    apps: [700, 520],
     arcade: [700, 610],
     ...(Object.fromEntries(GAME_LIST.map((game) => [game.id, game.size])) as Record<
         GameId,
+        [number, number]
+    >),
+    ...(Object.fromEntries(UTILITY_LIST.map((app) => [app.id, app.size])) as Record<
+        UtilityId,
         [number, number]
     >),
 };
@@ -67,3 +154,25 @@ export const GAME_SLUGS: Record<string, GameId> = {
 };
 
 export type { ComponentType, GameProps, ReactNode };
+
+/** What the terminal accepts after `run`, and as a command of its own. */
+export const APP_SLUGS: Record<string, UtilityId> = {
+    playground: "playground",
+    masklab: "masklab",
+    theme: "theme",
+    installer: "installer",
+    about: "changelog",
+    changelog: "changelog",
+    notes: "notes",
+    calculator: "calculator",
+    clock: "clock",
+    calendar: "calendar",
+    converter: "converter",
+    csslab: "cssgen",
+    settings: "settings",
+};
+
+export const appName = (id: UtilityId, locale: "en" | "pt" | "es"): string => {
+    const names = UTILITY_LIST.find((app) => app.id === id)?.names ?? ["", "", ""];
+    return names[{ en: 0, pt: 1, es: 2 }[locale]] ?? "";
+};

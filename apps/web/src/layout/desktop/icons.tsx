@@ -49,6 +49,195 @@ export function AppIcon({ id }: { id: AppId | "page" }) {
                     </svg>
                 </span>
             );
+        case "apps":
+            return (
+                <span className={`${tile} grid grid-cols-2 grid-rows-2 gap-1 bg-bg-1 p-2`}>
+                    <span className="size-full rounded-[4px] bg-[#4da3ff]" />
+                    <span className="size-full rounded-[4px] bg-[#a78bfa]" />
+                    <span className="size-full rounded-[4px] bg-[#28c840]" />
+                    <span className="size-full rounded-[4px] bg-[#febc2e]" />
+                </span>
+            );
+        case "playground":
+            return (
+                <span className={`${tile} bg-bg-1`}>
+                    <svg viewBox="0 0 32 32" className="size-8" aria-hidden="true">
+                        <g stroke="#3a4560" strokeWidth="2" strokeLinecap="round">
+                            <path d="M6 9h20M6 16h20M6 23h20" />
+                        </g>
+                        <circle cx="20" cy="9" r="3" fill="#4da3ff" />
+                        <circle cx="11" cy="16" r="3" fill="#a78bfa" />
+                        <circle cx="17" cy="23" r="3" fill="#28c840" />
+                    </svg>
+                </span>
+            );
+        case "masklab":
+            return (
+                <span
+                    className={`${tile} bg-[#05070d] font-bold font-mono text-[#4da3ff] text-[10px] leading-none`}
+                >
+                    (00)
+                </span>
+            );
+        case "theme":
+            return (
+                <span className={`${tile} bg-bg-1`}>
+                    <span
+                        className="size-7 rounded-full border border-line-strong"
+                        style={{
+                            background:
+                                "conic-gradient(#ff5f57, #febc2e, #28c840, #4da3ff, #a78bfa, #ff5f57)",
+                        }}
+                    />
+                </span>
+            );
+        case "installer":
+            return (
+                <span className={`${tile} bg-bg-1`}>
+                    <svg viewBox="0 0 32 32" className="size-8" aria-hidden="true">
+                        <path
+                            d="M6 20v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5"
+                            fill="none"
+                            stroke="#7d8fac"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                        />
+                        <path
+                            d="M16 6v14M10.5 14.5 16 20l5.5-5.5"
+                            fill="none"
+                            stroke="#4da3ff"
+                            strokeWidth="2.6"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                    </svg>
+                </span>
+            );
+        case "changelog":
+            return (
+                <span className={`${tile} flex-col gap-0.5 bg-bg-1`}>
+                    <span className="font-bold font-display text-[13px] text-ink leading-none">
+                        v1
+                    </span>
+                    <span className="h-[3px] w-6 rounded-full bg-accent-blue" />
+                    <span className="h-[3px] w-4 rounded-full bg-line-strong" />
+                </span>
+            );
+        case "notes":
+            return (
+                <span
+                    className={`${tile} flex-col justify-start gap-[3px] bg-[#febc2e] p-1.5 pt-2`}
+                >
+                    <span className="h-[2px] w-full rounded-full bg-black/35" />
+                    <span className="h-[2px] w-full rounded-full bg-black/35" />
+                    <span className="h-[2px] w-3/4 self-start rounded-full bg-black/35" />
+                    <span className="h-[2px] w-full rounded-full bg-black/35" />
+                </span>
+            );
+        case "calculator":
+            return (
+                <span className={`${tile} flex-col gap-[3px] bg-bg-0 p-1.5`}>
+                    <span className="h-3 w-full rounded-[3px] bg-bg-3" />
+                    <span className="grid w-full flex-1 grid-cols-3 grid-rows-2 gap-[2px]">
+                        <span className="rounded-[2px] bg-bg-3" />
+                        <span className="rounded-[2px] bg-bg-3" />
+                        <span className="rounded-[2px] bg-[#febc2e]" />
+                        <span className="rounded-[2px] bg-bg-3" />
+                        <span className="rounded-[2px] bg-bg-3" />
+                        <span className="rounded-[2px] bg-[#febc2e]" />
+                    </span>
+                </span>
+            );
+        case "clock":
+            return (
+                <span className={`${tile} bg-bg-1`}>
+                    <svg viewBox="0 0 32 32" className="size-8" aria-hidden="true">
+                        <circle
+                            cx="16"
+                            cy="16"
+                            r="11"
+                            fill="#05070d"
+                            stroke="#7d8fac"
+                            strokeWidth="2"
+                        />
+                        <path
+                            d="M16 9v7l5 3"
+                            fill="none"
+                            stroke="#eef2fb"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                        <circle cx="16" cy="16" r="1.4" fill="#ff5f57" />
+                    </svg>
+                </span>
+            );
+        case "calendar":
+            return (
+                <span className={`${tile} flex-col justify-start bg-[#eef2fb]`}>
+                    <span className="h-3.5 w-full bg-[#ff5f57]" />
+                    <span className="flex flex-1 items-center font-bold font-display text-[#05070d] text-base">
+                        {new Date().getDate()}
+                    </span>
+                </span>
+            );
+        case "converter":
+            return (
+                <span className={`${tile} bg-bg-1`}>
+                    <svg viewBox="0 0 32 32" className="size-8" aria-hidden="true">
+                        <path
+                            d="M7 12h17M20 8l4 4-4 4"
+                            fill="none"
+                            stroke="#4da3ff"
+                            strokeWidth="2.4"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                        <path
+                            d="M25 21H8M12 17l-4 4 4 4"
+                            fill="none"
+                            stroke="#a78bfa"
+                            strokeWidth="2.4"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                    </svg>
+                </span>
+            );
+        case "cssgen":
+            return (
+                <span className={`${tile} bg-bg-1`}>
+                    <span
+                        className="size-6 rounded-[7px]"
+                        style={{
+                            background: "linear-gradient(135deg, #4da3ff, #a78bfa)",
+                            boxShadow: "3px 4px 0 rgba(167,139,250,0.35)",
+                        }}
+                    />
+                </span>
+            );
+        case "settings":
+            return (
+                <span className={`${tile} bg-bg-1`}>
+                    <svg viewBox="0 0 32 32" className="size-8" aria-hidden="true">
+                        <path
+                            d="M16 5l2 2.6 3.2-.7.9 3.1 3.1.9-.7 3.2L27 16l-2.6 2 .7 3.2-3.1.9-.9 3.1-3.2-.7L16 27l-2-2.6-3.2.7-.9-3.1-3.1-.9.7-3.2L5 16l2.6-2-.7-3.2 3.1-.9.9-3.1 3.2.7L16 5Z"
+                            fill="#3a4560"
+                            stroke="#7d8fac"
+                            strokeWidth="1.2"
+                            strokeLinejoin="round"
+                        />
+                        <circle
+                            cx="16"
+                            cy="16"
+                            r="4"
+                            fill="#05070d"
+                            stroke="#eef2fb"
+                            strokeWidth="1.6"
+                        />
+                    </svg>
+                </span>
+            );
         case "snake":
             return (
                 <span className={`${tile} bg-bg-1`}>

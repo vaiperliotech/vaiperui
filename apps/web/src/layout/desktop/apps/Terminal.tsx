@@ -4,9 +4,15 @@ import { useEffect, useRef, useState } from "react";
 
 import { COMPONENT_NAMES } from "@/data/guides";
 import { isLocale, type Locale, locales } from "@/i18n/config";
-import { type AppId, GAME_SLUGS } from "../registry";
+import { APP_SLUGS, type AppId, GAME_SLUGS } from "../registry";
 
 type Line = { kind: "in" | "out" | "err"; text: string };
+type BatteryInfo = {
+    level: number;
+    charging: boolean;
+    chargingTime: number;
+    dischargingTime: number;
+};
 
 export type TerminalActions = {
     openApp: (app: AppId) => void;
@@ -19,6 +25,7 @@ export type TerminalActions = {
 };
 
 const GAMES = Object.keys(GAME_SLUGS);
+const APPS = Object.keys(APP_SLUGS);
 const COMMANDS = [
     "help",
     "ls",
@@ -29,7 +36,11 @@ const COMMANDS = [
     "games",
     "play",
     "scores",
+    "battery",
+    "apps",
+    "run",
     ...GAMES,
+    ...APPS,
     "clear",
     "exit",
 ];
@@ -96,6 +107,9 @@ const HELP = [
     "neofetch             about this site",
     "games                list the games, easiest first",
     "scores               your records (scores clear: wipe them)",
+    "battery              what this browser reports about the battery",
+    "apps                 list the apps (playground, notes, clock…)",
+    "run <app>            open one (or just type its name)",
     "play <game>          launch one (or just type its name)",
     "clear, exit",
 ];
@@ -135,7 +149,7 @@ export function Terminal({
     const err = (text: string): Line => ({ kind: "err", text });
 
     function launchGame(slug: string) {
-        const id = GAME_SLUGS[slug];
+        const id = GAME_SLUGS[slug] ?? APP_SLUGS[slug];
         if (!id) return;
         print(out(`launching ${slug}…`));
         actions.openApp(id);
@@ -221,6 +235,47 @@ export function Terminal({
             case "games":
                 print(out(GAMES.join("  ")));
                 break;
+            case "battery": {
+                const api = (navigator as Navigator & { getBattery?: () => Promise<BatteryInfo> })
+                    .getBattery;
+                if (!api) {
+                    print(
+                        err("navigator.getBattery is not available in this browser."),
+                        out("Chrome, Edge and Opera expose it; Safari, Firefox and Brave do not."),
+                    );
+                    break;
+                }
+                const brave = (
+                    navigator as Navigator & { brave?: { isBrave: () => Promise<boolean> } }
+                ).brave;
+                Promise.all([api.call(navigator), brave?.isBrave().catch(() => false)])
+                    .then(([b, isBrave]) => {
+                        const minutes = (seconds: number) =>
+                            Number.isFinite(seconds) ? `${Math.round(seconds / 60)} min` : "–";
+                        print(
+                            out(`level            ${Math.round(b.level * 100)}%`),
+                            out(`charging         ${b.charging}`),
+                            out(`time to full     ${minutes(b.chargingTime)}`),
+                            out(`time to empty    ${minutes(b.dischargingTime)}`),
+                        );
+                        if (isBrave && b.level === 1 && b.charging && b.chargingTime === 0) {
+                            print(
+                                err(
+                                    "Brave reports a fixed 100% to every site (privacy protection), so the real level stays hidden.",
+                                ),
+                            );
+                        }
+                    })
+                    .catch(() => print(err("the browser refused to share the battery state.")));
+                break;
+            }
+            case "apps":
+                print(out(APPS.join("  ")));
+                break;
+            case "run":
+                if (first in APP_SLUGS) launchGame(first);
+                else print(err(`run: ${first || "?"}: no such app (type "apps")`));
+                break;
             case "play":
                 if (first in GAME_SLUGS) launchGame(first);
                 else print(err(`play: ${first || "?"}: no such game (type "games")`));
@@ -235,7 +290,8 @@ export function Terminal({
                 print(err("nice try. this is a documentation site."));
                 break;
             default:
-                if (name.toLowerCase() in GAME_SLUGS) launchGame(name.toLowerCase());
+                if (name.toLowerCase() in GAME_SLUGS || name.toLowerCase() in APP_SLUGS)
+                    launchGame(name.toLowerCase());
                 else print(err(`${name}: command not found`));
         }
     }
@@ -243,8 +299,8 @@ export function Terminal({
     function complete() {
         const [head = "", tail] = value.split(/\s+/, 2);
         if (value.includes(" ")) {
-            if (head === "open" || head === "play") {
-                const pool = head === "open" ? PAGES : GAMES;
+            if (head === "open" || head === "play" || head === "run") {
+                const pool = head === "open" ? PAGES : head === "play" ? GAMES : APPS;
                 const match = pool.filter((entry) => entry.startsWith(tail ?? ""));
                 if (match.length === 1) setValue(`${head} ${match[0]}`);
             }

@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 
 import {
@@ -14,10 +14,24 @@ import {
 } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { AppWindow } from "./AppWindow";
+import { Apps } from "./apps/Apps";
 import { Arcade } from "./apps/Arcade";
+import { Calculator } from "./apps/Calculator";
+import { Calendar } from "./apps/Calendar";
+import { Changelog } from "./apps/Changelog";
+import { Clock } from "./apps/Clock";
+import { Converter } from "./apps/Converter";
+import { CssLab } from "./apps/CssLab";
+import { Installer } from "./apps/Installer";
+import { MaskLab } from "./apps/MaskLab";
 import { Minesweeper, minesWindowSize } from "./apps/Minesweeper";
+import { Notes } from "./apps/Notes";
+import { Playground } from "./apps/Playground";
+import { Settings } from "./apps/Settings";
 import { Snake } from "./apps/Snake";
 import { Terminal } from "./apps/Terminal";
+import { ThemeStudio } from "./apps/ThemeStudio";
+import { Battery } from "./Battery";
 import { Breakout } from "./games/Breakout";
 import { BugHunt } from "./games/BugHunt";
 import { ColorMatch } from "./games/ColorMatch";
@@ -31,14 +45,21 @@ import { Stack } from "./games/Stack";
 import { TicTacToe } from "./games/TicTacToe";
 import { Wordle } from "./games/Wordle";
 import { AppIcon } from "./icons";
-import { APP_IDS, type AppId, WINDOW_SIZES } from "./registry";
+import { APP_IDS, type AppId, appName, type UtilityId, WINDOW_SIZES } from "./registry";
+import {
+    getWallpaper,
+    loadWallpaper,
+    subscribeWallpaper,
+    Wallpaper,
+    type WallpaperId,
+} from "./wallpaper";
 
 type Win = { open: boolean; minimized: boolean; zoom: boolean; x: number; y: number; z: number };
 type Labels = Dictionary["header"]["window"];
 
 const MENU_BAR = 28;
 // the dock always shows these two; every other app appears there while it is open
-const PINNED: AppId[] = ["terminal", "arcade"];
+const PINNED: AppId[] = ["terminal", "apps", "arcade"];
 
 const closedWindow = (): Win => ({ open: false, minimized: false, zoom: false, x: 0, y: 0, z: 0 });
 
@@ -64,6 +85,11 @@ export function Desktop({
     const [focus, setFocus] = useState<AppId | null>(null);
     const [bounce, setBounce] = useState<AppId | null>(null);
     const [now, setNow] = useState<Date | null>(null);
+    const wallpaper = useSyncExternalStore(
+        subscribeWallpaper,
+        getWallpaper,
+        () => "blueprint" as WallpaperId,
+    );
     // the Minesweeper window grows with the difficulty chosen inside it
     const [minesSize, setMinesSize] = useState<[number, number]>(() => minesWindowSize("easy"));
     const z = useRef(10);
@@ -74,6 +100,7 @@ export function Desktop({
 
     useEffect(() => {
         home.current?.focus();
+        loadWallpaper();
         setNow(new Date());
         const tick = window.setInterval(() => setNow(new Date()), 20_000);
         return () => {
@@ -175,8 +202,13 @@ export function Desktop({
         }
     }
 
-    const titleOf = (id: AppId): string =>
-        id === "terminal" ? d.apps.terminal : id === "arcade" ? d.games.title : d.games.names[id];
+    const titleOf = (id: AppId): string => {
+        if (id === "terminal") return d.apps.terminal;
+        if (id === "apps") return "Apps";
+        if (id === "arcade") return d.games.title;
+        if (id in d.games.names) return d.games.names[id as keyof typeof d.games.names];
+        return appName(id as UtilityId, locale);
+    };
     const isOn = (id: AppId) => focus === id && wins[id].open && !wins[id].minimized;
 
     // pinned apps, then the games that are open right now (like the running apps of a real dock)
@@ -209,6 +241,32 @@ export function Desktop({
                 );
             case "arcade":
                 return <Arcade labels={d.games} onPlay={launch} />;
+            case "apps":
+                return <Apps locale={locale} onOpen={launch} />;
+            case "playground":
+                return <Playground active={isOn(id)} locale={locale} />;
+            case "masklab":
+                return <MaskLab active={isOn(id)} locale={locale} />;
+            case "theme":
+                return <ThemeStudio active={isOn(id)} locale={locale} />;
+            case "installer":
+                return <Installer active={isOn(id)} locale={locale} />;
+            case "changelog":
+                return <Changelog active={isOn(id)} locale={locale} version={version} />;
+            case "notes":
+                return <Notes active={isOn(id)} locale={locale} />;
+            case "calculator":
+                return <Calculator active={isOn(id)} locale={locale} />;
+            case "clock":
+                return <Clock active={isOn(id)} locale={locale} />;
+            case "calendar":
+                return <Calendar active={isOn(id)} locale={locale} />;
+            case "converter":
+                return <Converter active={isOn(id)} locale={locale} />;
+            case "cssgen":
+                return <CssLab active={isOn(id)} locale={locale} />;
+            case "settings":
+                return <Settings active={isOn(id)} locale={locale} onSwitchLocale={switchLocale} />;
             case "snake":
                 return <Snake labels={d.snake} active={isOn("snake")} />;
             case "mines":
@@ -244,16 +302,8 @@ export function Desktop({
 
     return createPortal(
         <div className="desktop-in fixed inset-0 z-[100] overflow-hidden bg-bg-0 text-ink">
-            {/* wallpaper */}
-            <div aria-hidden="true" className="blueprint absolute inset-0 opacity-70" />
-            <div
-                aria-hidden="true"
-                className="absolute inset-0"
-                style={{
-                    background:
-                        "radial-gradient(60% 55% at 78% 8%, color-mix(in oklab, var(--accent-blue) 16%, transparent), transparent 70%), radial-gradient(50% 50% at 8% 92%, color-mix(in oklab, var(--accent-purple) 14%, transparent), transparent 70%)",
-                }}
-            />
+            {/* wallpaper (chosen in Settings) */}
+            <Wallpaper id={wallpaper} />
 
             {/* menu bar */}
             <div
@@ -272,7 +322,10 @@ export function Desktop({
                     </button>
                     <span className="font-semibold text-ink">{focusedTitle}</span>
                 </div>
-                <time className="text-ink-dim tabular-nums">{clock}</time>
+                <div className="flex items-center gap-4">
+                    <Battery locale={locale} />
+                    <time className="text-ink-dim tabular-nums">{clock}</time>
+                </div>
             </div>
 
             {APP_IDS.map((id) => {
