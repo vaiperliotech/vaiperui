@@ -35,6 +35,8 @@ const meta = {
                 "glow",
             ],
         },
+        ripple: { control: "boolean" },
+        customColor: { control: "color" },
     },
 } satisfies Meta<typeof Button>;
 
@@ -229,6 +231,50 @@ export const WithIcons: Story = {
             </svg>
         ),
     },
+};
+
+export const Ripple: Story = {
+    args: { ripple: true, children: "Click me" },
+};
+
+export const RippleVariants: Story = {
+    args: { children: undefined },
+    render: () => (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+            <Button ripple>Solid</Button>
+            <Button ripple variant="outlined">
+                Outlined
+            </Button>
+            <Button ripple variant="transparent" variantColor="success">
+                Transparent
+            </Button>
+        </div>
+    ),
+};
+
+export const CustomColor: Story = {
+    args: { children: undefined },
+    render: () => (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+            <Button customColor="#ff6600">Orange</Button>
+            <Button customColor="#22c55e" variant="solid-inverse">
+                Green
+            </Button>
+            <Button customColor="#a78bfa" variant="outlined">
+                Outlined
+            </Button>
+            <Button customColor="#a78bfa" variant="outlined2">
+                Outlined 2
+            </Button>
+            <Button customColor="#ff6600" variant="transparent">
+                Transparent
+            </Button>
+            <Button customColor="#a78bfa" hover="glow">
+                Glow
+            </Button>
+            <Button customColor={{ light: "#a855f7", dark: "#f472b6" }}>Light/dark</Button>
+        </div>
+    ),
 };
 
 export const Disabled: Story = {

@@ -39,6 +39,8 @@ const meta = {
         size: { control: "select", options: ["sm", "md", "lg"] },
         radius: { control: "select", options: ["none", "sm", "md", "lg", "full"] },
         animation: { control: "select", options: ["none", "smooth", "fast", "bounce"] },
+        searchStyle: { control: "select", options: ["boxed", "full"] },
+        customColor: { control: "color" },
     },
 } satisfies Meta<typeof Select>;
 
@@ -93,6 +95,40 @@ export const SearchableFull: Story = {
 
 export const Detailed: Story = {
     args: { variant: "detailed", options: DETAILED_OPTIONS, label: "Destino" },
+};
+
+export const CustomColor: Story = {
+    args: { label: undefined },
+    render: () => (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, width: 260 }}>
+            <Select options={OPTIONS} label="Orange" customColor="#ff6600" />
+            <Select options={OPTIONS} label="Violet" customColor="#a78bfa" searchable />
+            <Select
+                options={OPTIONS}
+                label="Light/dark"
+                customColor={{ light: "#a855f7", dark: "#f472b6" }}
+            />
+        </div>
+    ),
+};
+
+export const LeadingInDefault: Story = {
+    args: {
+        options: DETAILED_OPTIONS.map(({ description: _description, ...option }) => option),
+        label: "Country",
+    },
+};
+
+export const Localized: Story = {
+    args: {
+        searchable: true,
+        label: "País",
+        placeholder: "Escolha um país",
+        searchPlaceholder: "Buscar...",
+        emptyMessage: "Nenhuma opção encontrada",
+        noResultsMessage: (query) => `Nenhum resultado para "${query}"`,
+        clearSearchLabel: "Limpar busca",
+    },
 };
 
 export const Disabled: Story = {

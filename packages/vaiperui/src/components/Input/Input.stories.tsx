@@ -15,7 +15,21 @@ const meta = {
         size: { control: "select", options: ["sm", "md", "lg"] },
         radius: { control: "select", options: ["none", "sm", "md", "lg", "full"] },
         animation: { control: "select", options: ["none", "smooth", "fast", "bounce"] },
-        mask: { control: "select", options: ["cpf", "cnpj", "cei", "cep", "phone"] },
+        mask: {
+            control: "select",
+            options: [
+                "cpf",
+                "cnpj",
+                "cei",
+                "cep",
+                "phone",
+                "creditCard",
+                "cardExpiry",
+                "date",
+                "time",
+            ],
+        },
+        customColor: { control: "color" },
     },
 } satisfies Meta<typeof Input>;
 
@@ -152,7 +166,23 @@ export const Masks: Story = {
             <Input aria-label="CNPJ" label="CNPJ" mask="cnpj" />
             <Input aria-label="CEI" label="CEI" mask="cei" />
             <Input aria-label="CEP" label="CEP" mask="cep" />
-            <Input aria-label="Telefone" label="Telefone" mask="phone" />
+            <Input aria-label="Phone" label="Phone" mask="phone" />
+            <Input aria-label="Credit card" label="Credit card" mask="creditCard" />
+            <Input aria-label="Expiry" label="Expiry" mask="cardExpiry" />
+            <Input aria-label="Date" label="Date" mask="date" />
+            <Input aria-label="Time" label="Time" mask="time" />
+        </div>
+    ),
+};
+
+export const CustomColor: Story = {
+    args: { "aria-label": undefined },
+    render: () => (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, width: 280 }}>
+            <Input customColor="#ff6600" label="Orange" placeholder="Focus me" />
+            <Input customColor="#22c55e" label="Green" placeholder="Focus me" />
+            <Input customColor="#a78bfa" variant="outline" label="Violet outline" />
+            <Input customColor={{ light: "#a855f7", dark: "#fde047" }} label="Light/dark" />
         </div>
     ),
 };
