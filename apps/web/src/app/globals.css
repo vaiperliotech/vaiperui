@@ -228,3 +228,447 @@ pre {
 .code-copy-btn.is-copied {
     opacity: 1;
 }
+
+/* Smooth jumps from the "On this page" outline, unless the user asked for less motion */
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+/* ---- Header traffic lights: the page behaves like a macOS window (see layout/TrafficLights) ---- */
+
+[data-window] {
+    transform-origin: 50% var(--win-center, 50vh);
+}
+
+/* opacity, not visibility: components with `transition-all` would keep a hidden parent visible for a moment */
+html[data-window-state="closed"] [data-window],
+html[data-window-state="minimized"] [data-window] {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* red: CRT switching off, the picture collapses to a line, then to a dot */
+html[data-window-state="closing"] [data-window] {
+    animation: crt-off 520ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+html[data-window-state="opening"] [data-window] {
+    animation: crt-on 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* yellow: minimizing into the dock, then growing back out of it */
+html[data-window-state="minimizing"] [data-window] {
+    transform-origin: 50% var(--win-bottom, 100vh);
+    animation: minimize 620ms cubic-bezier(0.55, 0, 0.8, 0.4) forwards;
+}
+
+html[data-window-state="restoring"] [data-window] {
+    transform-origin: 50% var(--win-bottom, 100vh);
+    animation: restore 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes crt-off {
+    0% {
+        transform: scale(1, 1);
+        filter: brightness(1);
+    }
+    55% {
+        transform: scale(1, 0.006);
+        filter: brightness(2.4);
+    }
+    82% {
+        transform: scale(0.004, 0.006);
+        filter: brightness(3);
+    }
+    100% {
+        transform: scale(0, 0);
+        filter: brightness(3);
+        opacity: 0;
+    }
+}
+
+@keyframes crt-on {
+    0% {
+        transform: scale(0.004, 0.006);
+        filter: brightness(3);
+    }
+    45% {
+        transform: scale(1, 0.006);
+        filter: brightness(2.4);
+    }
+    100% {
+        transform: scale(1, 1);
+        filter: brightness(1);
+    }
+}
+
+@keyframes minimize {
+    0% {
+        transform: scale(1, 1);
+        opacity: 1;
+    }
+    55% {
+        transform: scale(0.45, 0.3);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(0.02, 0.025);
+        opacity: 0;
+    }
+}
+
+@keyframes restore {
+    0% {
+        transform: scale(0.02, 0.025);
+        opacity: 0;
+    }
+    40% {
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1, 1);
+        opacity: 1;
+    }
+}
+
+/* the dock bounces in, as macOS does */
+.dock-in {
+    animation: dock-in 560ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* `translate`, not `transform`: the dock is also centered with a translate utility, and both would add up */
+@keyframes dock-in {
+    from {
+        translate: -50% 140%;
+    }
+    to {
+        translate: -50% 0;
+    }
+}
+
+.blink {
+    animation: blink 1.05s steps(1) infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dock-in,
+    .blink {
+        animation: none;
+    }
+}
+
+/* ---- Minimized page: the little desktop (see layout/desktop) ---- */
+
+.desktop-in {
+    animation: desktop-in 260ms ease-out both;
+}
+
+@keyframes desktop-in {
+    from {
+        opacity: 0;
+    }
+}
+
+.app-window {
+    animation: window-in 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes window-in {
+    from {
+        opacity: 0;
+        transform: scale(0.94) translateY(8px);
+    }
+}
+
+/* the dock icon hops while its app launches */
+.dock-bounce {
+    animation: dock-bounce 700ms cubic-bezier(0.28, 0.84, 0.42, 1) 1;
+}
+
+@keyframes dock-bounce {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    28% {
+        transform: translateY(-22px);
+    }
+    52% {
+        transform: translateY(0);
+    }
+    72% {
+        transform: translateY(-9px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .desktop-in,
+    .app-window,
+    .dock-bounce {
+        animation: none;
+    }
+}
+
+/* Minesweeper victory: the board flashes in a wave from the last click */
+.win-cell {
+    animation: win-pop 700ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes win-pop {
+    0% {
+        transform: scale(1);
+    }
+    35% {
+        transform: scale(1.22);
+        background-color: color-mix(in oklab, #28c840 55%, var(--bg-0));
+        z-index: 1;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.win-message {
+    animation: win-message 900ms ease-out both;
+}
+
+@keyframes win-message {
+    from {
+        opacity: 0;
+        transform: translateY(6px) scale(0.9);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .win-cell,
+    .win-message {
+        animation: none;
+    }
+}
+
+/* 2048 tiles */
+.tile-pop {
+    animation: tile-pop 180ms ease-out 100ms both;
+}
+
+.tile-merge {
+    animation: tile-merge 200ms ease-out 80ms both;
+}
+
+@keyframes tile-pop {
+    from {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+}
+
+@keyframes tile-merge {
+    50% {
+        transform: scale(1.18);
+    }
+}
+
+/* Wordle: tiles flip over to show their color, and a short row wobbles */
+.wordle-flip {
+    animation: wordle-flip 480ms ease-in-out both;
+}
+
+@keyframes wordle-flip {
+    0% {
+        transform: rotateX(0);
+    }
+    50% {
+        transform: rotateX(90deg);
+    }
+    100% {
+        transform: rotateX(0);
+    }
+}
+
+.wordle-shake {
+    animation: wordle-shake 400ms ease-in-out;
+}
+
+@keyframes wordle-shake {
+    20%,
+    60% {
+        transform: translateX(-5px);
+    }
+    40%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tile-pop,
+    .tile-merge,
+    .wordle-flip,
+    .wordle-shake {
+        animation: none;
+    }
+}
+
+/* Bug Hunt: a bug pops out of its line, and a squashed one leaves a "fixed" tag behind */
+.bug-in {
+    animation: bug-in 160ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes bug-in {
+    from {
+        transform: scale(0.2);
+        opacity: 0;
+    }
+}
+
+.bug-fixed {
+    animation: bug-fixed 600ms ease-out both;
+}
+
+@keyframes bug-fixed {
+    to {
+        transform: translateY(-14px);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bug-in,
+    .bug-fixed {
+        animation: none;
+    }
+}
+
+/* the clock's panel eases in from the bar it belongs to */
+.clock-panel {
+    animation: clock-panel 160ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes clock-panel {
+    from {
+        opacity: 0;
+        translate: 0 -6px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .clock-panel {
+        animation: none;
+    }
+}
+
+/* ---- Desktop wallpapers move slowly (see layout/desktop/wallpaper) ---- */
+
+.wp-grid {
+    animation: wp-grid 18s linear infinite;
+}
+
+.wp-breathe {
+    animation: wp-breathe 10s ease-in-out infinite;
+}
+
+.wp-blob-a {
+    animation: wp-blob-a 26s ease-in-out infinite alternate;
+}
+
+.wp-blob-b {
+    animation: wp-blob-b 32s ease-in-out infinite alternate;
+}
+
+.wp-blob-c {
+    animation: wp-blob-c 29s ease-in-out infinite alternate;
+}
+
+.wp-stars-far {
+    animation: wp-twinkle 7s ease-in-out infinite;
+}
+
+.wp-stars-near {
+    animation: wp-twinkle 4.5s ease-in-out -2s infinite;
+}
+
+@keyframes wp-grid {
+    to {
+        background-position: 72px 72px;
+    }
+}
+
+@keyframes wp-breathe {
+    0%,
+    100% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes wp-blob-a {
+    to {
+        transform: translate(9%, -7%) scale(1.18);
+    }
+}
+
+@keyframes wp-blob-b {
+    to {
+        transform: translate(-8%, 9%) scale(1.12);
+    }
+}
+
+@keyframes wp-blob-c {
+    to {
+        transform: translate(-6%, -8%) scale(1.2);
+    }
+}
+
+@keyframes wp-twinkle {
+    0%,
+    100% {
+        opacity: 0.45;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wp-grid,
+    .wp-breathe,
+    .wp-blob-a,
+    .wp-blob-b,
+    .wp-blob-c,
+    .wp-stars-far,
+    .wp-stars-near {
+        animation: none;
+    }
+}
+
+/* the easter egg: the wallpaper runs through every color for a moment */
+.wp-rainbow {
+    animation: wp-rainbow 1.6s linear 3;
+}
+
+@keyframes wp-rainbow {
+    to {
+        filter: hue-rotate(360deg);
+    }
+}
+
+.toast-in {
+    animation: toast-in 380ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        translate: -50% 20px;
+    }
+}

@@ -10,6 +10,7 @@ import { getComponent } from "@/data/components";
 import { getVariations } from "@/data/variations";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
+import { slugify } from "@/lib/slug";
 
 type DocsLabels = Dictionary["docs"];
 
@@ -96,7 +97,12 @@ export function ComponentDoc({
             <p className="mt-3 max-w-xl text-ink-dim">{component.blurb}</p>
 
             <section className="mt-10">
-                <h2 className="font-display text-lg font-semibold text-ink">{labels.howToUse}</h2>
+                <h2
+                    id={slugify(labels.howToUse)}
+                    className="scroll-mt-24 font-display text-lg font-semibold text-ink"
+                >
+                    {labels.howToUse}
+                </h2>
                 <p className="mt-3 max-w-2xl text-ink-dim">{component.usage}</p>
                 <div className="mt-5 space-y-4">
                     <PreviewWindow labels={labels} contentClassName="min-h-40 gap-4">
@@ -110,7 +116,12 @@ export function ComponentDoc({
 
             {gallery.map((group) => (
                 <section key={group.title} className="mt-16">
-                    <h2 className="font-display text-lg font-semibold text-ink">{group.title}</h2>
+                    <h2
+                        id={slugify(group.title)}
+                        className="scroll-mt-24 font-display text-lg font-semibold text-ink"
+                    >
+                        {group.title}
+                    </h2>
                     {group.description ? (
                         <p className="mt-2 max-w-2xl text-ink-dim">{group.description}</p>
                     ) : null}
@@ -137,7 +148,12 @@ export function ComponentDoc({
                 </section>
             ))}
 
-            <h2 className="mt-16 font-display text-lg font-semibold text-ink">{labels.props}</h2>
+            <h2
+                id={slugify(labels.props)}
+                className="mt-16 scroll-mt-24 font-display text-lg font-semibold text-ink"
+            >
+                {labels.props}
+            </h2>
             <div className="mt-4 overflow-x-auto rounded-xl border border-line">
                 <table className="w-full min-w-160 border-collapse text-sm">
                     <thead>
@@ -152,7 +168,11 @@ export function ComponentDoc({
                     </thead>
                     <tbody>
                         {component.props.map((row) => (
-                            <tr key={row.prop} className="border-b border-line last:border-0">
+                            <tr
+                                id={`prop-${slugify(row.prop)}`}
+                                key={row.prop}
+                                className="scroll-mt-24 border-b border-line last:border-0"
+                            >
                                 <td className="px-4 py-3 align-top font-mono text-xs text-accent-blue">
                                     {row.prop}
                                 </td>

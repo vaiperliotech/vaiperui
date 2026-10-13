@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { GUIDE_PATHS } from "@/data/guides";
 import { type Locale, localePath } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { slugify } from "@/lib/slug";
 import { CodeBlock } from "./CodeBlock";
 import { TerminalWindow } from "./TerminalWindow";
 
@@ -30,7 +31,12 @@ export function Guide({
 export function Section({ title, children }: { title: string; children: ReactNode }) {
     return (
         <section>
-            <h2 className="font-display text-lg font-semibold text-ink">{title}</h2>
+            <h2
+                id={slugify(title)}
+                className="scroll-mt-24 font-display text-lg font-semibold text-ink"
+            >
+                {title}
+            </h2>
             <div className="mt-4 space-y-4">{children}</div>
         </section>
     );

@@ -4,7 +4,10 @@ import { GithubIcon } from "@/components/GithubIcon";
 import { type Locale, localePath } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { GITHUB_URL } from "@/lib/site";
+import { getVaiperUiVersion } from "@/lib/vaiper-version";
 import { LocaleSwitcher } from "./LocaleSwitcher";
+import { SearchDialog } from "./SearchDialog";
+import { TrafficLights } from "./TrafficLights";
 
 export function Header({ locale }: { locale: Locale }) {
     const dict = getDictionary(locale).header;
@@ -12,11 +15,12 @@ export function Header({ locale }: { locale: Locale }) {
     return (
         <header className="sticky top-0 z-40 border-b border-line bg-bg-1/90 backdrop-blur-md">
             <div className="relative flex items-center justify-between px-4 py-2.5 sm:px-6">
-                <span className="hidden gap-1.5 sm:flex">
-                    <span className="size-2.5 rounded-full bg-mac-red" />
-                    <span className="size-2.5 rounded-full bg-mac-yellow" />
-                    <span className="size-2.5 rounded-full bg-mac-green" />
-                </span>
+                <TrafficLights
+                    labels={dict.window}
+                    locale={locale}
+                    version={getVaiperUiVersion()}
+                />
+                <span className="sm:hidden" aria-hidden="true" />
                 <Link
                     href={localePath(locale, "/")}
                     className="font-display text-base font-semibold tracking-tight text-ink sm:absolute sm:left-1/2 sm:-translate-x-1/2"
@@ -24,6 +28,7 @@ export function Header({ locale }: { locale: Locale }) {
                     vaiper<span className="text-accent-blue">ui</span>
                 </Link>
                 <div className="flex items-center gap-4">
+                    <SearchDialog locale={locale} labels={getDictionary(locale).search} />
                     <LocaleSwitcher locale={locale} label={dict.languageLabel} />
                     <a
                         href={GITHUB_URL}
