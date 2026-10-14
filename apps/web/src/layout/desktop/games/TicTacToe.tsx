@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { makeT } from "@/data/samples";
+import { Lobby, useRoom } from "./room";
 import {
     type GameProps,
     GameShell,
@@ -79,9 +81,15 @@ function MarkIcon({ mark }: { mark: "X" | "O" }) {
     );
 }
 
-export function TicTacToe({ active, t }: GameProps) {
+type Msg = { t: "m"; i: number } | { t: "r" };
+type Level = "easy" | "hard" | "online";
+
+export function TicTacToe({ active, t, locale }: GameProps) {
+    const tr = makeT(locale);
     const [board, setBoard] = useState<Mark[]>(Array(9).fill(null));
-    const [unbeatable, setUnbeatable] = useState(false);
+    const [level, setLevel] = useState<Level>("easy");
+    const unbeatable = level === "hard";
+    const online = level === "online";
     const [score, setScore] = usePersistedState("tictactoe-score", { you: 0, draw: 0, cpu: 0 });
     const timer = useRef<number | undefined>(undefined);
     const result = winner(board);
@@ -90,6 +98,27 @@ export function TicTacToe({ active, t }: GameProps) {
     const ui = t.ui;
 
     useEffect(() => () => window.clearTimeout(timer.current), []);
+
+    // X always moves first: the host plays X, the guest plays O
+    const turn: "X" | "O" = board.filter(Boolean).length % 2 === 0 ? "X" : "O";
+    const room = useRoom<Msg>(
+        "tictactoe",
+        locale,
+        (msg) => {
+            if (msg.t === "r") return setBoard(Array(9).fill(null));
+            // the opponent's move, if it is a legal one
+            setBoard((current) => {
+                const next = current.filter(Boolean).length % 2 === 0 ? "X" : "O";
+                if (current[msg.i] || winner(current)) return current;
+                const copy = [...current];
+                copy[msg.i] = next;
+                return copy;
+            });
+        },
+        () => setBoard(Array(9).fill(null)),
+    );
+    const mine: "X" | "O" = room.isHost ? "X" : "O";
+    const waiting = online && (!room.live || turn !== mine);
 
     const finish = useCallback(
         (next: Mark[]) => {
@@ -106,6 +135,14 @@ export function TicTacToe({ active, t }: GameProps) {
 
     function play(index: number) {
         if (over || board[index]) return;
+        if (online) {
+            if (!room.live || turn !== mine) return;
+            const next = [...board];
+            next[index] = mine;
+            setBoard(next);
+            room.send({ t: "m", i: index });
+            return;
+        }
         const next = [...board];
         next[index] = "X";
         setBoard(next);
@@ -121,6 +158,7 @@ export function TicTacToe({ active, t }: GameProps) {
     function reset() {
         window.clearTimeout(timer.current);
         setBoard(Array(9).fill(null));
+        if (online && room.live) room.send({ t: "r" });
     }
 
     // number keys 1-9 mirror the numeric keypad layout; the handler is re-made as the board changes
@@ -131,30 +169,46 @@ export function TicTacToe({ active, t }: GameProps) {
         } else if (event.key === "r" || event.key === "Enter") reset();
     });
 
-    const message = result ? (result.mark === "X" ? ui.win : ui.over) : full ? ui.draw : "";
+    const me = online ? mine : "X";
+    const message = result
+        ? result.mark === me
+            ? ui.win
+            : ui.over
+        : full
+          ? ui.draw
+          : online && room.live
+            ? turn === mine
+                ? tr("Your turn", "Sua vez", "Tu turno")
+                : tr("Opponent's turn", "Vez do oponente", "Turno del oponente")
+            : "";
 
     return (
         <GameShell>
             <Pills
-                value={unbeatable ? "hard" : "easy"}
+                value={level}
                 options={[
                     { id: "easy", label: ui.easy },
                     { id: "hard", label: ui.unbeatable },
+                    { id: "online", label: "Online" },
                 ]}
                 onChange={(next) => {
-                    setUnbeatable(next === "hard");
-                    reset();
+                    room.leave();
+                    window.clearTimeout(timer.current);
+                    setBoard(Array(9).fill(null));
+                    setLevel(next);
                 }}
             />
-            <StatBar
-                width={288}
-                items={[
-                    [ui.you, score.you],
-                    [ui.draw, score.draw],
-                    ["CPU", score.cpu],
-                ]}
-            />
-            <div className="grid grid-cols-3 gap-1.5">
+            {online ? null : (
+                <StatBar
+                    width={288}
+                    items={[
+                        [ui.you, score.you],
+                        [ui.draw, score.draw],
+                        ["CPU", score.cpu],
+                    ]}
+                />
+            )}
+            <div className="relative grid grid-cols-3 gap-1.5">
                 {board.map((mark, index) => {
                     const winning = result?.line.includes(index);
                     return (
@@ -168,12 +222,13 @@ export function TicTacToe({ active, t }: GameProps) {
                                 winning
                                     ? "border-[#28c840]/70 bg-[#28c840]/15"
                                     : "border-line-strong bg-bg-0 hover:bg-bg-2"
-                            } ${mark || over ? "cursor-default" : "cursor-pointer"}`}
+                            } ${mark || over || waiting ? "cursor-default" : "cursor-pointer"}`}
                         >
                             {mark ? <MarkIcon mark={mark} /> : null}
                         </button>
                     );
                 })}
+                {online && !room.live ? <Lobby room={room} locale={locale} /> : null}
             </div>
             <div className="flex h-8 items-center gap-3">
                 <span aria-live="polite" className="font-mono text-xs text-ink-dim">
