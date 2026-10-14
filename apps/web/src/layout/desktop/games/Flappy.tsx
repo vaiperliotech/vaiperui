@@ -2,12 +2,15 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { makeT } from "@/data/samples";
+import { Lobby, seeded, useRoom } from "./room";
 import {
     GAME_KEYS,
     type GameProps,
     GameShell,
     Overlay,
     PALETTE,
+    Pills,
     prepareCanvas,
     StatBar,
     useBest,
@@ -28,13 +31,23 @@ const SPACING = 200;
 
 type Status = "ready" | "running" | "over";
 type Pipe = { x: number; top: number; passed: boolean };
+type Mode = "solo" | "online";
+// a race: the host picks the seed, then each side streams its bird; the first to die loses
+type Msg = { t: "go"; seed: number } | { t: "s"; y: number; score: number } | { t: "d" };
 
-function newPipe(x: number): Pipe {
-    return { x, top: 70 + Math.random() * (H - GROUND - GAP - 140), passed: false };
+function newPipe(x: number, rand: () => number): Pipe {
+    return { x, top: 70 + rand() * (H - GROUND - GAP - 140), passed: false };
 }
 
-export function Flappy({ active, t }: GameProps) {
+export function Flappy({ active, t, locale }: GameProps) {
     const ui = t.ui;
+    const tr = makeT(locale);
+    const [mode, setMode] = useState<Mode>("solo");
+    const [result, setResult] = useState<"win" | "lose" | null>(null);
+    const [oppScore, setOppScore] = useState(0);
+    const rand = useRef<() => number>(Math.random);
+    const opp = useRef<{ y: number; on: boolean }>({ y: 0, on: false });
+    const online = mode === "online";
     const canvas = useRef<HTMLCanvasElement>(null);
     const [status, setStatus] = useState<Status>("ready");
     const [score, setScore] = useState(0);
@@ -79,6 +92,15 @@ export function Flappy({ active, t }: GameProps) {
 
         ctx.fillStyle = PALETTE.bg2;
         ctx.fillRect(0, H - GROUND, W, GROUND);
+        if (opp.current.on) {
+            // the opponent's bird: a ghost at the same x
+            ctx.globalAlpha = 0.35;
+            ctx.fillStyle = PALETTE.violet;
+            ctx.beginPath();
+            ctx.roundRect(BIRD_X, opp.current.y, BIRD, BIRD, 9);
+            ctx.fill();
+            ctx.globalAlpha = 1;
+        }
         ctx.fillStyle = PALETTE.line;
         ctx.fillRect(0, H - GROUND, W, 1.5);
         ctx.fillStyle = "rgba(255,255,255,0.12)";
@@ -109,20 +131,69 @@ export function Flappy({ active, t }: GameProps) {
         ctx.fillText(String(g.score), W / 2, 62);
     }, []);
 
-    const reset = useCallback(() => {
-        game.current = {
-            y: H / 2,
-            vy: 0,
-            pipes: [newPipe(W + 60), newPipe(W + 60 + SPACING), newPipe(W + 60 + SPACING * 2)],
-            offset: 0,
-            score: 0,
-        };
-        setScore(0);
-        set("ready");
-        draw();
-    }, [draw, set]);
+    const reset = useCallback(
+        (seed?: number) => {
+            rand.current = seed === undefined ? Math.random : seeded(seed);
+            opp.current.on = false;
+            setResult(null);
+            setOppScore(0);
+            game.current = {
+                y: H / 2,
+                vy: 0,
+                pipes: [
+                    newPipe(W + 60, rand.current),
+                    newPipe(W + 60 + SPACING, rand.current),
+                    newPipe(W + 60 + SPACING * 2, rand.current),
+                ],
+                offset: 0,
+                score: 0,
+            };
+            setScore(0);
+            set("ready");
+            draw();
+        },
+        [draw, set],
+    );
 
     useEffect(() => reset(), [reset]);
+
+    // both sides reset from the same seed and run at once
+    const startRace = useCallback(
+        (seed: number) => {
+            reset(seed);
+            game.current.vy = FLAP;
+            set("running");
+        },
+        [reset, set],
+    );
+
+    const room = useRoom<Msg>(
+        "flappy",
+        locale,
+        (msg) => {
+            if (msg.t === "go") startRace(msg.seed);
+            else if (msg.t === "s") {
+                opp.current = { y: msg.y, on: true };
+                setOppScore(msg.score);
+            } else if (statusRef.current === "running") {
+                setResult("win");
+                set("over");
+                draw();
+            }
+        },
+        () => reset(),
+    );
+
+    const press = () => {
+        const s = statusRef.current;
+        if (!online) return s === "over" ? reset() : flap();
+        if (s === "running") flap();
+        else if (room.isHost && room.live) {
+            const seed = Math.floor(Math.random() * 2 ** 31);
+            room.send({ t: "go", seed });
+            startRace(seed);
+        }
+    };
 
     const flap = useCallback(() => {
         if (statusRef.current === "over") return;
@@ -141,7 +212,7 @@ export function Flappy({ active, t }: GameProps) {
         if (first && first.x < -PIPE_W - 10) {
             g.pipes.shift();
             const last = g.pipes[g.pipes.length - 1];
-            g.pipes.push(newPipe((last?.x ?? W) + SPACING));
+            g.pipes.push(newPipe((last?.x ?? W) + SPACING, rand.current));
         }
         let dead = g.y + BIRD > H - GROUND || g.y < -20;
         for (const pipe of g.pipes) {
@@ -153,10 +224,14 @@ export function Flappy({ active, t }: GameProps) {
                 setScore(g.score);
             }
         }
+        if (online) room.send({ t: "s", y: g.y, score: g.score });
         draw();
         if (dead) {
             g.y = Math.min(g.y, H - GROUND - BIRD);
-            report(g.score);
+            if (online) {
+                room.send({ t: "d" });
+                setResult("lose");
+            } else report(g.score);
             set("over");
             draw();
         }
@@ -168,24 +243,44 @@ export function Flappy({ active, t }: GameProps) {
 
     useGameKeys(active, (event) => {
         if (GAME_KEYS.has(event.key)) event.preventDefault();
-        if (event.key === " " || event.key === "ArrowUp" || event.key === "w") {
-            if (statusRef.current === "over") reset();
-            else flap();
-        } else if (event.key === "r") reset();
+        if (event.key === " " || event.key === "ArrowUp" || event.key === "w") press();
+        else if (event.key === "r" && !online) reset();
     });
+
+    const changeMode = (next: Mode) => {
+        room.leave();
+        setMode(next);
+        reset();
+    };
+
+    const wait = tr(
+        "Waiting for the host to start…",
+        "Esperando o anfitrião iniciar…",
+        "Esperando que el anfitrión inicie…",
+    );
 
     return (
         <GameShell>
+            <Pills
+                value={mode}
+                options={[
+                    { id: "solo", label: tr("Solo", "Solo", "Solo") },
+                    { id: "online", label: "Online" },
+                ]}
+                onChange={changeMode}
+            />
             <StatBar
                 width={W}
                 items={[
                     [ui.score, score],
-                    [ui.best, Math.max(best ?? 0, score)],
+                    online
+                        ? [tr("Opponent", "Oponente", "Oponente"), oppScore]
+                        : [ui.best, Math.max(best ?? 0, score)],
                 ]}
             />
             {/* a click anywhere on the board flaps, like a tap; the keyboard has Space */}
             <div
-                onPointerDown={() => (statusRef.current === "over" ? reset() : flap())}
+                onPointerDown={press}
                 className="relative cursor-pointer overflow-hidden rounded-lg border border-line-strong"
             >
                 <canvas
@@ -195,12 +290,23 @@ export function Flappy({ active, t }: GameProps) {
                     style={{ width: W, height: H }}
                     className="block"
                 />
-                {status === "ready" ? <Overlay>{ui.start}</Overlay> : null}
-                {status === "over" ? (
+                {online && !room.live ? (
+                    <Lobby room={room} locale={locale} />
+                ) : status === "ready" ? (
+                    <Overlay>{online && room.isGuest ? wait : ui.start}</Overlay>
+                ) : status === "over" ? (
                     <Overlay>
                         <div className="flex flex-col gap-1">
-                            <span>{ui.over}</span>
-                            <span className="text-ink-dim">{ui.restart}</span>
+                            <span>
+                                {online
+                                    ? result === "win"
+                                        ? tr("You win!", "Você venceu!", "¡Ganaste!")
+                                        : tr("You lose", "Você perdeu", "Perdiste")
+                                    : ui.over}
+                            </span>
+                            <span className="text-ink-dim">
+                                {online && room.isGuest ? wait : ui.restart}
+                            </span>
                         </div>
                     </Overlay>
                 ) : null}

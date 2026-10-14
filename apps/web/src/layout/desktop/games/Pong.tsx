@@ -1,17 +1,15 @@
 "use client";
 
-import type { DataConnection, Peer } from "peerjs";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { makeT } from "@/data/samples";
-
+import { Lobby, useRoom } from "./room";
 import {
     GAME_KEYS,
     type GameProps,
     GameShell,
     Overlay,
     PALETTE,
-    PillButton,
     Pills,
     prepareCanvas,
     StatBar,
@@ -30,23 +28,12 @@ const WIN_AT = 7;
 
 type Mode = "1p" | "2p" | "online";
 type Status = "ready" | "running" | "paused" | "over";
-type Net = {
-    phase: "idle" | "waiting" | "connected";
-    role: "host" | "guest";
-    code: string;
-    error: string;
-};
 // the host runs the match and streams it; the guest streams back where its paddle is
 type Msg =
     | { t: "s"; b: [number, number]; l: number; sc: [number, number]; st: Status }
     | { t: "p"; y: number };
 
-const IDLE: Net = { phase: "idle", role: "host", code: "", error: "" };
-const ROOM = "vaiperui-pong-";
 const clamp = (v: number) => Math.max(PADDLE_H / 2, Math.min(H - PADDLE_H / 2, v));
-const CODE_LENGTH = 7;
-const randomCode = () =>
-    String(Math.floor(Math.random() * 10 ** CODE_LENGTH)).padStart(CODE_LENGTH, "0");
 
 function serve(toRight: boolean) {
     const angle = (Math.random() - 0.5) * 0.7;
@@ -71,14 +58,6 @@ export function Pong({ active, t, locale }: GameProps) {
     const statusRef = useRef<Status>("ready");
     const keys = useRef(new Set<string>());
     const game = useRef({ ball: serve(true), left: H / 2, right: H / 2, wait: 0 });
-    const [net, setNet] = useState<Net>(IDLE);
-    const [joinCode, setJoinCode] = useState("");
-    const netRef = useRef(net);
-    netRef.current = net;
-    const peer = useRef<Peer | null>(null);
-    const conn = useRef<DataConnection | null>(null);
-    const guest = mode === "online" && net.role === "guest";
-
     const set = useCallback((next: Status) => {
         statusRef.current = next;
         setStatus(next);
@@ -119,92 +98,29 @@ export function Pong({ active, t, locale }: GameProps) {
         draw([0, 0]);
     }, [draw, set]);
 
-    function closeNet(error = "") {
-        // detached first, so closing it does not read as the opponent leaving
-        const link = conn.current;
-        conn.current = null;
-        link?.close();
-        peer.current?.destroy();
-        peer.current = null;
-        setNet({ ...IDLE, error });
+    function onData(msg: Msg) {
+        const g = game.current;
+        if (msg.t === "p") g.right = clamp(msg.y);
+        else {
+            g.ball.x = msg.b[0];
+            g.ball.y = msg.b[1];
+            g.left = msg.l;
+            setScores((prev) => (prev[0] === msg.sc[0] && prev[1] === msg.sc[1] ? prev : msg.sc));
+            if (statusRef.current !== msg.st) set(msg.st);
+        }
     }
-
-    function attach(link: DataConnection) {
-        conn.current = link;
-        link.on("open", () => setNet((n) => ({ ...n, phase: "connected" })));
-        link.on("close", () => {
-            if (conn.current !== link) return;
-            closeNet(tr("Your opponent left.", "O oponente saiu.", "Tu oponente se fue."));
-            reset();
-        });
-        link.on("data", (raw) => {
-            const msg = raw as Msg;
-            const g = game.current;
-            if (msg.t === "p") g.right = clamp(msg.y);
-            else {
-                g.ball.x = msg.b[0];
-                g.ball.y = msg.b[1];
-                g.left = msg.l;
-                setScores((prev) =>
-                    prev[0] === msg.sc[0] && prev[1] === msg.sc[1] ? prev : msg.sc,
-                );
-                if (statusRef.current !== msg.st) set(msg.st);
-            }
-        });
-    }
-
-    async function create() {
-        closeNet();
-        const { Peer } = await import("peerjs");
-        const code = randomCode();
-        const host = new Peer(ROOM + code);
-        peer.current = host;
-        setNet({ phase: "waiting", role: "host", code, error: "" });
-        host.on("connection", (link) => (conn.current ? link.close() : attach(link)));
-        host.on("error", () =>
-            closeNet(
-                tr(
-                    "Could not open a room.",
-                    "Não foi possível criar a sala.",
-                    "No se pudo crear la sala.",
-                ),
-            ),
-        );
-    }
-
-    async function join() {
-        const code = joinCode.trim();
-        if (code.length !== CODE_LENGTH) return;
-        closeNet();
-        const { Peer } = await import("peerjs");
-        const me = new Peer();
-        peer.current = me;
-        setNet({ phase: "waiting", role: "guest", code, error: "" });
-        me.on("open", () => attach(me.connect(ROOM + code)));
-        me.on("error", () =>
-            closeNet(
-                tr(
-                    "No room with that code.",
-                    "Nenhuma sala com esse código.",
-                    "Ninguna sala con ese código.",
-                ),
-            ),
-        );
-    }
+    const room = useRoom<Msg>("pong", locale, onData, () => reset());
+    const guest = mode === "online" && room.isGuest;
 
     // changing the mode starts a fresh match, and leaving the online one closes the room
     // biome-ignore lint/correctness/useExhaustiveDependencies: mode is the trigger, the rest does not read it
     useEffect(() => {
-        closeNet();
+        room.leave();
         reset();
     }, [mode]);
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: only the unmount matters
-    useEffect(() => () => closeNet(), []);
-
     // the host tells the guest about every change, and each frame while the ball moves
     const sendState = () => {
-        if (!conn.current?.open) return;
         const g = game.current;
         const msg: Msg = {
             t: "s",
@@ -213,12 +129,12 @@ export function Pong({ active, t, locale }: GameProps) {
             sc: scores,
             st: statusRef.current,
         };
-        conn.current.send(msg);
+        room.send(msg);
     };
     // biome-ignore lint/correctness/useExhaustiveDependencies: status, scores and the link are the triggers
     useEffect(() => {
-        if (mode === "online" && net.role === "host" && net.phase === "connected") sendState();
-    }, [status, scores, net.phase]);
+        if (mode === "online" && room.isHost && room.live) sendState();
+    }, [status, scores, room.live]);
 
     const step = (dt: number) => {
         const g = game.current;
@@ -292,12 +208,12 @@ export function Pong({ active, t, locale }: GameProps) {
         const k = keys.current;
         if (k.has("w") || k.has("ArrowUp")) g.right = clamp(g.right - 5.2 * dt);
         if (k.has("s") || k.has("ArrowDown")) g.right = clamp(g.right + 5.2 * dt);
-        if (conn.current?.open) conn.current.send({ t: "p", y: g.right } satisfies Msg);
+        room.send({ t: "p", y: g.right });
         draw(scores);
     };
 
     const online = mode === "online";
-    const live = online && net.phase === "connected";
+    const live = online && room.live;
     useRaf(active && (guest ? live : status === "running"), (dt) => {
         if (guest) return guestStep(dt);
         step(dt);
@@ -311,11 +227,7 @@ export function Pong({ active, t, locale }: GameProps) {
     useGameKeys(active, (event) => {
         const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
         if (GAME_KEYS.has(event.key)) event.preventDefault();
-        if (
-            online &&
-            (guest || netRef.current.phase !== "connected") &&
-            (key === " " || key === "r")
-        ) {
+        if (online && (guest || !room.live) && (key === " " || key === "r")) {
             // only the host starts and restarts, and only with an opponent
         } else if (key === " ") {
             if (statusRef.current === "over") reset();
@@ -337,7 +249,7 @@ export function Pong({ active, t, locale }: GameProps) {
     }, [active]);
 
     const winner = scores[0] >= WIN_AT ? 1 : 2;
-    const mine = net.role === "host" ? 1 : 2;
+    const mine = room.isHost ? 1 : 2;
     const message =
         online && !live
             ? null
@@ -386,84 +298,7 @@ export function Pong({ active, t, locale }: GameProps) {
                     className="block"
                 />
                 {online && !live ? (
-                    <Overlay>
-                        <div className="flex flex-col items-center gap-3">
-                            {net.phase === "idle" ? (
-                                <>
-                                    <PillButton onClick={create}>
-                                        {tr("Create a room", "Criar sala", "Crear sala")}
-                                    </PillButton>
-                                    <span className="text-ink-faint">
-                                        {tr(
-                                            "or enter a code",
-                                            "ou digite um código",
-                                            "o escribe un código",
-                                        )}
-                                    </span>
-                                    <span className="flex items-center gap-2">
-                                        <input
-                                            value={joinCode}
-                                            onChange={(event) =>
-                                                setJoinCode(event.target.value.replace(/\D/g, ""))
-                                            }
-                                            onKeyDown={(event) => {
-                                                event.stopPropagation();
-                                                if (event.key === "Enter") join();
-                                            }}
-                                            maxLength={CODE_LENGTH}
-                                            inputMode="numeric"
-                                            spellCheck={false}
-                                            autoComplete="off"
-                                            aria-label={tr(
-                                                "Room code",
-                                                "Código da sala",
-                                                "Código de la sala",
-                                            )}
-                                            placeholder="0000000"
-                                            className="w-32 rounded-md border border-line-strong bg-bg-0 px-2 py-1 text-center tracking-widest outline-none focus:border-accent-blue"
-                                        />
-                                        <PillButton onClick={join}>
-                                            {tr("Join", "Entrar", "Entrar")}
-                                        </PillButton>
-                                    </span>
-                                    {net.error ? (
-                                        <span className="text-[#ff5f57]">{net.error}</span>
-                                    ) : null}
-                                </>
-                            ) : (
-                                <>
-                                    {net.role === "host" ? (
-                                        <>
-                                            <span className="text-ink-faint">
-                                                {tr(
-                                                    "Room code",
-                                                    "Código da sala",
-                                                    "Código de la sala",
-                                                )}
-                                            </span>
-                                            <span className="font-bold text-3xl tracking-[0.2em]">
-                                                {net.code}
-                                            </span>
-                                            <span className="text-ink-faint">
-                                                {tr(
-                                                    "Waiting for your opponent…",
-                                                    "Esperando o oponente…",
-                                                    "Esperando al oponente…",
-                                                )}
-                                            </span>
-                                        </>
-                                    ) : (
-                                        <span>
-                                            {tr("Connecting…", "Conectando…", "Conectando…")}
-                                        </span>
-                                    )}
-                                    <PillButton onClick={() => closeNet()}>
-                                        {tr("Cancel", "Cancelar", "Cancelar")}
-                                    </PillButton>
-                                </>
-                            )}
-                        </div>
-                    </Overlay>
+                    <Lobby room={room} locale={locale} />
                 ) : message ? (
                     <Overlay>{message}</Overlay>
                 ) : null}
