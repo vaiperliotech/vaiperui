@@ -14,7 +14,7 @@ export type SidebarLabels = {
 };
 
 const linkClass = (isActive: boolean) =>
-    `-ml-px block border-l px-3 py-1.5 font-mono text-sm transition-colors ${
+    `-ml-px block border-l px-3 py-1.5 font-mono text-base transition-colors ${
         isActive
             ? "border-accent-blue text-ink"
             : "border-transparent text-ink-dim hover:border-line-strong hover:text-ink"
@@ -24,7 +24,10 @@ export function DocsSidebar({ locale, labels }: { locale: Locale; labels: Sideba
     const pathname = stripLocale(usePathname());
 
     return (
-        <nav aria-label={labels.aria} className="lg:sticky lg:top-24">
+        <nav
+            aria-label={labels.aria}
+            className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:overscroll-contain lg:pb-6 [scrollbar-width:thin]"
+        >
             <ul className="flex flex-col gap-0.5 border-l border-line">
                 {GUIDE_PATHS.map((guide) => {
                     const isActive = pathname === guide.href;
@@ -42,10 +45,10 @@ export function DocsSidebar({ locale, labels }: { locale: Locale; labels: Sideba
                 })}
             </ul>
 
-            <p className="mt-8 mb-3 font-mono text-xs text-ink-faint">{labels.components}</p>
+            <p className="mt-8 mb-3 font-mono text-[15px] text-ink-faint">{labels.components}</p>
             {COMPONENT_GROUPS.map((group) => (
                 <details key={group.key} open className="group mt-5">
-                    <summary className="mb-2 flex cursor-pointer list-none items-center gap-1.5 font-mono text-xs text-ink-faint/70 transition-colors hover:text-ink [&::-webkit-details-marker]:hidden">
+                    <summary className="mb-2 flex cursor-pointer list-none items-center gap-1.5 font-mono text-[15px] text-ink-faint/70 transition-colors hover:text-ink [&::-webkit-details-marker]:hidden">
                         <svg
                             viewBox="0 0 16 16"
                             fill="none"

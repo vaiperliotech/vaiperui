@@ -136,7 +136,7 @@ export function CodeBlock({
                 {copied ? <CheckIcon className="size-3" /> : <CopyIcon className="size-3" />}
                 {copied ? copiedLabel : copy}
             </button>
-            <pre className={`overflow-x-auto font-mono text-[13px] leading-6 ${className}`}>
+            <pre className={`overflow-x-auto font-mono text-[15px] leading-6 ${className}`}>
                 <code>
                     {lines.map((line, lineIndex) => (
                         // biome-ignore lint/suspicious/noArrayIndexKey: static code sample, line order never changes

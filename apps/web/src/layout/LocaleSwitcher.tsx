@@ -30,7 +30,7 @@ export function LocaleSwitcher({ locale, label }: { locale: Locale; label: strin
         <div className="dark">
             <Select
                 aria-label={label}
-                size="sm"
+                size="md"
                 customColor="var(--accent-blue)"
                 value={locale}
                 options={options}
