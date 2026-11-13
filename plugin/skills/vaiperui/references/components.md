@@ -1,6 +1,6 @@
 # vaiperui components (44)
 
-Version 1.0.0-beta. One file per component with props, examples and accessibility.
+Version 1.0.0. One file per component with props, examples and accessibility.
 
 ## Forms
 - [Button](button.md): All the native <button> props, plus variant, color, size, radius, hover and ready-made animations.

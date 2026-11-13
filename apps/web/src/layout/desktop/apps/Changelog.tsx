@@ -19,6 +19,27 @@ export function Changelog({ locale, version }: AppProps & { version: string }) {
 
     const releases = [
         {
+            version: "1.0.0",
+            label: t("First stable release", "Primeira versão estável", "Primera versión estable"),
+            notes: [
+                t(
+                    "44 components in 7 groups: forms with input masks, date and time pickers, data display, feedback, navigation, overlays, layout and media.",
+                    "44 componentes em 7 grupos: formulários com máscaras, seletores de data e hora, exibição de dados, feedback, navegação, sobreposições, layout e mídia.",
+                    "44 componentes en 7 grupos: formularios con máscaras, selectores de fecha y hora, visualización de datos, feedback, navegación, superposiciones, layout y multimedia.",
+                ),
+                t(
+                    "An accessibility section on every component page, and a Use with AI guide.",
+                    "Uma seção de acessibilidade em cada página de componente e um guia de uso com IA.",
+                    "Una sección de accesibilidad en cada página de componente y una guía de uso con IA.",
+                ),
+                t(
+                    "An agent skill shipped in the package, a hosted MCP server at /mcp and a Claude Code plugin.",
+                    "Uma skill de agente dentro do pacote, um servidor MCP hospedado em /mcp e um plugin do Claude Code.",
+                    "Una skill de agente dentro del paquete, un servidor MCP alojado en /mcp y un plugin de Claude Code.",
+                ),
+            ],
+        },
+        {
             version: "1.0.0-beta",
             label: t("First public beta", "Primeira beta pública", "Primera beta pública"),
             notes: [

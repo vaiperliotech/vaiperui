@@ -1,6 +1,6 @@
 {
   "library": "vaiperui",
-  "version": "1.0.0-beta",
+  "version": "1.0.0",
   "locale": "en",
   "setup": {
     "install": "npm install vaiperui",

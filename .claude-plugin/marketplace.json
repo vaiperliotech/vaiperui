@@ -7,7 +7,7 @@
             "name": "vaiperui",
             "source": "./plugin",
             "description": "Agent skill and MCP server for vaiperui: exact props, value shapes, accessibility notes, examples and recipes for 44 components.",
-            "version": "1.0.0-beta",
+            "version": "1.0.0",
             "category": "development",
             "tags": ["react", "tailwindcss", "components", "design-system", "mcp"]
         }

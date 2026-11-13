@@ -1,6 +1,6 @@
 {
     "name": "vaiperui",
-    "version": "1.0.0-beta",
+    "version": "1.0.0",
     "description": "React component library for Tailwind CSS: 44 accessible, typed components (forms with input masks, selects, date and time pickers, tables, overlays, toasts, media) with dark mode and a single customColor prop. Ships an agent skill; see also vaiperui-mcp.",
     "keywords": [
         "react",
