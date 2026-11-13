@@ -27,6 +27,7 @@ const meta = {
                 "cardExpiry",
                 "date",
                 "time",
+                "custom",
             ],
         },
         customColor: { control: "color" },
@@ -158,6 +159,17 @@ export const Masked: Story = {
     args: { "aria-label": undefined, label: "CPF", mask: "cpf" },
 };
 
+export const CustomMask: Story = {
+    args: {
+        "aria-label": undefined,
+        label: "Hex color",
+        mask: "custom",
+        maskRegex: /[0-9a-f]/i,
+        maskFormat: (v: string) => (v ? `#${v.slice(0, 6)}` : ""),
+        placeholder: "#ff6600",
+    },
+};
+
 export const Masks: Story = {
     args: { "aria-label": undefined },
     render: () => (
@@ -171,6 +183,14 @@ export const Masks: Story = {
             <Input aria-label="Expiry" label="Expiry" mask="cardExpiry" />
             <Input aria-label="Date" label="Date" mask="date" />
             <Input aria-label="Time" label="Time" mask="time" />
+            <Input
+                aria-label="Hex color"
+                label="Hex color"
+                mask="custom"
+                maskRegex={/[0-9a-f]/i}
+                maskFormat={(v) => (v ? `#${v.slice(0, 6)}` : "")}
+                placeholder="#ff6600"
+            />
         </div>
     ),
 };

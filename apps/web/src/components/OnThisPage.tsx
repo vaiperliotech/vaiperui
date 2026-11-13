@@ -42,7 +42,7 @@ export function OnThisPage({ title }: { title: string }) {
 
     return (
         <nav aria-label={title} className="lg:sticky lg:top-24">
-            <p className="mb-3 font-mono text-xs text-ink-faint">{title}</p>
+            <p className="mb-3 font-mono text-[15px] text-ink-faint">{title}</p>
             <ul className="flex flex-col gap-0.5 border-l border-line">
                 {items.map((item) => {
                     const isActive = item.id === active;
@@ -52,7 +52,7 @@ export function OnThisPage({ title }: { title: string }) {
                                 href={`#${item.id}`}
                                 aria-current={isActive ? "location" : undefined}
                                 onClick={() => setActive(item.id)}
-                                className={`-ml-px block border-l px-3 py-1.5 text-sm transition-colors ${
+                                className={`-ml-px block border-l px-3 py-1.5 text-base transition-colors ${
                                     isActive
                                         ? "border-accent-blue text-ink"
                                         : "border-transparent text-ink-dim hover:border-line-strong hover:text-ink"

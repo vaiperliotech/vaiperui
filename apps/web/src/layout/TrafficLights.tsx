@@ -160,7 +160,7 @@ export function TrafficLights({
             </fieldset>
             <span
                 aria-hidden="true"
-                className={`pointer-events-none absolute top-1/2 left-full ml-3 -translate-y-1/2 whitespace-nowrap font-mono text-[11px] text-ink-faint transition-opacity duration-300 ${
+                className={`pointer-events-none absolute top-1/2 left-full ml-3 -translate-y-1/2 whitespace-nowrap font-mono text-xs text-ink-faint transition-opacity duration-300 ${
                     note ? "opacity-100" : "opacity-0"
                 }`}
             >

@@ -23,7 +23,7 @@ export function Header({ locale }: { locale: Locale }) {
                 <span className="sm:hidden" aria-hidden="true" />
                 <Link
                     href={localePath(locale, "/")}
-                    className="font-display text-base font-semibold tracking-tight text-ink sm:absolute sm:left-1/2 sm:-translate-x-1/2"
+                    className="font-display text-xl font-semibold tracking-tight text-ink sm:absolute sm:left-1/2 sm:-translate-x-1/2"
                 >
                     vaiper<span className="text-accent-blue">ui</span>
                 </Link>

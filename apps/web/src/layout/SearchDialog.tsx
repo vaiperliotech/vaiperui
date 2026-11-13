@@ -290,11 +290,11 @@ export function SearchDialog({ locale, labels }: { locale: Locale; labels: Label
                 onFocus={() => loadIndex(locale)}
                 aria-label={labels.trigger}
                 aria-keyshortcuts="Control+K Meta+K"
-                className="flex h-8 cursor-pointer items-center gap-2 rounded-md border border-line-strong bg-bg-0 px-2.5 font-mono text-xs text-ink-faint transition-colors hover:border-accent-blue/60 hover:text-ink md:w-56 lg:w-64"
+                className="flex h-9 cursor-pointer items-center gap-2 rounded-md border border-line-strong bg-bg-0 px-3 font-mono text-sm text-ink-faint transition-colors hover:border-accent-blue/60 hover:text-ink md:w-56 lg:w-64"
             >
                 <SearchIcon className="size-3.5 shrink-0" />
                 <span className="hidden flex-1 text-left md:block">{labels.trigger}</span>
-                <kbd className="hidden rounded border border-line-strong px-1.5 py-px text-[10px] md:block">
+                <kbd className="hidden rounded border border-line-strong px-1.5 py-px text-xs md:block">
                     {modifier} K
                 </kbd>
             </button>

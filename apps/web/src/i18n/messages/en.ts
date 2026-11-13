@@ -185,6 +185,15 @@ export const en = {
     docs: {
         sidebarAria: "Documentation",
         components: "components",
+        groups: {
+            forms: "forms",
+            dataDisplay: "data display",
+            feedback: "feedback",
+            navigation: "navigation",
+            overlays: "overlays",
+            layout: "layout",
+            media: "media",
+        },
         paginationAria: "Guide navigation",
         previous: "previous",
         next: "next",
@@ -195,6 +204,10 @@ export const en = {
         },
         onThisPage: "On this page",
         howToUse: "How to use",
+        accessibility: "Accessibility",
+        a11yKeyboard: "Keyboard",
+        a11yCols: { key: "Key", action: "Action" },
+        a11yCaveats: "Keep in mind",
         props: "Props",
         propsCols: {
             prop: "Prop",
@@ -220,7 +233,7 @@ export const en = {
             },
             components: {
                 title: "Components",
-                body: "The reference for <c>Button</c>, <c>Input</c> and <c>Select</c> is in the sidebar. Each page has live examples, the code and the props table.",
+                body: "The reference for every component is in the sidebar. Each page has live examples, the code and the props table.",
             },
         },
         installation: {

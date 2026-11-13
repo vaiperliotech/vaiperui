@@ -20,8 +20,8 @@ export function Guide({
 }) {
     return (
         <article>
-            <p className="font-mono text-xs text-ink-faint">{crumb}</p>
-            <h1 className="mt-2 font-display text-3xl font-semibold text-ink">{title}</h1>
+            <p className="font-mono text-[15px] text-ink-faint">{crumb}</p>
+            <h1 className="mt-2 font-display text-4xl font-semibold text-ink">{title}</h1>
             <p className="mt-3 max-w-xl text-ink-dim">{description}</p>
             <div className="mt-10 space-y-14">{children}</div>
         </article>
@@ -33,7 +33,7 @@ export function Section({ title, children }: { title: string; children: ReactNod
         <section>
             <h2
                 id={slugify(title)}
-                className="scroll-mt-24 font-display text-lg font-semibold text-ink"
+                className="scroll-mt-24 font-display text-[22px] font-semibold text-ink"
             >
                 {title}
             </h2>
@@ -43,7 +43,7 @@ export function Section({ title, children }: { title: string; children: ReactNod
 }
 
 export function P({ children }: { children: ReactNode }) {
-    return <p className="max-w-2xl text-base leading-7 text-ink-dim">{children}</p>;
+    return <p className="max-w-2xl text-[18px] leading-8 text-ink-dim">{children}</p>;
 }
 
 export function Code({ children }: { children: ReactNode }) {

@@ -3,6 +3,14 @@ import type { ReactNode } from "react";
 import { Button, Input, Select } from "vaiperui";
 
 import type { Locale } from "@/i18n/config";
+import { getDataDisplayComponents } from "./dataDisplayComponents";
+import { getDateComponents } from "./dateComponents";
+import { getFeedbackComponents } from "./feedbackComponents";
+import { getFormComponents } from "./formComponents";
+import { getLayoutComponents } from "./layoutComponents";
+import { getMediaComponents } from "./mediaComponents";
+import { getNavigationComponents } from "./navigationComponents";
+import { getOverlaysComponents } from "./overlaysComponents";
 import { makeT, samples, selectLabels } from "./samples";
 
 export type PropRow = {
@@ -10,6 +18,16 @@ export type PropRow = {
     values: string;
     defaultValue: string;
     description: string;
+};
+
+/** The "Accessibility" section of a component page. */
+export type AccessibilityDoc = {
+    /** Roles, aria attributes and behaviors: one short sentence each. */
+    notes: string[];
+    /** Keyboard interactions. */
+    keys?: Array<{ keys: string; action: string }>;
+    /** Limits and things to keep in mind (what the component does NOT do, what the app must provide). */
+    caveats?: string[];
 };
 
 export type ComponentEntry = {
@@ -20,9 +38,55 @@ export type ComponentEntry = {
     code: string;
     demo: ReactNode;
     props: PropRow[];
+    accessibility?: AccessibilityDoc;
 };
 
-export const COMPONENT_SLUGS = ["button", "input", "select"] as const;
+export const COMPONENT_SLUGS = [
+    "button",
+    "input",
+    "select",
+    "textarea",
+    "checkbox",
+    "radio",
+    "switch",
+    "slider",
+    "upload",
+    "calendar",
+    "date-picker",
+    "date-range-picker",
+    "time-picker",
+    "date-time-picker",
+    "avatar",
+    "badge",
+    "tag",
+    "card",
+    "list",
+    "table",
+    "accordion",
+    "alert",
+    "banner",
+    "toast",
+    "skeleton",
+    "tabs",
+    "segmented-control",
+    "breadcrumb",
+    "pagination",
+    "stepper",
+    "modal",
+    "drawer",
+    "popover",
+    "menu",
+    "tooltip",
+    "container",
+    "grid",
+    "stack",
+    "divider",
+    "audio-player",
+    "video-player",
+    "gallery",
+    "lightbox",
+    "carousel",
+] as const;
 
 export function getComponents(locale: Locale): ComponentEntry[] {
     const t = makeT(locale);
@@ -53,6 +117,57 @@ export function getComponents(locale: Locale): ComponentEntry[] {
                 "Importe de `vaiperui` e use como um `<button>`: todas as props nativas (`onClick`, `disabled`, `type`, `aria-*`…) continuam funcionando. A aparência é controlada pelas props `variant`, `variantColor`, `size`, `radius`, `hover` e `animation`.",
                 "Importa desde `vaiperui` y úsalo como un `<button>`: todas las props nativas (`onClick`, `disabled`, `type`, `aria-*`…) siguen funcionando. La apariencia se controla con las props `variant`, `variantColor`, `size`, `radius`, `hover` y `animation`.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        "Renders a native `<button>`, so role, focus and Enter/Space activation come from the browser.",
+                        "Renderiza um `<button>` nativo, então papel, foco e ativação por Enter/Espaço vêm do navegador.",
+                        "Renderiza un `<button>` nativo, así que el rol, el foco y la activación con Enter/Espacio los aporta el navegador.",
+                    ),
+                    t(
+                        '`type` defaults to `"button"`, so it does not submit a form unless you pass `type="submit"`.',
+                        '`type` é `"button"` por padrão, então não envia um formulário a menos que você passe `type="submit"`.',
+                        '`type` es `"button"` por defecto, así que no envía un formulario salvo que pases `type="submit"`.',
+                    ),
+                    t(
+                        "`disabled` uses the native attribute: the button leaves the tab order and ignores clicks.",
+                        "`disabled` usa o atributo nativo: o botão sai da ordem de Tab e ignora cliques.",
+                        "`disabled` usa el atributo nativo: el botón sale del orden de Tab e ignora los clics.",
+                    ),
+                    t(
+                        "A visible focus ring (`focus-visible`) is applied on keyboard focus.",
+                        "Um anel de foco visível (`focus-visible`) é aplicado no foco por teclado.",
+                        "Un anillo de foco visible (`focus-visible`) se aplica en el foco por teclado.",
+                    ),
+                    t(
+                        "The ripple is `aria-hidden` and hidden with `prefers-reduced-motion`; the looping `animation` presets only run under `motion-safe`.",
+                        "O ripple é `aria-hidden` e fica oculto com `prefers-reduced-motion`; as `animation` em loop só rodam sob `motion-safe`.",
+                        "El ripple es `aria-hidden` y se oculta con `prefers-reduced-motion`; las `animation` en bucle solo corren bajo `motion-safe`.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Enter",
+                        action: t("Activates the button.", "Ativa o botão.", "Activa el botón."),
+                    },
+                    {
+                        keys: "Space",
+                        action: t("Activates the button.", "Ativa o botão.", "Activa el botón."),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "Icon-only buttons have no accessible name: pass `aria-label`. `iconStart`/`iconEnd` are not hidden from assistive tech, so mark decorative icons `aria-hidden`.",
+                        "Botões só com ícone não têm nome acessível: passe `aria-label`. `iconStart`/`iconEnd` não são ocultados de tecnologias assistivas, então marque ícones decorativos com `aria-hidden`.",
+                        "Los botones solo con icono no tienen nombre accesible: pasa `aria-label`. `iconStart`/`iconEnd` no se ocultan a las tecnologías de asistencia, así que marca los iconos decorativos con `aria-hidden`.",
+                    ),
+                    t(
+                        "There is no built-in loading or pressed state: set `aria-busy` or `aria-pressed` yourself when needed.",
+                        "Não há estado de loading ou pressionado embutido: defina `aria-busy` ou `aria-pressed` você mesmo quando precisar.",
+                        "No hay estado de carga ni de presionado integrado: define `aria-busy` o `aria-pressed` tú mismo cuando lo necesites.",
+                    ),
+                ],
+            },
             code: `import { Button } from "vaiperui";
 
 <Button variantColor="primary" hover="lift">
@@ -163,6 +278,26 @@ export function getComponents(locale: Locale): ComponentEntry[] {
                     ),
                 },
                 {
+                    prop: "maskRegex",
+                    values: "RegExp",
+                    defaultValue: none,
+                    description: t(
+                        'With mask="custom": each typed character must match this regex or it is dropped (e.g. /[0-9a-f]/i for a hex color)',
+                        'Com mask="custom": cada caractere digitado precisa casar com este regex, senão é descartado (ex.: /[0-9a-f]/i para cor hex)',
+                        'Con mask="custom": cada carácter escrito debe coincidir con este regex o se descarta (p. ej. /[0-9a-f]/i para color hex)',
+                    ),
+                },
+                {
+                    prop: "maskFormat",
+                    values: "(value: string) => string",
+                    defaultValue: none,
+                    description: t(
+                        'With mask="custom": receives the characters kept by maskRegex and returns the displayed text (e.g. prefix "#" for hex colors)',
+                        'Com mask="custom": recebe os caracteres mantidos pelo maskRegex e devolve o texto exibido (ex.: prefixo "#" para cores hex)',
+                        'Con mask="custom": recibe los caracteres que mantiene maskRegex y devuelve el texto mostrado (p. ej. prefijo "#" para colores hex)',
+                    ),
+                },
+                {
                     prop: t("(native)", "(nativas)", "(nativas)"),
                     values: "ButtonHTMLAttributes<HTMLButtonElement>",
                     defaultValue: none,
@@ -187,6 +322,57 @@ export function getComponents(locale: Locale): ComponentEntry[] {
                 "Todas as props nativas de `<input>`, mais `mask`, que formata cpf/cnpj/cei/cep (BR) e phone/creditCard/cardExpiry/date/time (globais) em tempo real enquanto o usuário digita. O foco pode ser um `ring` (padrão) ou apenas um `outline`.",
                 "Todas las props nativas de `<input>`, más `mask`, que formatea cpf/cnpj/cei/cep (BR) y phone/creditCard/cardExpiry/date/time (globales) en tiempo real mientras el usuario escribe. El foco puede ser un `ring` (predeterminado) o solo un `outline`.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        "Renders a native `<input>`; `label` becomes a `<label>` linked by `htmlFor`/`id` (an id is generated if you do not pass one).",
+                        "Renderiza um `<input>` nativo; `label` vira um `<label>` ligado por `htmlFor`/`id` (um id é gerado se você não passar).",
+                        "Renderiza un `<input>` nativo; `label` pasa a ser un `<label>` enlazado por `htmlFor`/`id` (se genera un id si no pasas uno).",
+                    ),
+                    t(
+                        '`errorMessage` sets `aria-invalid="true"` and points `aria-describedby` to the error text.',
+                        '`errorMessage` define `aria-invalid="true"` e aponta `aria-describedby` para o texto de erro.',
+                        '`errorMessage` define `aria-invalid="true"` y apunta `aria-describedby` al texto de error.',
+                    ),
+                    t(
+                        "`helperText` is linked through `aria-describedby`; while an error is shown, only the error is linked and the helper is not rendered.",
+                        "`helperText` é ligado via `aria-describedby`; enquanto há erro, só o erro é ligado e o helper não é renderizado.",
+                        "`helperText` se enlaza con `aria-describedby`; mientras hay error, solo se enlaza el error y el helper no se renderiza.",
+                    ),
+                    t(
+                        "`disabled` uses the native attribute and dims the label.",
+                        "`disabled` usa o atributo nativo e esmaece o label.",
+                        "`disabled` usa el atributo nativo y atenúa el label.",
+                    ),
+                    t(
+                        'Preset masks (digit masks) set `inputMode="numeric"`; the formatted value is what the input holds.',
+                        'Máscaras prontas (de dígitos) definem `inputMode="numeric"`; o valor formatado é o que o input guarda.',
+                        'Las máscaras predefinidas (de dígitos) definen `inputMode="numeric"`; el valor formateado es el que guarda el input.',
+                    ),
+                    t(
+                        "Leading and trailing icons are decorative overlays with `pointer-events-none`.",
+                        "Ícones à esquerda e à direita são overlays decorativos com `pointer-events-none`.",
+                        "Los iconos inicial y final son overlays decorativos con `pointer-events-none`.",
+                    ),
+                ],
+                caveats: [
+                    t(
+                        "Without `label`, pass `aria-label` or `aria-labelledby`; a placeholder is not an accessible name.",
+                        "Sem `label`, passe `aria-label` ou `aria-labelledby`; placeholder não é nome acessível.",
+                        "Sin `label`, pasa `aria-label` o `aria-labelledby`; un placeholder no es un nombre accesible.",
+                    ),
+                    t(
+                        'The error text has no `role="alert"` or `aria-live`, so it is not announced when it appears; it is read when the field is focused.',
+                        'O texto de erro não tem `role="alert"` nem `aria-live`, então não é anunciado ao aparecer; é lido quando o campo recebe foco.',
+                        'El texto de error no tiene `role="alert"` ni `aria-live`, así que no se anuncia al aparecer; se lee cuando el campo recibe el foco.',
+                    ),
+                    t(
+                        '`required` is passed to the native input, but no asterisk or "required" text is drawn in the label.',
+                        '`required` vai para o input nativo, mas nenhum asterisco ou texto "obrigatório" é desenhado no label.',
+                        '`required` pasa al input nativo, pero no se dibuja asterisco ni texto "obligatorio" en el label.',
+                    ),
+                ],
+            },
             code: `import { Input } from "vaiperui";
 
 <Input label="${s.phone}" mask="phone" />
@@ -308,7 +494,7 @@ export function getComponents(locale: Locale): ComponentEntry[] {
                 },
                 {
                     prop: "mask",
-                    values: "cpf | cnpj | cei | cep | phone | creditCard | cardExpiry | date | time",
+                    values: "cpf | cnpj | cei | cep | phone | creditCard | cardExpiry | date | time | custom",
                     defaultValue: none,
                     description: t(
                         "Formats the value automatically as the user types (controlled or not); onChange emits the already-masked string",
@@ -341,6 +527,107 @@ export function getComponents(locale: Locale): ComponentEntry[] {
                 'Combobox acessível (`role="combobox"` + `listbox`) com navegação por teclado, typeahead e seleção controlada ou não. Ative `searchable` para filtrar por texto e `variant="detailed"` para opções com `leading` e `description`.',
                 'Combobox accesible (`role="combobox"` + `listbox`) con navegación por teclado, typeahead y selección controlada o no. Activa `searchable` para filtrar por texto y `variant="detailed"` para opciones con `leading` y `description`.',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'The trigger is a `<button role="combobox">` with `aria-haspopup="listbox"`, `aria-expanded` and `aria-controls` pointing at the list.',
+                        'O gatilho é um `<button role="combobox">` com `aria-haspopup="listbox"`, `aria-expanded` e `aria-controls` apontando para a lista.',
+                        'El disparador es un `<button role="combobox">` con `aria-haspopup="listbox"`, `aria-expanded` y `aria-controls` apuntando a la lista.',
+                    ),
+                    t(
+                        'The list is `role="listbox"` with `role="option"` items carrying `aria-selected`, plus `aria-disabled` on disabled options.',
+                        'A lista é `role="listbox"` com itens `role="option"` que levam `aria-selected`, e `aria-disabled` nas opções desabilitadas.',
+                        'La lista es `role="listbox"` con elementos `role="option"` que llevan `aria-selected`, y `aria-disabled` en las opciones deshabilitadas.',
+                    ),
+                    t(
+                        "Focus stays on the trigger and the highlighted option is exposed with `aria-activedescendant`; with `searchable`, focus moves to the search field, which holds `aria-activedescendant` instead.",
+                        "O foco fica no gatilho e a opção destacada é exposta com `aria-activedescendant`; com `searchable`, o foco vai para o campo de busca, que passa a levar o `aria-activedescendant`.",
+                        "El foco queda en el disparador y la opción resaltada se expone con `aria-activedescendant`; con `searchable`, el foco pasa al campo de búsqueda, que lleva el `aria-activedescendant`.",
+                    ),
+                    t(
+                        "`label` is a `<label htmlFor>` for the trigger; `aria-label` is set on it too. The search field is named by `searchPlaceholder`.",
+                        "`label` é um `<label htmlFor>` do gatilho; `aria-label` também é aplicado nele. O campo de busca é nomeado por `searchPlaceholder`.",
+                        "`label` es un `<label htmlFor>` del disparador; `aria-label` también se aplica en él. El campo de búsqueda se nombra con `searchPlaceholder`.",
+                    ),
+                    t(
+                        "While `loading`, the listbox has `aria-busy`. Selecting an option or pressing Esc returns focus to the trigger.",
+                        "Durante o `loading`, o listbox tem `aria-busy`. Selecionar uma opção ou pressionar Esc devolve o foco ao gatilho.",
+                        "Durante `loading`, el listbox tiene `aria-busy`. Seleccionar una opción o pulsar Esc devuelve el foco al disparador.",
+                    ),
+                    t(
+                        "`disabled` uses the native attribute on the trigger. With `name`, a hidden input carries the value for forms.",
+                        "`disabled` usa o atributo nativo no gatilho. Com `name`, um input hidden leva o valor para formulários.",
+                        "`disabled` usa el atributo nativo en el disparador. Con `name`, un input hidden lleva el valor a los formularios.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            "Opens the list; when open, selects the highlighted option.",
+                            "Abre a lista; com ela aberta, seleciona a opção destacada.",
+                            "Abre la lista; con ella abierta, selecciona la opción resaltada.",
+                        ),
+                    },
+                    {
+                        keys: "ArrowDown / ArrowUp",
+                        action: t(
+                            "Opens the list; when open, moves the highlight (skipping disabled options).",
+                            "Abre a lista; com ela aberta, move o destaque (pulando opções desabilitadas).",
+                            "Abre la lista; con ella abierta, mueve el resaltado (omitiendo opciones deshabilitadas).",
+                        ),
+                    },
+                    {
+                        keys: "Home / End",
+                        action: t(
+                            "Highlights the first / last option while open.",
+                            "Destaca a primeira / última opção com a lista aberta.",
+                            "Resalta la primera / última opción con la lista abierta.",
+                        ),
+                    },
+                    {
+                        keys: "Esc",
+                        action: t(
+                            "Closes the list; in the search field, also returns focus to the trigger.",
+                            "Fecha a lista; no campo de busca, também devolve o foco ao gatilho.",
+                            "Cierra la lista; en el campo de búsqueda, también devuelve el foco al disparador.",
+                        ),
+                    },
+                    {
+                        keys: "Tab",
+                        action: t(
+                            "Closes the list and lets focus move on.",
+                            "Fecha a lista e deixa o foco seguir adiante.",
+                            "Cierra la lista y deja que el foco continúe.",
+                        ),
+                    },
+                    {
+                        keys: "Letters",
+                        action: t(
+                            "Without `searchable`, typeahead jumps to the option starting with the typed text.",
+                            "Sem `searchable`, o typeahead pula para a opção que começa com o texto digitado.",
+                            "Sin `searchable`, el typeahead salta a la opción que empieza con el texto escrito.",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "Without a visible `label`, pass `aria-label`; the component does not name the trigger on its own.",
+                        "Sem `label` visível, passe `aria-label`; o componente não nomeia o gatilho sozinho.",
+                        "Sin `label` visible, pasa `aria-label`; el componente no nombra el disparador por sí solo.",
+                    ),
+                    t(
+                        "The list renders in a portal on `document.body`, outside the field in DOM order, and does not trap focus.",
+                        "A lista é renderizada em um portal no `document.body`, fora do campo na ordem do DOM, e não prende o foco.",
+                        "La lista se renderiza en un portal en `document.body`, fuera del campo en el orden del DOM, y no atrapa el foco.",
+                    ),
+                    t(
+                        "Single selection only, and there is no `aria-invalid`/error state: show validation messages yourself.",
+                        "Apenas seleção única, e não há estado de erro/`aria-invalid`: mostre mensagens de validação por conta própria.",
+                        "Solo selección única, y no hay estado de error/`aria-invalid`: muestra los mensajes de validación por tu cuenta.",
+                    ),
+                ],
+            },
             code: `import { Select } from "vaiperui";
 
 <Select
@@ -428,6 +715,56 @@ ${countriesCode}
                         "Text when a search has no matches; receives the typed query",
                         "Texto quando a busca não tem resultados; recebe o termo digitado",
                         "Texto cuando la búsqueda no tiene resultados; recibe el término escrito",
+                    ),
+                },
+                {
+                    prop: "loading",
+                    values: "boolean",
+                    defaultValue: "false",
+                    description: t(
+                        "Shows a spinner row at the end of the list while options load",
+                        "Mostra uma linha com spinner no fim da lista enquanto as opções carregam",
+                        "Muestra una fila con spinner al final de la lista mientras cargan las opciones",
+                    ),
+                },
+                {
+                    prop: "loadingMessage",
+                    values: "string",
+                    defaultValue: '"Loading..."',
+                    description: t(
+                        "Text shown next to the spinner",
+                        "Texto exibido ao lado do spinner",
+                        "Texto mostrado junto al spinner",
+                    ),
+                },
+                {
+                    prop: "onReachEnd",
+                    values: "() => void",
+                    defaultValue: none,
+                    description: t(
+                        "Fires when the user scrolls near the end of the list (not while loading): fetch the next page and append it to options",
+                        "Dispara quando o usuário rola perto do fim da lista (não enquanto carrega): busque a próxima página e some às options",
+                        "Se dispara cuando el usuario se acerca al final de la lista (no mientras carga): pida la siguiente página y añádala a options",
+                    ),
+                },
+                {
+                    prop: "hasMore",
+                    values: "boolean",
+                    defaultValue: "true",
+                    description: t(
+                        "Set false after the last page. While true, onReachEnd also fires when the options don't fill the menu, until they do",
+                        "Use false após a última página. Enquanto true, onReachEnd também dispara quando as opções não preenchem o menu, até preencherem",
+                        "Use false tras la última página. Mientras sea true, onReachEnd también se dispara si las opciones no llenan el menú, hasta que lo hagan",
+                    ),
+                },
+                {
+                    prop: "onSearchChange",
+                    values: "(query: string) => void",
+                    defaultValue: none,
+                    description: t(
+                        "Server-side search (needs searchable): called with the typed text and turns off the local filter, so options should already be the matches. Debounce it yourself",
+                        "Busca no servidor (exige searchable): chamado com o texto digitado e desliga o filtro local, então options já deve ser o resultado. Faça o debounce por conta própria",
+                        "Búsqueda en el servidor (requiere searchable): se llama con el texto escrito y apaga el filtro local, así que options ya debe ser el resultado. Haga el debounce usted mismo",
                     ),
                 },
                 {
@@ -572,6 +909,14 @@ ${countriesCode}
                 },
             ],
         },
+        ...getFormComponents(locale),
+        ...getDateComponents(locale),
+        ...getDataDisplayComponents(locale),
+        ...getFeedbackComponents(locale),
+        ...getNavigationComponents(locale),
+        ...getOverlaysComponents(locale),
+        ...getLayoutComponents(locale),
+        ...getMediaComponents(locale),
     ];
 }
 

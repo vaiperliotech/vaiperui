@@ -192,6 +192,15 @@ export const pt: Dictionary = {
     docs: {
         sidebarAria: "Documentação",
         components: "componentes",
+        groups: {
+            forms: "formulários",
+            dataDisplay: "exibição de dados",
+            feedback: "feedback",
+            navigation: "navegação",
+            overlays: "sobreposições",
+            layout: "layout",
+            media: "mídia",
+        },
         paginationAria: "Navegação entre guias",
         previous: "anterior",
         next: "próximo",
@@ -202,6 +211,10 @@ export const pt: Dictionary = {
         },
         onThisPage: "Nesta página",
         howToUse: "Como usar",
+        accessibility: "Acessibilidade",
+        a11yKeyboard: "Teclado",
+        a11yCols: { key: "Tecla", action: "Ação" },
+        a11yCaveats: "Tenha em mente",
         props: "Props",
         propsCols: {
             prop: "Prop",
@@ -227,7 +240,7 @@ export const pt: Dictionary = {
             },
             components: {
                 title: "Componentes",
-                body: "A referência de <c>Button</c>, <c>Input</c> e <c>Select</c> está na barra lateral. Cada página traz exemplos ao vivo, o código e a tabela de props.",
+                body: "A referência de todos os componentes está na barra lateral. Cada página traz exemplos ao vivo, o código e a tabela de props.",
             },
         },
         installation: {

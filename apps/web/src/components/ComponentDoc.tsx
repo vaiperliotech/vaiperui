@@ -90,20 +90,22 @@ export function ComponentDoc({
 
     return (
         <article>
-            <p className="font-mono text-xs text-ink-faint">
+            <p className="font-mono text-[15px] text-ink-faint">
                 {labels.components} / {component.slug}
             </p>
-            <h1 className="mt-2 font-display text-3xl font-semibold text-ink">{component.name}</h1>
-            <p className="mt-3 max-w-xl text-ink-dim">{component.blurb}</p>
+            <h1 className="mt-2 font-display text-4xl font-semibold text-ink">{component.name}</h1>
+            <p className="mt-3 max-w-2xl text-[19px] leading-8 text-ink-dim">{component.blurb}</p>
 
             <section className="mt-10">
                 <h2
                     id={slugify(labels.howToUse)}
-                    className="scroll-mt-24 font-display text-lg font-semibold text-ink"
+                    className="scroll-mt-24 font-display text-[22px] font-semibold text-ink"
                 >
                     {labels.howToUse}
                 </h2>
-                <p className="mt-3 max-w-2xl text-ink-dim">{component.usage}</p>
+                <p className="mt-3 max-w-2xl text-[18px] leading-8 text-ink-dim">
+                    {component.usage}
+                </p>
                 <div className="mt-5 space-y-4">
                     <PreviewWindow labels={labels} contentClassName="min-h-40 gap-4">
                         {component.demo}
@@ -118,12 +120,14 @@ export function ComponentDoc({
                 <section key={group.title} className="mt-16">
                     <h2
                         id={slugify(group.title)}
-                        className="scroll-mt-24 font-display text-lg font-semibold text-ink"
+                        className="scroll-mt-24 font-display text-[22px] font-semibold text-ink"
                     >
                         {group.title}
                     </h2>
                     {group.description ? (
-                        <p className="mt-2 max-w-2xl text-ink-dim">{group.description}</p>
+                        <p className="mt-2 max-w-2xl text-[18px] leading-8 text-ink-dim">
+                            {group.description}
+                        </p>
                     ) : null}
                     <div className="mt-5 space-y-4">
                         <PreviewWindow labels={labels} contentClassName="gap-x-8 gap-y-6">
@@ -150,14 +154,14 @@ export function ComponentDoc({
 
             <h2
                 id={slugify(labels.props)}
-                className="mt-16 scroll-mt-24 font-display text-lg font-semibold text-ink"
+                className="mt-16 scroll-mt-24 font-display text-[22px] font-semibold text-ink"
             >
                 {labels.props}
             </h2>
             <div className="mt-4 overflow-x-auto rounded-xl border border-line">
-                <table className="w-full min-w-160 border-collapse text-sm">
+                <table className="w-full min-w-160 border-collapse text-base">
                     <thead>
-                        <tr className="border-b border-line bg-bg-2 text-left font-mono text-xs text-ink-faint">
+                        <tr className="border-b border-line bg-bg-2 text-left font-mono text-[15px] text-ink-faint">
                             <th className="px-4 py-2.5 font-medium">{labels.propsCols.prop}</th>
                             <th className="px-4 py-2.5 font-medium">{labels.propsCols.values}</th>
                             <th className="px-4 py-2.5 font-medium">{labels.propsCols.default}</th>
@@ -173,13 +177,13 @@ export function ComponentDoc({
                                 key={row.prop}
                                 className="scroll-mt-24 border-b border-line last:border-0"
                             >
-                                <td className="px-4 py-3 align-top font-mono text-xs text-accent-blue">
+                                <td className="px-4 py-3 align-top font-mono text-[15px] text-accent-blue">
                                     {row.prop}
                                 </td>
-                                <td className="px-4 py-3 align-top font-mono text-xs text-ink-dim">
+                                <td className="px-4 py-3 align-top font-mono text-[15px] text-ink-dim">
                                     {row.values}
                                 </td>
-                                <td className="px-4 py-3 align-top font-mono text-xs text-ink-dim">
+                                <td className="px-4 py-3 align-top font-mono text-[15px] text-ink-dim">
                                     {row.defaultValue}
                                 </td>
                                 <td className="px-4 py-3 align-top text-ink-dim">
@@ -190,6 +194,70 @@ export function ComponentDoc({
                     </tbody>
                 </table>
             </div>
+
+            {component.accessibility ? (
+                <section className="mt-16">
+                    <h2
+                        id={slugify(labels.accessibility)}
+                        className="scroll-mt-24 font-display text-[22px] font-semibold text-ink"
+                    >
+                        {labels.accessibility}
+                    </h2>
+                    <ul className="mt-4 max-w-2xl list-disc space-y-2 pl-5 text-[18px] leading-8 text-ink-dim marker:text-ink-faint">
+                        {component.accessibility.notes.map((note) => (
+                            <li key={note}>{note}</li>
+                        ))}
+                    </ul>
+                    {component.accessibility.keys?.length ? (
+                        <>
+                            <h3 className="mt-8 font-display text-xl font-semibold text-ink">
+                                {labels.a11yKeyboard}
+                            </h3>
+                            <div className="mt-3 overflow-x-auto rounded-xl border border-line">
+                                <table className="w-full min-w-120 border-collapse text-base">
+                                    <thead>
+                                        <tr className="border-b border-line bg-bg-2 text-left font-mono text-[15px] text-ink-faint">
+                                            <th className="px-4 py-2.5 font-medium">
+                                                {labels.a11yCols.key}
+                                            </th>
+                                            <th className="px-4 py-2.5 font-medium">
+                                                {labels.a11yCols.action}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {component.accessibility.keys.map((row) => (
+                                            <tr
+                                                key={row.keys}
+                                                className="border-b border-line last:border-0"
+                                            >
+                                                <td className="px-4 py-3 align-top font-mono text-[15px] text-accent-blue">
+                                                    {row.keys}
+                                                </td>
+                                                <td className="px-4 py-3 align-top text-ink-dim">
+                                                    {row.action}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </>
+                    ) : null}
+                    {component.accessibility.caveats?.length ? (
+                        <>
+                            <h3 className="mt-8 font-display text-xl font-semibold text-ink">
+                                {labels.a11yCaveats}
+                            </h3>
+                            <ul className="mt-3 max-w-2xl list-disc space-y-2 pl-5 text-[18px] leading-8 text-ink-dim marker:text-ink-faint">
+                                {component.accessibility.caveats.map((caveat) => (
+                                    <li key={caveat}>{caveat}</li>
+                                ))}
+                            </ul>
+                        </>
+                    ) : null}
+                </section>
+            ) : null}
         </article>
     );
 }

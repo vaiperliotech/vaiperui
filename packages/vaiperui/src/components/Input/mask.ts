@@ -1,6 +1,8 @@
 import type { InputMask } from "./types";
 
-export const MASK_DIGIT_LIMIT: Record<InputMask, number> = {
+type DigitMask = Exclude<InputMask, "custom">;
+
+export const MASK_DIGIT_LIMIT: Record<DigitMask, number> = {
     cpf: 11,
     cnpj: 14,
     cei: 12,
@@ -12,7 +14,7 @@ export const MASK_DIGIT_LIMIT: Record<InputMask, number> = {
     time: 4,
 };
 
-export const MASK_PLACEHOLDER: Record<InputMask, string> = {
+export const MASK_PLACEHOLDER: Record<DigitMask, string> = {
     cpf: "000.000.000-00",
     cnpj: "00.000.000/0000-00",
     cei: "00.000.00000/00",
@@ -70,7 +72,7 @@ export function onlyDigits(value: string): string {
     return value.replace(/\D/g, "");
 }
 
-export function applyMask(digits: string, mask: InputMask): string {
+export function applyMask(digits: string, mask: DigitMask): string {
     switch (mask) {
         case "cpf": {
             let out = digits.slice(0, 3);
@@ -110,4 +112,10 @@ export function applyMask(digits: string, mask: InputMask): string {
         case "time":
             return applyPattern(digits, MASK_PLACEHOLDER.time);
     }
+}
+
+// Keeps only the characters that match `regex`. Flags g/y are dropped: they make `test` stateful.
+export function filterByRegex(value: string, regex: RegExp): string {
+    const re = new RegExp(regex.source, regex.flags.replace(/[gy]/g, ""));
+    return [...value].filter((char) => re.test(char)).join("");
 }

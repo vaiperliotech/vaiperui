@@ -17,7 +17,7 @@ import { TerminalWindow } from "./TerminalWindow";
  * "live" é um `Input` de verdade, focável, com label associado, e os chips
  * são botões reais navegáveis por teclado.
  */
-const MASKS: InputMask[] = ["cpf", "cnpj", "cep", "phone"];
+const MASKS: Exclude<InputMask, "custom">[] = ["cpf", "cnpj", "cep", "phone"];
 
 export type HeroLabels = {
     color: string;
@@ -25,7 +25,7 @@ export type HeroLabels = {
     colors: { orange: string; green: string; violet: string };
     viewCode: string;
     viewLive: string;
-    masks: Record<InputMask, string>;
+    masks: Record<Exclude<InputMask, "custom">, string>;
 };
 
 const DEFAULT_COLOR = "#a78bfa";
@@ -120,7 +120,7 @@ function ControlGroup({ legend, children }: { legend: string; children: ReactNod
 
 export function HeroBuildTerminal({ labels }: { labels: HeroLabels }) {
     const [view, setView] = useState<View>("live");
-    const [mask, setMask] = useState<InputMask>("cpf");
+    const [mask, setMask] = useState<Exclude<InputMask, "custom">>("cpf");
     const [color, setColor] = useState(DEFAULT_COLOR);
 
     return (

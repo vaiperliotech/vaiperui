@@ -26,6 +26,26 @@ export interface SelectProps {
     placeholder?: string;
     emptyMessage?: string;
     /** Shows a filter input inside the menu so the user can type to narrow the options. */
+    /** Shows a spinner row at the end of the list (and instead of the empty message) while options load. */
+    loading?: boolean;
+    loadingMessage?: string;
+    /**
+     * Fires when the user scrolls near the end of the list and `loading` is false: fetch the next
+     * page, append it to `options` and set `loading` meanwhile.
+     */
+    onReachEnd?: () => void;
+    /**
+     * Set to false when the last page was loaded. While true, `onReachEnd` also fires when the
+     * options don't fill the menu (no scrollbar), until they do.
+     */
+    hasMore?: boolean;
+    /**
+     * Server-side search: called with the typed text (not debounced: debounce it yourself) and
+     * the local filter is turned off, so `options` should already be the matching ones. Also
+     * called with "" when the search is cleared or the menu reopens with a leftover query.
+     * Needs `searchable`.
+     */
+    onSearchChange?: (query: string) => void;
     searchable?: boolean;
     searchPlaceholder?: string;
     /** Message for a search with no matches. Receives the trimmed query. */

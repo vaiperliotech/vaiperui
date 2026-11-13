@@ -94,6 +94,23 @@ export function buildSearchIndex(locale: Locale): SearchEntry[] {
             });
         }
 
+        if (component.accessibility) {
+            const a11y = component.accessibility;
+            const text = [
+                ...a11y.notes,
+                ...(a11y.keys ?? []).map((k) => `${k.keys} ${k.action}`),
+                ...(a11y.caveats ?? []),
+            ].join(" ");
+            entries.push({
+                kind: "section",
+                title: dict.docs.accessibility,
+                parent: component.name,
+                text,
+                summary: summarize(a11y.notes[0] ?? text),
+                href: `${href}#${slugify(dict.docs.accessibility)}`,
+            });
+        }
+
         for (const row of component.props) {
             entries.push({
                 kind: "prop",
