@@ -278,26 +278,6 @@ export function getComponents(locale: Locale): ComponentEntry[] {
                     ),
                 },
                 {
-                    prop: "maskRegex",
-                    values: "RegExp",
-                    defaultValue: none,
-                    description: t(
-                        'With mask="custom": each typed character must match this regex or it is dropped (e.g. /[0-9a-f]/i for a hex color)',
-                        'Com mask="custom": cada caractere digitado precisa casar com este regex, senão é descartado (ex.: /[0-9a-f]/i para cor hex)',
-                        'Con mask="custom": cada carácter escrito debe coincidir con este regex o se descarta (p. ej. /[0-9a-f]/i para color hex)',
-                    ),
-                },
-                {
-                    prop: "maskFormat",
-                    values: "(value: string) => string",
-                    defaultValue: none,
-                    description: t(
-                        'With mask="custom": receives the characters kept by maskRegex and returns the displayed text (e.g. prefix "#" for hex colors)',
-                        'Com mask="custom": recebe os caracteres mantidos pelo maskRegex e devolve o texto exibido (ex.: prefixo "#" para cores hex)',
-                        'Con mask="custom": recibe los caracteres que mantiene maskRegex y devuelve el texto mostrado (p. ej. prefijo "#" para colores hex)',
-                    ),
-                },
-                {
                     prop: t("(native)", "(nativas)", "(nativas)"),
                     values: "ButtonHTMLAttributes<HTMLButtonElement>",
                     defaultValue: none,
@@ -497,9 +477,29 @@ export function getComponents(locale: Locale): ComponentEntry[] {
                     values: "cpf | cnpj | cei | cep | phone | creditCard | cardExpiry | date | time | custom",
                     defaultValue: none,
                     description: t(
-                        "Formats the value automatically as the user types (controlled or not); onChange emits the already-masked string",
-                        "Formata o valor automaticamente enquanto o usuário digita (controlado ou não); o onChange emite a string já mascarada",
-                        "Formatea el valor automáticamente mientras el usuario escribe (controlado o no); onChange emite el texto ya enmascarado",
+                        "Formats the value automatically as the user types (controlled or not); onChange emits the already-masked string. Formats: cpf 123.456.789-01, cnpj 12.345.678/0001-99, cei 12.345.67890/12, cep 12345-678, phone +55 (11) 98765-4321 or +1 (415) 555-2671, creditCard 4111 1111 1111 1111, cardExpiry 12/28, date 31/12/2025, time 23:59",
+                        "Formata o valor automaticamente enquanto o usuário digita (controlado ou não); o onChange emite a string já mascarada. Formatos: cpf 123.456.789-01, cnpj 12.345.678/0001-99, cei 12.345.67890/12, cep 12345-678, phone +55 (11) 98765-4321 or +1 (415) 555-2671, creditCard 4111 1111 1111 1111, cardExpiry 12/28, date 31/12/2025, time 23:59",
+                        "Formatea el valor automáticamente mientras el usuario escribe (controlado o no); onChange emite el texto ya enmascarado. Formatos: cpf 123.456.789-01, cnpj 12.345.678/0001-99, cei 12.345.67890/12, cep 12345-678, phone +55 (11) 98765-4321 or +1 (415) 555-2671, creditCard 4111 1111 1111 1111, cardExpiry 12/28, date 31/12/2025, time 23:59",
+                    ),
+                },
+                {
+                    prop: "maskRegex",
+                    values: "RegExp",
+                    defaultValue: none,
+                    description: t(
+                        'With mask="custom": each typed character must match this regex or it is dropped (e.g. /[0-9a-f]/i for a hex color)',
+                        'Com mask="custom": cada caractere digitado precisa casar com este regex, senão é descartado (ex.: /[0-9a-f]/i para cor hex)',
+                        'Con mask="custom": cada carácter escrito debe coincidir con este regex o se descarta (p. ej. /[0-9a-f]/i para color hex)',
+                    ),
+                },
+                {
+                    prop: "maskFormat",
+                    values: "(value: string) => string",
+                    defaultValue: none,
+                    description: t(
+                        'With mask="custom": receives the characters kept by maskRegex and returns the displayed text (e.g. prefix "#" for hex colors)',
+                        'Com mask="custom": recebe os caracteres mantidos pelo maskRegex e devolve o texto exibido (ex.: prefixo "#" para cores hex)',
+                        'Con mask="custom": recibe los caracteres que mantiene maskRegex y devuelve el texto mostrado (p. ej. prefijo "#" para colores hex)',
                     ),
                 },
                 {
@@ -762,9 +762,9 @@ ${countriesCode}
                     values: "(query: string) => void",
                     defaultValue: none,
                     description: t(
-                        "Server-side search (needs searchable): called with the typed text and turns off the local filter, so options should already be the matches. Debounce it yourself",
-                        "Busca no servidor (exige searchable): chamado com o texto digitado e desliga o filtro local, então options já deve ser o resultado. Faça o debounce por conta própria",
-                        "Búsqueda en el servidor (requiere searchable): se llama con el texto escrito y apaga el filtro local, así que options ya debe ser el resultado. Haga el debounce usted mismo",
+                        'Server-side search (needs searchable): called with the typed text and turns off the local filter, so options should already be the matches. Debounce it yourself. It is also called with "" when the search is cleared or the menu reopens with a leftover query, and the selected option keeps its label on the button even when a search removes it from options',
+                        'Busca no servidor (exige searchable): chamado com o texto digitado e desliga o filtro local, então options já deve ser o resultado. Faça o debounce por conta própria. Também é chamado com "" quando a busca é limpa ou o menu reabre com um texto antigo, e a opção selecionada mantém o rótulo no botão mesmo que uma busca a remova das options',
+                        'Búsqueda en el servidor (requiere searchable): se llama con el texto escrito y apaga el filtro local, así que options ya debe ser el resultado. Haga el debounce usted mismo. También se llama con "" cuando se borra la búsqueda o el menú se reabre con un texto anterior, y la opción seleccionada conserva su etiqueta en el botón aunque una búsqueda la quite de options',
                     ),
                 },
                 {

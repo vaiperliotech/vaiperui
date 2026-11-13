@@ -1,0 +1,15 @@
+{
+    "name": "vaiperui",
+    "owner": { "name": "Vaiperliotech", "url": "https://github.com/vaiperliotech" },
+    "description": "Claude Code plugins for vaiperui, the React component library for Tailwind CSS v4.",
+    "plugins": [
+        {
+            "name": "vaiperui",
+            "source": "./plugin",
+            "description": "Agent skill and MCP server for vaiperui: exact props, value shapes, accessibility notes, examples and recipes for 44 components.",
+            "version": "1.0.0-beta",
+            "category": "development",
+            "tags": ["react", "tailwindcss", "components", "design-system", "mcp"]
+        }
+    ]
+}

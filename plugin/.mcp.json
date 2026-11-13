@@ -1,0 +1,8 @@
+{
+    "mcpServers": {
+        "vaiperui": {
+            "type": "http",
+            "url": "https://vaiperui.vercel.app/mcp"
+        }
+    }
+}

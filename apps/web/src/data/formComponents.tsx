@@ -907,9 +907,9 @@ const [files, setFiles] = useState<File[]>([]);
                     "accept",
                     "string",
                     none,
-                    "Accepted types: .pdf, image/*, image/png, comma-separated. Also filters dragged files",
-                    "Tipos aceitos: .pdf, image/*, image/png, separados por vírgula. Também filtra arquivos arrastados",
-                    "Tipos aceptados: .pdf, image/*, image/png, separados por coma. También filtra archivos arrastrados",
+                    "Accepted types: .pdf, image/*, image/png, comma-separated. Also filters dragged files; files that do not match are ignored silently (no callback), so validate and inform the user yourself",
+                    "Tipos aceitos: .pdf, image/*, image/png, separados por vírgula. Também filtra arquivos arrastados; arquivos que não casam são ignorados em silêncio (sem callback), então valide e avise o usuário você mesmo",
+                    "Tipos aceptados: .pdf, image/*, image/png, separados por coma. También filtra archivos arrastrados; los archivos que no coinciden se ignoran en silencio (sin callback), así que valida e informa al usuario tú mismo",
                 ),
                 row(
                     "multiple",

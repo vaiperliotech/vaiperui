@@ -156,6 +156,14 @@ export function getDateComponents(locale: Locale): ComponentEntry[] {
             "Nombre accesible cuando no hay etiqueta",
         ),
         row(
+            "id / className",
+            "string",
+            none,
+            "id of the field button (the label points to it) and classes for the wrapper",
+            "id do botão do campo (o rótulo aponta para ele) e classes do contêiner",
+            "id del botón del campo (la etiqueta apunta a él) y clases del contenedor",
+        ),
+        row(
             "panelLabel",
             "string",
             none,
@@ -623,7 +631,7 @@ const [date, setDate] = useState<Date>();
                     ),
                 ],
             },
-            code: code(`import { DateRangePicker, getDatePresets } from "vaiperui";
+            code: code(`import { DateRangePicker, getDatePresets, type DateRange } from "vaiperui";
 
 const [period, setPeriod] = useState<DateRange>({});
 
@@ -855,7 +863,23 @@ const [time, setTime] = useState("14:30");
                     'Se llama con "HH:mm" cuando cambia la hora, el minuto o el período',
                 ),
                 ...timeRows,
-                ...fieldRows.filter((r) => !["placeholder"].includes(r.prop)),
+                row(
+                    "placeholder",
+                    "string",
+                    '"--:--"',
+                    'Text when nothing is chosen ("--:-- --" with hour12)',
+                    'Texto quando nada foi escolhido ("--:-- --" com hour12)',
+                    'Texto cuando no se eligió nada ("--:-- --" con hour12)',
+                ),
+                ...fieldRows.filter((r) => r.prop !== "placeholder"),
+                row(
+                    "variantColor / customColor / animation",
+                    "primary | success | warning | danger / CSS color / none | smooth | fast | bounce",
+                    "primary / smooth",
+                    "Color of the selected hour and minute, and of the focus; transition speed",
+                    "Cor da hora e do minuto selecionados e do foco; velocidade da transição",
+                    "Color de la hora y el minuto seleccionados y del foco; velocidad de la transición",
+                ),
             ],
         },
         {

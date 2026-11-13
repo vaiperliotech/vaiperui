@@ -23,6 +23,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-    // Skips Next internals, API routes and anything with a file extension (favicon.ico, sitemap.xml...)
-    matcher: ["/((?!_next|api|.*\\..*).*)"],
+    // Skips Next internals, API routes, the MCP endpoint (/mcp) and anything with a file extension
+    // (favicon.ico, sitemap.xml...)
+    matcher: ["/((?!_next|api|mcp|.*\\..*).*)"],
 };

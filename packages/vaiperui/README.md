@@ -65,6 +65,12 @@ export function Example() {
 The components work in the Next.js App Router, since the package entry is already marked with
 `"use client"`.
 
+## Use it with an AI agent
+
+The package ships an [Agent Skill](https://docs.claude.com/en/docs/claude-code/skills) at `node_modules/vaiperui/skills/vaiperui`: setup, the shared props, how each component's value works, a component picker and a reference file per component (props, examples, accessibility). Copy it to `.claude/skills/vaiperui` in your project, or install the Claude Code plugin: `/plugin marketplace add vaiperliotech/vaiperui` then `/plugin install vaiperui@vaiperui`.
+
+For live lookups, add the MCP server (a route of the website, nothing runs on your machine): `claude mcp add --transport http vaiperui https://vaiperui.vercel.app/mcp`, or just the URL in any MCP client that takes one. See the [MCP README](../mcp/README.md).
+
 ## Button
 
 A `<button>` with every native prop plus styling options.

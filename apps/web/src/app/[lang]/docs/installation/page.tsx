@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-
 import { CodePanel, Guide, GuidePagination, P, Section } from "@/components/Guide";
+import { SETUP } from "@/data/setup";
 import { htmlLang, isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { rich } from "@/i18n/rich";
@@ -31,7 +31,7 @@ export default async function InstallationPage({ params }: Props) {
         <Guide crumb={g.crumb} title={dict.docs.guides.installation} description={g.description}>
             <Section title={g.install.title}>
                 <P>{rich(g.install.body, lang)}</P>
-                <CodePanel title="terminal" code={`npm install vaiperui`} />
+                <CodePanel title="terminal" code={SETUP.install} />
             </Section>
 
             <Section title={g.requirements.title}>
@@ -40,13 +40,7 @@ export default async function InstallationPage({ params }: Props) {
 
             <Section title={g.css.title}>
                 <P>{g.css.body}</P>
-                <CodePanel
-                    title="globals.css"
-                    code={`@import "tailwindcss";
-@import "vaiperui/theme.css";
-
-@source "../node_modules/vaiperui/dist";`}
-                />
+                <CodePanel title="globals.css" code={SETUP.css} />
             </Section>
 
             <Section title={g.components.title}>
@@ -58,18 +52,10 @@ export default async function InstallationPage({ params }: Props) {
                 <P>{rich(g.dark.intro, lang)}</P>
                 <CodePanel
                     title="app/layout.tsx"
-                    code={`<html lang="${htmlLang[lang]}" className="dark">`}
+                    code={SETUP.darkHtml.replace('lang="en"', `lang="${htmlLang[lang]}"`)}
                 />
                 <P>{rich(g.dark.variables, lang)}</P>
-                <CodePanel
-                    title="globals.css"
-                    code={`.dark {
-  --vpd-surface: #0b0f19;
-  --vpd-surface-muted: #131a2a;
-  --vpd-text: #e2e8f0;
-  --vpd-border: #1f2937;
-}`}
-                />
+                <CodePanel title="globals.css" code={SETUP.darkVariables} />
             </Section>
 
             <GuidePagination locale={lang} current="/docs/installation" />

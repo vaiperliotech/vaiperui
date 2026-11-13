@@ -1,0 +1,61 @@
+{
+    "name": "vaiperui-mcp",
+    "version": "1.0.0-beta",
+    "description": "MCP server (a remote endpoint for the vaiperui website, plus a local stdio CLI) and Agent Skill generator for the vaiperui React component library.",
+    "keywords": [
+        "mcp",
+        "model-context-protocol",
+        "vaiperui",
+        "react",
+        "agent-skill",
+        "claude",
+        "design-system"
+    ],
+    "homepage": "https://vaiperui.vercel.app",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/vaiperliotech/vaiperui.git",
+        "directory": "packages/mcp"
+    },
+    "bugs": {
+        "url": "https://github.com/vaiperliotech/vaiperui/issues"
+    },
+    "license": "MIT",
+    "type": "module",
+    "bin": {
+        "vaiperui-mcp": "./dist/cli.js"
+    },
+    "files": [
+        "dist"
+    ],
+    "engines": {
+        "node": ">=20"
+    },
+    "scripts": {
+        "build": "node scripts/build-skill.mjs && tsup",
+        "typecheck": "tsc --noEmit",
+        "test": "vitest run",
+        "lint": "biome check .",
+        "format": "biome format --write .",
+        "clean": "rm -rf dist .turbo",
+        "skill": "node scripts/build-skill.mjs",
+        "skill:check": "node scripts/build-skill.mjs --check"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.32.2",
+        "zod": "^4.6.7"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "catalog:",
+        "@types/node": "catalog:",
+        "ts5": "npm:typescript@5.9.3",
+        "tsup": "catalog:",
+        "typescript": "catalog:",
+        "vitest": "catalog:",
+        "esbuild": "^0.28.2"
+    },
+    "private": true,
+    "exports": {
+        ".": "./src/http.ts"
+    }
+}

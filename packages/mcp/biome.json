@@ -1,0 +1,6 @@
+{
+    "extends": "//",
+    "files": {
+        "includes": ["**", "!catalog", "!.build", "!.dist-copy"]
+    }
+}
