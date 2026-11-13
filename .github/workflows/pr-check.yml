@@ -22,6 +22,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # The MCP server and the agent skill are generated from the docs data
+      - name: Docs catalog and agent skill are up to date
+        run: |
+          pnpm --filter @vaiperui/web catalog:check
+          pnpm --filter vaiperui-mcp skill:check
+
       - name: Lint
         run: pnpm lint
 

@@ -2,6 +2,7 @@ export const GUIDE_PATHS = [
     { href: "/docs", key: "intro" },
     { href: "/docs/installation", key: "installation" },
     { href: "/docs/getting-started", key: "gettingStarted" },
+    { href: "/docs/ai", key: "ai" },
 ] as const;
 
 export const COMPONENT_NAMES = {

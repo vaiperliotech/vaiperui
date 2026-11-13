@@ -30,6 +30,11 @@ const GUIDES = [
         path: "/docs/getting-started",
         sections: ["first", "variants", "masks", "next"],
     },
+    {
+        key: "ai",
+        path: "/docs/ai",
+        sections: ["what", "plugin", "mcp", "tools", "skill", "prompts", "trust"],
+    },
 ] as const;
 
 // "<c>Input</c> formats…" -> "Input formats…"

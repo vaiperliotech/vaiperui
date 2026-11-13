@@ -1,7 +1,7 @@
 {
     "name": "vaiperui",
     "version": "1.0.0-beta",
-    "description": "React component library for Tailwind CSS: accessible Button, Input and Select with built-in masks, ripple and a single customColor prop.",
+    "description": "React component library for Tailwind CSS: 44 accessible, typed components (forms with input masks, selects, date and time pickers, tables, overlays, toasts, media) with dark mode and a single customColor prop. Ships an agent skill; see also vaiperui-mcp.",
     "keywords": [
         "react",
         "react-components",
@@ -12,7 +12,9 @@
         "typescript",
         "input-mask",
         "accessibility",
-        "dark-mode"
+        "dark-mode",
+        "mcp",
+        "agent-skill"
     ],
     "homepage": "https://vaiperui.vercel.app",
     "repository": {
@@ -32,7 +34,8 @@
     ],
     "files": [
         "dist",
-        "src/styles"
+        "src/styles",
+        "skills"
     ],
     "exports": {
         ".": {

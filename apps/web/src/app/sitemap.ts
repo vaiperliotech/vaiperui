@@ -9,6 +9,7 @@ const PAGES = [
     { path: "/docs", changeFrequency: "weekly", priority: 0.9 },
     { path: "/docs/installation", changeFrequency: "monthly", priority: 0.8 },
     { path: "/docs/getting-started", changeFrequency: "monthly", priority: 0.8 },
+    { path: "/docs/ai", changeFrequency: "monthly", priority: 0.8 },
     ...COMPONENT_SLUGS.map((slug) => ({
         path: `/docs/${slug}`,
         changeFrequency: "weekly" as const,

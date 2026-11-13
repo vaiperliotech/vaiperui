@@ -131,6 +131,42 @@ export function getDataDisplayComponents(locale: Locale): ComponentEntry[] {
                 '`name` é obrigatório: gera as iniciais (primeira e última palavras) e o rótulo acessível (`role="img"`), enquanto a imagem é decorativa. Passe `src` para uma foto; se faltar ou quebrar, aparecem as iniciais.',
                 '`name` es obligatorio: da las iniciales (primera y última palabra) y la etiqueta accesible (`role="img"`), mientras la imagen es decorativa. Pasa `src` para una foto; si falta o falla, se muestran las iniciales.',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'The root is a `<span>` with `role="img"` and `aria-label` set from `name`.',
+                        'A raiz é um `<span>` com `role="img"` e `aria-label` vindo de `name`.',
+                        'La raíz es un `<span>` con `role="img"` y `aria-label` tomado de `name`.',
+                    ),
+                    t(
+                        'The inner `<img>` has `alt=""` and the initials are `aria-hidden`, so screen readers announce only `name`.',
+                        'O `<img>` interno tem `alt=""` e as iniciais são `aria-hidden`, então leitores de tela anunciam apenas `name`.',
+                        'El `<img>` interno tiene `alt=""` y las iniciales son `aria-hidden`, así que los lectores de pantalla anuncian solo `name`.',
+                    ),
+                    t(
+                        "If `src` fails to load, the image is dropped and the initials are shown instead.",
+                        "Se `src` falhar ao carregar, a imagem é removida e as iniciais aparecem no lugar.",
+                        "Si `src` falla al cargar, se descarta la imagen y se muestran las iniciales.",
+                    ),
+                    t(
+                        "It is not focusable and has no keyboard behavior.",
+                        "Não é focável e não tem comportamento de teclado.",
+                        "No es enfocable y no tiene comportamiento de teclado.",
+                    ),
+                ],
+                caveats: [
+                    t(
+                        "`name` is the accessible label: use the person's real name, not a filename.",
+                        "`name` é o rótulo acessível: use o nome real da pessoa, não um nome de arquivo.",
+                        "`name` es la etiqueta accesible: usa el nombre real de la persona, no un nombre de archivo.",
+                    ),
+                    t(
+                        "To make an avatar clickable, wrap it in your own `<button>` or link.",
+                        "Para tornar um avatar clicável, envolva-o em seu próprio `<button>` ou link.",
+                        "Para hacer clicable un avatar, envuélvelo en tu propio `<button>` o enlace.",
+                    ),
+                ],
+            },
             code: `import { Avatar } from "vaiperui";
 
 <Avatar name="Camila Souza" />
@@ -198,6 +234,42 @@ export function getDataDisplayComponents(locale: Locale): ComponentEntry[] {
                 "Use `status` para a cor semântica e `dot` para um indicador decorativo. Não é interativo. A cor não deve ser o único sinal, então o texto deve dizer o status. Para categorias ou filtros use `Tag`.",
                 "Usa `status` para el color semántico y `dot` para un indicador decorativo. No es interactivo. El color no debe ser la única señal, así que el texto debe decir el estado. Para categorías o filtros usa `Tag`.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        "The badge is a plain `<span>` with no role, so it is read as ordinary text.",
+                        "O badge é um `<span>` simples sem role, então é lido como texto comum.",
+                        "El badge es un `<span>` simple sin rol, así que se lee como texto normal.",
+                    ),
+                    t(
+                        "`status` changes only colors (and a dashed border for `pending`); no text or ARIA attribute is added for it.",
+                        "`status` muda apenas cores (e uma borda tracejada em `pending`); nenhum texto ou atributo ARIA é adicionado.",
+                        "`status` cambia solo los colores (y un borde discontinuo en `pending`); no se agrega ningún texto ni atributo ARIA.",
+                    ),
+                    t(
+                        "The `dot` is `aria-hidden` decoration.",
+                        "O `dot` é decoração `aria-hidden`.",
+                        "El `dot` es decoración `aria-hidden`.",
+                    ),
+                    t(
+                        "It is not a live region, so changing its text does not trigger an announcement.",
+                        "Não é uma live region, então mudar o texto não dispara um anúncio.",
+                        "No es una live region, así que cambiar su texto no dispara un anuncio.",
+                    ),
+                ],
+                caveats: [
+                    t(
+                        'Put the status in the text ("Paid", "Failed"); color alone does not reach screen readers or color-blind users.',
+                        'Coloque o status no texto ("Pago", "Falhou"); só a cor não chega a leitores de tela nem a quem tem daltonismo.',
+                        'Pon el estado en el texto ("Pagado", "Falló"); el color solo no llega a lectores de pantalla ni a personas con daltonismo.',
+                    ),
+                    t(
+                        'To announce a change, render the badge inside your own `role="status"` region.',
+                        'Para anunciar uma mudança, renderize o badge dentro de uma região `role="status"` sua.',
+                        'Para anunciar un cambio, renderiza el badge dentro de una región `role="status"` tuya.',
+                    ),
+                ],
+            },
             code: `import { Badge } from "vaiperui";
 
 <Badge status="success" dot>${t("Active", "Ativo", "Activo")}</Badge>
@@ -251,6 +323,65 @@ export function getDataDisplayComponents(locale: Locale): ComponentEntry[] {
                 "`variant` é `filled` ou `outline`. Passar `onDismiss` renderiza um `<button>` real de remover; dê a cada um um `dismissLabel` específico para leitores de tela os distinguirem. Para status semântico use `Badge`.",
                 "`variant` es `filled` u `outline`. Pasar `onDismiss` renderiza un `<button>` real para quitar; da a cada uno un `dismissLabel` específico para que los lectores de pantalla los distingan. Para estado semántico usa `Badge`.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        "The tag is a plain `<span>` with no role; its text is read as ordinary content.",
+                        "A tag é um `<span>` simples sem role; o texto é lido como conteúdo comum.",
+                        "El tag es un `<span>` simple sin rol; su texto se lee como contenido normal.",
+                    ),
+                    t(
+                        'With `onDismiss`, it renders a real `<button type="button">` with `aria-label` from `dismissLabel` (default "Remove").',
+                        'Com `onDismiss`, renderiza um `<button type="button">` real com `aria-label` vindo de `dismissLabel` (padrão "Remove").',
+                        'Con `onDismiss`, renderiza un `<button type="button">` real con `aria-label` tomado de `dismissLabel` (por defecto "Remove").',
+                    ),
+                    t(
+                        "The X icon is `aria-hidden`, and the button shows a focus outline with `:focus-visible`.",
+                        "O ícone X é `aria-hidden` e o botão mostra um contorno de foco com `:focus-visible`.",
+                        "El icono X es `aria-hidden` y el botón muestra un contorno de foco con `:focus-visible`.",
+                    ),
+                    t(
+                        "Without `onDismiss` there is no button and the tag is not focusable.",
+                        "Sem `onDismiss` não há botão e a tag não é focável.",
+                        "Sin `onDismiss` no hay botón y el tag no es enfocable.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Tab / Shift+Tab",
+                        action: t(
+                            "Moves focus to and from the dismiss button.",
+                            "Move o foco para o botão de remover e para fora dele.",
+                            "Mueve el foco hacia el botón de quitar y fuera de él.",
+                        ),
+                    },
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            "Activates the dismiss button and calls `onDismiss`.",
+                            "Ativa o botão de remover e chama `onDismiss`.",
+                            "Activa el botón de quitar y llama a `onDismiss`.",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "Translate `dismissLabel` yourself; the default is English.",
+                        "Traduza `dismissLabel` você mesmo; o padrão é em inglês.",
+                        "Traduce `dismissLabel` tú mismo; el valor por defecto está en inglés.",
+                    ),
+                    t(
+                        'Give each tag a specific label ("Remove design"), or screen reader users hear the same "Remove" repeatedly.',
+                        'Dê a cada tag um rótulo específico ("Remover design"), ou quem usa leitor de tela ouve o mesmo "Remove" várias vezes.',
+                        'Da a cada tag una etiqueta específica ("Quitar diseño"), o quienes usan lector de pantalla oyen el mismo "Remove" varias veces.',
+                    ),
+                    t(
+                        "Moving focus after a tag is removed is up to your app; the component does not do it.",
+                        "Mover o foco após remover uma tag fica por conta do seu app; o componente não faz isso.",
+                        "Mover el foco tras quitar un tag corre por cuenta de tu app; el componente no lo hace.",
+                    ),
+                ],
+            },
             code: `import { Tag } from "vaiperui";
 
 <Tag>Design</Tag>
@@ -324,6 +455,42 @@ export function getDataDisplayComponents(locale: Locale): ComponentEntry[] {
                 "O `Card` não tem role ARIA: dê a ele um título que caiba na página. `CardHeader`, `CardBody` e `CardFooter` são auxiliares opcionais. `padding` é `none` (mídia de ponta a ponta), `md` ou `lg`.",
                 "`Card` no tiene rol ARIA: dale un encabezado acorde a la página. `CardHeader`, `CardBody` y `CardFooter` son ayudas opcionales. `padding` es `none` (media de borde a borde), `md` o `lg`.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        "`Card` is a plain `<div>` with no role and is not a landmark.",
+                        "`Card` é um `<div>` simples sem role e não é um landmark.",
+                        "`Card` es un `<div>` simple sin rol y no es un landmark.",
+                    ),
+                    t(
+                        "`CardHeader`, `CardBody` and `CardFooter` are also `<div>`s; `CardHeader` is not a heading element.",
+                        "`CardHeader`, `CardBody` e `CardFooter` também são `<div>`s; `CardHeader` não é um elemento de título.",
+                        "`CardHeader`, `CardBody` y `CardFooter` también son `<div>`s; `CardHeader` no es un elemento de encabezado.",
+                    ),
+                    t(
+                        "The card is not focusable and handles no keys; the content you put inside defines the semantics.",
+                        "O card não é focável e não trata teclas; o conteúdo que você coloca dentro define a semântica.",
+                        "El card no es enfocable y no maneja teclas; el contenido que pones dentro define la semántica.",
+                    ),
+                    t(
+                        "Any native `<div>` prop, such as `role`, `aria-labelledby` or `tabIndex`, is passed through.",
+                        "Qualquer prop nativa de `<div>`, como `role`, `aria-labelledby` ou `tabIndex`, é repassada.",
+                        "Cualquier prop nativa de `<div>`, como `role`, `aria-labelledby` o `tabIndex`, se pasa tal cual.",
+                    ),
+                ],
+                caveats: [
+                    t(
+                        "Put a real heading (`<h2>`, `<h3>`) inside `CardHeader` at the level that fits your page outline.",
+                        "Coloque um título real (`<h2>`, `<h3>`) dentro de `CardHeader`, no nível que cabe na estrutura da página.",
+                        "Pon un encabezado real (`<h2>`, `<h3>`) dentro de `CardHeader`, en el nivel que encaje en la estructura de la página.",
+                    ),
+                    t(
+                        "For a clickable card, use a real link or button inside it; a click handler on the `<div>` is not keyboard accessible.",
+                        "Para um card clicável, use um link ou botão real dentro dele; um handler de clique no `<div>` não é acessível por teclado.",
+                        "Para un card clicable, usa un enlace o botón real dentro; un handler de clic en el `<div>` no es accesible por teclado.",
+                    ),
+                ],
+            },
             code: `import { Card, CardHeader, CardBody, CardFooter } from "vaiperui";
 
 <Card>
@@ -368,6 +535,42 @@ export function getDataDisplayComponents(locale: Locale): ComponentEntry[] {
                 "`List` renderiza um `<ul>` (`divided` desenha linhas entre os itens); `ListItem` recebe `title`, `description`, `leading` (ex.: um Avatar), `trailing` (ex.: um Badge ou botão) e `children` extras. A lista não é interativa: coloque um link ou botão em `title` ou `trailing`.",
                 "`List` renderiza un `<ul>` (`divided` dibuja líneas entre elementos); `ListItem` recibe `title`, `description`, `leading` (p. ej. un Avatar), `trailing` (p. ej. un Badge o botón) y `children` extra. La lista no es interactiva: pon un enlace o botón en `title` o `trailing`.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        "`List` renders a native `<ul>` and `ListItem` a native `<li>`, so list semantics and item counts reach assistive technology.",
+                        "`List` renderiza um `<ul>` nativo e `ListItem` um `<li>` nativo, então a semântica de lista e a contagem de itens chegam à tecnologia assistiva.",
+                        "`List` renderiza un `<ul>` nativo y `ListItem` un `<li>` nativo, así que la semántica de lista y el conteo de elementos llegan a la tecnología de asistencia.",
+                    ),
+                    t(
+                        "`title` and `description` are plain `<div>`s, not headings or a description list.",
+                        "`title` e `description` são `<div>`s simples, não títulos nem uma lista de descrição.",
+                        "`title` y `description` son `<div>`s simples, no encabezados ni una lista de descripción.",
+                    ),
+                    t(
+                        "`leading` and `trailing` are rendered as given; the library adds no ARIA to them.",
+                        "`leading` e `trailing` são renderizados como recebidos; a biblioteca não adiciona ARIA a eles.",
+                        "`leading` y `trailing` se renderizan tal cual; la biblioteca no les agrega ARIA.",
+                    ),
+                    t(
+                        "Items are not focusable and handle no keys; only the links or buttons you place inside are interactive.",
+                        "Os itens não são focáveis e não tratam teclas; só os links ou botões que você coloca dentro são interativos.",
+                        "Los elementos no son enfocables y no manejan teclas; solo son interactivos los enlaces o botones que pones dentro.",
+                    ),
+                ],
+                caveats: [
+                    t(
+                        'The list uses `list-none`; some browsers (notably Safari with VoiceOver) then stop announcing it as a list. Add `role="list"` if that matters to you.',
+                        'A lista usa `list-none`; alguns navegadores (em especial o Safari com VoiceOver) deixam de anunciá-la como lista. Adicione `role="list"` se isso importar.',
+                        'La lista usa `list-none`; algunos navegadores (en especial Safari con VoiceOver) dejan de anunciarla como lista. Agrega `role="list"` si eso te importa.',
+                    ),
+                    t(
+                        "`title` is truncated visually with an ellipsis; the full text stays in the DOM and is read in full.",
+                        "`title` é cortado visualmente com reticências; o texto completo continua no DOM e é lido por inteiro.",
+                        "`title` se corta visualmente con puntos suspensivos; el texto completo sigue en el DOM y se lee completo.",
+                    ),
+                ],
+            },
             code: `import { List, ListItem, Avatar, Badge } from "vaiperui";
 
 <List divided>
@@ -451,6 +654,47 @@ export function getDataDisplayComponents(locale: Locale): ComponentEntry[] {
                 'Componha `Table`, `TableCaption`, `TableHeader`, `TableBody`, `TableRow`, `TableHead` e `TableCell`; cada um mapeia ao elemento nativo e aceita suas props nativas. Nomeie a tabela com um `TableCaption` ou `aria-label`. `TableHead` usa `scope="col"` por padrão. A ordenação fica por sua conta (`aria-sort` mais um botão no cabeçalho).',
                 'Compón `Table`, `TableCaption`, `TableHeader`, `TableBody`, `TableRow`, `TableHead` y `TableCell`; cada uno corresponde a su elemento nativo y acepta sus props nativas. Nombra la tabla con un `TableCaption` o `aria-label`. `TableHead` usa `scope="col"` por defecto. La ordenación corre por tu cuenta (`aria-sort` más un botón en el encabezado).',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        "Each part maps to its native element (`<table>`, `<caption>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>`), so table navigation in screen readers works.",
+                        "Cada parte corresponde ao seu elemento nativo (`<table>`, `<caption>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>`), então a navegação por tabela em leitores de tela funciona.",
+                        "Cada parte corresponde a su elemento nativo (`<table>`, `<caption>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>`), así que la navegación por tablas en lectores de pantalla funciona.",
+                    ),
+                    t(
+                        '`TableHead` sets `scope="col"` by default; pass `scope="row"` for a row header cell.',
+                        '`TableHead` define `scope="col"` por padrão; passe `scope="row"` para uma célula de cabeçalho de linha.',
+                        '`TableHead` define `scope="col"` por defecto; pasa `scope="row"` para una celda de encabezado de fila.',
+                    ),
+                    t(
+                        "`TableCaption` is a real `<caption>` and names the table.",
+                        "`TableCaption` é um `<caption>` real e dá nome à tabela.",
+                        "`TableCaption` es un `<caption>` real y da nombre a la tabla.",
+                    ),
+                    t(
+                        "`striped` and row hover are visual only and add no semantics.",
+                        "`striped` e o hover de linha são apenas visuais e não adicionam semântica.",
+                        "`striped` y el hover de fila son solo visuales y no agregan semántica.",
+                    ),
+                ],
+                caveats: [
+                    t(
+                        "Always add a `TableCaption` or `aria-label`; without one the table has no accessible name.",
+                        "Sempre adicione um `TableCaption` ou `aria-label`; sem um deles a tabela não tem nome acessível.",
+                        "Agrega siempre un `TableCaption` o `aria-label`; sin uno la tabla no tiene nombre accesible.",
+                    ),
+                    t(
+                        "The table is wrapped in a `<div>` with `overflow-x: auto` that is not focusable, so keyboard-only users cannot scroll a wide table; wrap the table in your own focusable, labelled container if wide tables are expected.",
+                        "A tabela fica dentro de um `<div>` com `overflow-x: auto` que não é focável, então quem usa só teclado não consegue rolar uma tabela larga; se tabelas largas forem esperadas, envolva a tabela em seu próprio contêiner focável e rotulado.",
+                        "La tabla está dentro de un `<div>` con `overflow-x: auto` que no es enfocable, así que quien usa solo teclado no puede desplazar una tabla ancha; si esperas tablas anchas, envuelve la tabla en tu propio contenedor enfocable y con etiqueta.",
+                    ),
+                    t(
+                        "There is no built-in sorting, selection or keyboard navigation; add `aria-sort` and header buttons yourself.",
+                        "Não há ordenação, seleção nem navegação por teclado embutidas; adicione `aria-sort` e botões no cabeçalho você mesmo.",
+                        "No hay ordenación, selección ni navegación por teclado integradas; agrega `aria-sort` y botones en el encabezado tú mismo.",
+                    ),
+                ],
+            },
             code: `import { Table, TableCaption, TableHeader, TableBody, TableRow, TableHead, TableCell } from "vaiperui";
 
 <Table striped>
@@ -534,6 +778,81 @@ export function getDataDisplayComponents(locale: Locale): ComponentEntry[] {
                 '`type="single"` mantém uma seção aberta (adicione `collapsible` para poder fechá-la); `type="multiple"` permite várias abertas. Use `defaultValue` ou `value` + `onValueChange` (string para single, `string[]` para multiple). Setas cima/baixo, Home e End movem o foco entre os cabeçalhos.',
                 '`type="single"` mantiene una sección abierta (agrega `collapsible` para poder cerrarla); `type="multiple"` permite varias abiertas. Usa `defaultValue` o `value` + `onValueChange` (string para single, `string[]` para multiple). Flechas arriba/abajo, Home y End mueven el foco entre encabezados.',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'Each title is a `<button type="button">` inside an `<h3>`, so it is a heading and a control at once.',
+                        'Cada título é um `<button type="button">` dentro de um `<h3>`, sendo ao mesmo tempo título e controle.',
+                        'Cada título es un `<button type="button">` dentro de un `<h3>`, siendo a la vez encabezado y control.',
+                    ),
+                    t(
+                        "The button sets `aria-expanded` and `aria-controls` pointing to its panel.",
+                        "O botão define `aria-expanded` e `aria-controls` apontando para o seu painel.",
+                        "El botón define `aria-expanded` y `aria-controls` apuntando a su panel.",
+                    ),
+                    t(
+                        "The panel is a `<section>` with `aria-labelledby` pointing to the button, and it uses the `hidden` attribute while closed.",
+                        "O painel é uma `<section>` com `aria-labelledby` apontando para o botão, e usa o atributo `hidden` enquanto fechado.",
+                        "El panel es una `<section>` con `aria-labelledby` apuntando al botón, y usa el atributo `hidden` mientras está cerrado.",
+                    ),
+                    t(
+                        "A `disabled` item uses the native `disabled` attribute: it cannot be focused or activated, and arrow keys skip it.",
+                        "Um item `disabled` usa o atributo nativo `disabled`: não recebe foco nem pode ser ativado, e as setas o pulam.",
+                        "Un elemento `disabled` usa el atributo nativo `disabled`: no recibe foco ni se puede activar, y las flechas lo saltan.",
+                    ),
+                    t(
+                        "The chevron is `aria-hidden` and has a visible focus ring on the button.",
+                        "O chevron é `aria-hidden` e o botão tem anel de foco visível.",
+                        "El chevron es `aria-hidden` y el botón tiene anillo de foco visible.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Tab / Shift+Tab",
+                        action: t(
+                            "Moves focus through the headers (and any focusable content in open panels).",
+                            "Move o foco pelos cabeçalhos (e por conteúdo focável dentro de painéis abertos).",
+                            "Mueve el foco por los encabezados (y por contenido enfocable dentro de paneles abiertos).",
+                        ),
+                    },
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            "Opens or closes the focused section.",
+                            "Abre ou fecha a seção em foco.",
+                            "Abre o cierra la sección enfocada.",
+                        ),
+                    },
+                    {
+                        keys: "Arrow Down / Arrow Up",
+                        action: t(
+                            "Moves focus to the next or previous header, wrapping around at the ends.",
+                            "Move o foco para o cabeçalho seguinte ou anterior, voltando ao início/fim nas pontas.",
+                            "Mueve el foco al encabezado siguiente o anterior, dando la vuelta en los extremos.",
+                        ),
+                    },
+                    {
+                        keys: "Home / End",
+                        action: t(
+                            "Moves focus to the first or last enabled header.",
+                            "Move o foco para o primeiro ou último cabeçalho habilitado.",
+                            "Mueve el foco al primer o último encabezado habilitado.",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        'The chevron transition has no `prefers-reduced-motion` check; use `animation="none"` for users who need it.',
+                        'A transição do chevron não verifica `prefers-reduced-motion`; use `animation="none"` para quem precisa.',
+                        'La transición del chevron no revisa `prefers-reduced-motion`; usa `animation="none"` para quien lo necesite.',
+                    ),
+                    t(
+                        "An open panel is a labelled `<section>`, which many screen readers expose as a region landmark; many open items mean many landmarks.",
+                        "Um painel aberto é uma `<section>` com rótulo, que muitos leitores de tela expõem como landmark de região; muitos itens abertos geram muitos landmarks.",
+                        "Un panel abierto es una `<section>` con etiqueta, que muchos lectores de pantalla exponen como landmark de región; muchos elementos abiertos generan muchos landmarks.",
+                    ),
+                ],
+            },
             code: `import { Accordion, AccordionItem } from "vaiperui";
 
 <Accordion type="single" collapsible defaultValue="payment">

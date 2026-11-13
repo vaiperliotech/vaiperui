@@ -10,7 +10,9 @@
         "typecheck": "tsc --noEmit",
         "lint": "biome check .",
         "format": "biome format --write .",
-        "clean": "rm -rf .next .turbo"
+        "clean": "rm -rf .next .turbo",
+        "catalog": "node scripts/catalog.mjs",
+        "catalog:check": "node scripts/catalog.mjs --check"
     },
     "dependencies": {
         "@vercel/analytics": "^2.0.1",
@@ -19,7 +21,8 @@
         "peerjs": "^1.5.5",
         "react": "catalog:",
         "react-dom": "catalog:",
-        "vaiperui": "catalog:"
+        "vaiperui": "catalog:",
+        "vaiperui-mcp": "workspace:*"
     },
     "devDependencies": {
         "@biomejs/biome": "catalog:",
@@ -28,6 +31,7 @@
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "@vaiperui/config": "catalog:",
+        "esbuild": "^0.28.2",
         "tailwindcss": "catalog:",
         "typescript": "catalog:"
     }

@@ -1,0 +1,10 @@
+{
+    "extends": "@vaiperui/config/tsconfig.base.json",
+    "compilerOptions": {
+        "lib": ["ES2023"],
+        "types": ["node"],
+        "jsx": "preserve"
+    },
+    "include": ["src", "vitest.config.ts", "tsup.config.ts"],
+    "exclude": ["dist", "node_modules"]
+}
