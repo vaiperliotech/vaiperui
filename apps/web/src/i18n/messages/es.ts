@@ -211,6 +211,10 @@ export const es: Dictionary = {
         },
         onThisPage: "En esta página",
         howToUse: "Cómo usar",
+        accessibility: "Accesibilidad",
+        a11yKeyboard: "Teclado",
+        a11yCols: { key: "Tecla", action: "Acción" },
+        a11yCaveats: "Ten en cuenta",
         props: "Props",
         propsCols: {
             prop: "Prop",

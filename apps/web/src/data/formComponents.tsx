@@ -119,6 +119,47 @@ export function getFormComponents(locale: Locale): ComponentEntry[] {
                 "Um `<textarea>` com todas as props nativas, `label`, `helperText` e `errorMessage`. Compartilha `variant` (`ring` ou `outline`), cores, tamanhos, radius e `customColor` com o `Input`, e deixa escolher o `resize`.",
                 "Un `<textarea>` con todas las props nativas, `label`, `helperText` y `errorMessage`. Comparte `variant` (`ring` u `outline`), colores, tamaños, radius y `customColor` con `Input`, y permite elegir el `resize`.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        "Renders a native `<textarea>`, so role, text editing, selection and spellcheck come from the browser.",
+                        "Renderiza um `<textarea>` nativo, então papel, edição de texto, seleção e corretor ortográfico vêm do navegador.",
+                        "Renderiza un `<textarea>` nativo, así que el rol, la edición de texto, la selección y el corrector ortográfico vienen del navegador.",
+                    ),
+                    t(
+                        "`label` is a `<label htmlFor>` tied to the field through its `id` (generated when you do not pass one).",
+                        "`label` é um `<label htmlFor>` ligado ao campo pelo `id` (gerado quando você não passa um).",
+                        "`label` es un `<label htmlFor>` vinculado al campo mediante su `id` (generado si no pasas uno).",
+                    ),
+                    t(
+                        '`errorMessage` sets `aria-invalid="true"`, and `aria-describedby` points to the error text, or to `helperText` when there is no error.',
+                        '`errorMessage` define `aria-invalid="true"`, e `aria-describedby` aponta para o texto de erro, ou para o `helperText` quando não há erro.',
+                        '`errorMessage` define `aria-invalid="true"` y `aria-describedby` apunta al texto de error, o al `helperText` cuando no hay error.',
+                    ),
+                    t(
+                        "Only one description is linked at a time: the error replaces the helper text.",
+                        "Só uma descrição é vinculada por vez: o erro substitui o texto de ajuda.",
+                        "Solo se vincula una descripción a la vez: el error reemplaza al texto de ayuda.",
+                    ),
+                    t(
+                        "`disabled` and other native attributes (`readOnly`, `required`, `maxLength`) pass straight to the element.",
+                        "`disabled` e os demais atributos nativos (`readOnly`, `required`, `maxLength`) vão direto para o elemento.",
+                        "`disabled` y los demás atributos nativos (`readOnly`, `required`, `maxLength`) pasan directo al elemento.",
+                    ),
+                ],
+                caveats: [
+                    t(
+                        "Without `label`, pass `aria-label` or `aria-labelledby` yourself; the field has no other name.",
+                        "Sem `label`, passe `aria-label` ou `aria-labelledby`; o campo não tem outro nome.",
+                        "Sin `label`, pasa `aria-label` o `aria-labelledby`; el campo no tiene otro nombre.",
+                    ),
+                    t(
+                        "The error text is not a live region, so it is not announced when it appears; it is read when the field is focused.",
+                        "O texto de erro não é uma live region, então não é anunciado quando aparece; é lido quando o campo recebe foco.",
+                        "El texto de error no es una live region, así que no se anuncia al aparecer; se lee cuando el campo recibe el foco.",
+                    ),
+                ],
+            },
             code: `import { Textarea } from "vaiperui";
 
 <Textarea label="${t("Message", "Mensagem", "Mensaje")}" rows={4} />
@@ -246,6 +287,57 @@ export function getFormComponents(locale: Locale): ComponentEntry[] {
                 'Um `<input type="checkbox">` nativo (então formulários, `ref` e teclado funcionam) com visual próprio. Passe `label` para a linha inteira ser clicável e `indeterminate` para um pai com só alguns filhos marcados.',
                 'Un `<input type="checkbox">` nativo (así que formularios, `ref` y teclado funcionan) con aspecto propio. Pasa `label` para que toda la fila sea clicable e `indeterminate` para un padre con solo algunos hijos marcados.',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'Renders a native `<input type="checkbox">` (visually hidden, drawn over by the custom box), so role, Space toggle and form behavior are native.',
+                        'Renderiza um `<input type="checkbox">` nativo (oculto visualmente, com a caixa customizada desenhada por cima), então papel, alternância com Space e comportamento em formulários são nativos.',
+                        'Renderiza un `<input type="checkbox">` nativo (oculto visualmente, con la casilla personalizada dibujada encima), así que el rol, el cambio con Space y el comportamiento en formularios son nativos.',
+                    ),
+                    t(
+                        "The `<label>` wraps the input, so the label text names it and the whole row is clickable.",
+                        "O `<label>` envolve o input, então o texto do rótulo dá o nome e a linha inteira é clicável.",
+                        "El `<label>` envuelve el input, así que el texto de la etiqueta le da nombre y toda la fila es clicable.",
+                    ),
+                    t(
+                        '`indeterminate` sets the DOM `indeterminate` property, which assistive tech reads as "mixed".',
+                        '`indeterminate` define a propriedade `indeterminate` do DOM, que tecnologias assistivas leem como "misto".',
+                        '`indeterminate` define la propiedad `indeterminate` del DOM, que las tecnologías asistivas leen como "mixto".',
+                    ),
+                    t(
+                        '`errorMessage` sets `aria-invalid="true"`; `aria-describedby` points to the error, or to `helperText` when there is no error.',
+                        '`errorMessage` define `aria-invalid="true"`; `aria-describedby` aponta para o erro, ou para o `helperText` quando não há erro.',
+                        '`errorMessage` define `aria-invalid="true"`; `aria-describedby` apunta al error, o al `helperText` si no hay error.',
+                    ),
+                    t(
+                        "The check and dash icons are `aria-hidden`; state is exposed only by the native input.",
+                        "Os ícones de check e traço são `aria-hidden`; o estado é exposto só pelo input nativo.",
+                        "Los iconos de check y guion son `aria-hidden`; el estado lo expone solo el input nativo.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Space",
+                        action: t(
+                            "Toggles the checkbox.",
+                            "Alterna o checkbox.",
+                            "Alterna el checkbox.",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "Without `label`, pass `aria-label`; the control has no other name.",
+                        "Sem `label`, passe `aria-label`; o controle não tem outro nome.",
+                        "Sin `label`, pasa `aria-label`; el control no tiene otro nombre.",
+                    ),
+                    t(
+                        "`indeterminate` is visual state only: clicking still resolves to checked or unchecked, and you decide what that means.",
+                        "`indeterminate` é só estado visual: o clique continua resultando em marcado ou desmarcado, e você decide o que isso significa.",
+                        "`indeterminate` es solo estado visual: el clic sigue resultando en marcado o desmarcado, y tú decides qué significa.",
+                    ),
+                ],
+            },
             code: `import { Checkbox } from "vaiperui";
 
 <Checkbox label="${t("Accept the terms", "Aceito os termos", "Acepto los términos")}" />
@@ -302,6 +394,73 @@ export function getFormComponents(locale: Locale): ComponentEntry[] {
                 "Use `RadioGroup` com um array `options` (como o `Select`): ele compartilha um `name`, funciona controlado (`value`) ou não (`defaultValue`) e as setas movem entre as opções nativamente. Use `Radio` sozinho quando precisar de controle total de cada linha.",
                 "Usa `RadioGroup` con un array `options` (como `Select`): comparte un `name`, funciona controlado (`value`) o no (`defaultValue`) y las flechas se mueven entre opciones de forma nativa. Usa `Radio` solo cuando necesites control total de cada fila.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        '`RadioGroup` renders a `<fieldset>` with a `<legend>` (from `label`) and an inner `role="radiogroup"` named by the same `label`.',
+                        '`RadioGroup` renderiza um `<fieldset>` com `<legend>` (vindo de `label`) e um `role="radiogroup"` interno nomeado pelo mesmo `label`.',
+                        '`RadioGroup` renderiza un `<fieldset>` con `<legend>` (de `label`) y un `role="radiogroup"` interno nombrado con el mismo `label`.',
+                    ),
+                    t(
+                        'Each option is a native `<input type="radio">` sharing one `name`, so the browser provides arrow-key navigation and a single tab stop.',
+                        'Cada opção é um `<input type="radio">` nativo com o mesmo `name`, então o navegador entrega a navegação por setas e uma única parada de Tab.',
+                        'Cada opción es un `<input type="radio">` nativo con el mismo `name`, así que el navegador aporta la navegación con flechas y una única parada de Tab.',
+                    ),
+                    t(
+                        "Each option `label` names its radio and its `description` becomes the radio's `aria-describedby` text.",
+                        "O `label` de cada opção dá o nome ao radio e a `description` vira o texto de `aria-describedby` dele.",
+                        "El `label` de cada opción nombra a su radio y su `description` pasa a ser el texto de `aria-describedby`.",
+                    ),
+                    t(
+                        "`errorMessage` sets `aria-invalid` on the fieldset and on every radio; `aria-describedby` on the fieldset points to the error or helper text.",
+                        "`errorMessage` define `aria-invalid` no fieldset e em cada radio; o `aria-describedby` do fieldset aponta para o erro ou o texto de ajuda.",
+                        "`errorMessage` define `aria-invalid` en el fieldset y en cada radio; el `aria-describedby` del fieldset apunta al error o al texto de ayuda.",
+                    ),
+                    t(
+                        "`disabled` on the group disables the fieldset; an option can also be disabled on its own.",
+                        "`disabled` no grupo desabilita o fieldset; uma opção também pode ser desabilitada individualmente.",
+                        "`disabled` en el grupo deshabilita el fieldset; una opción también puede deshabilitarse por separado.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Tab",
+                        action: t(
+                            "Moves focus into and out of the group (one stop, on the selected option).",
+                            "Move o foco para dentro e para fora do grupo (uma parada, na opção selecionada).",
+                            "Mueve el foco hacia dentro y fuera del grupo (una parada, en la opción seleccionada).",
+                        ),
+                    },
+                    {
+                        keys: "Arrow keys",
+                        action: t(
+                            "Move to the next or previous option and select it (native radio behavior).",
+                            "Vão para a opção seguinte ou anterior e a selecionam (comportamento nativo de radio).",
+                            "Van a la opción siguiente o anterior y la seleccionan (comportamiento nativo de radio).",
+                        ),
+                    },
+                    {
+                        keys: "Space",
+                        action: t(
+                            "Selects the focused option when none is selected yet.",
+                            "Seleciona a opção focada quando nenhuma está selecionada ainda.",
+                            "Selecciona la opción enfocada cuando aún no hay ninguna seleccionada.",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "Always pass `label` to `RadioGroup`; without it the group has no accessible name.",
+                        "Sempre passe `label` ao `RadioGroup`; sem ele o grupo não tem nome acessível.",
+                        "Pasa siempre `label` a `RadioGroup`; sin él el grupo no tiene nombre accesible.",
+                    ),
+                    t(
+                        "A standalone `Radio` has no group semantics: give related radios the same `name` and wrap them yourself.",
+                        "Um `Radio` avulso não tem semântica de grupo: dê o mesmo `name` aos radios relacionados e envolva-os você mesmo.",
+                        "Un `Radio` suelto no tiene semántica de grupo: dale el mismo `name` a los radios relacionados y envuélvelos tú.",
+                    ),
+                ],
+            },
             code: `import { RadioGroup } from "vaiperui";
 
 <RadioGroup
@@ -430,6 +589,77 @@ export function getFormComponents(locale: Locale): ComponentEntry[] {
                 "O valor é sempre um array, um número por botão: `[40]` para um valor, `[20, 80]` para um intervalo com a trilha preenchida entre os botões. O Slider não exibe o número escolhido, então mostre-o ao lado do controle. Dê nome com `aria-label` (obrigatório) e, no intervalo, a cada botão com `thumbLabels`.",
                 "El valor es siempre un array, un número por botón: `[40]` para un valor, `[20, 80]` para un intervalo con la pista rellena entre los botones. El Slider no muestra el número elegido, así que muéstralo junto al control. Ponle nombre con `aria-label` (obligatorio) y, en un intervalo, a cada botón con `thumbLabels`.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'Each thumb is a `<div role="slider">` (not a native input) with `aria-valuemin`, `aria-valuemax`, `aria-valuenow` and `aria-orientation="horizontal"`.',
+                        'Cada thumb é um `<div role="slider">` (não um input nativo) com `aria-valuemin`, `aria-valuemax`, `aria-valuenow` e `aria-orientation="horizontal"`.',
+                        'Cada thumb es un `<div role="slider">` (no un input nativo) con `aria-valuemin`, `aria-valuemax`, `aria-valuenow` y `aria-orientation="horizontal"`.',
+                    ),
+                    t(
+                        '`aria-label` is required. With several thumbs a number is appended ("Price 1", "Price 2"), or use `thumbLabels` for custom names.',
+                        '`aria-label` é obrigatório. Com vários thumbs um número é acrescentado ("Preço 1", "Preço 2"), ou use `thumbLabels` para nomes próprios.',
+                        '`aria-label` es obligatorio. Con varios thumbs se añade un número ("Precio 1", "Precio 2"), o usa `thumbLabels` para nombres propios.',
+                    ),
+                    t(
+                        "Every thumb is a tab stop (`tabIndex=0`); a thumb never crosses its neighbor, and `minStepsBetweenThumbs` keeps a gap between them.",
+                        "Cada thumb é uma parada de Tab (`tabIndex=0`); um thumb nunca cruza o vizinho, e `minStepsBetweenThumbs` mantém uma distância entre eles.",
+                        "Cada thumb es una parada de Tab (`tabIndex=0`); un thumb nunca cruza a su vecino y `minStepsBetweenThumbs` mantiene una separación entre ellos.",
+                    ),
+                    t(
+                        'When `disabled`, thumbs get `aria-disabled="true"` and `tabIndex=-1`, and the control ignores pointer and keyboard input.',
+                        'Com `disabled`, os thumbs recebem `aria-disabled="true"` e `tabIndex=-1`, e o controle ignora ponteiro e teclado.',
+                        'Con `disabled`, los thumbs reciben `aria-disabled="true"` y `tabIndex=-1`, y el control ignora puntero y teclado.',
+                    ),
+                    t(
+                        "Pressing the track focuses the nearest thumb; `name` adds one hidden input per thumb for form submission.",
+                        "Clicar na trilha foca o thumb mais próximo; `name` adiciona um input hidden por thumb para envio em formulários.",
+                        "Pulsar la pista enfoca el thumb más cercano; `name` añade un input hidden por thumb para el envío de formularios.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Arrow Right / Up",
+                        action: t(
+                            "Increase by one `step`.",
+                            "Aumentam um `step`.",
+                            "Aumentan un `step`.",
+                        ),
+                    },
+                    {
+                        keys: "Arrow Left / Down",
+                        action: t(
+                            "Decrease by one `step`.",
+                            "Diminuem um `step`.",
+                            "Disminuyen un `step`.",
+                        ),
+                    },
+                    {
+                        keys: "Page Up / Page Down",
+                        action: t("Change by 10 steps.", "Mudam 10 steps.", "Cambian 10 steps."),
+                    },
+                    {
+                        keys: "Home / End",
+                        action: t(
+                            "Jump to `min` / `max` (limited by neighboring thumbs).",
+                            "Vão para `min` / `max` (limitado pelos thumbs vizinhos).",
+                            "Van a `min` / `max` (limitado por los thumbs vecinos).",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "`aria-valuetext` is not set, so screen readers announce the raw number; if it needs a unit, name it in the `aria-label`.",
+                        "`aria-valuetext` não é definido, então leitores de tela anunciam o número bruto; se precisar de unidade, ponha no `aria-label`.",
+                        "`aria-valuetext` no se define, así que los lectores de pantalla anuncian el número crudo; si necesita unidad, inclúyela en el `aria-label`.",
+                    ),
+                    t(
+                        "Dragging is pointer-only; keyboard users rely on the keys above. There is no `aria-labelledby` support, only `aria-label`.",
+                        "Arrastar é só por ponteiro; usuários de teclado dependem das teclas acima. Não há suporte a `aria-labelledby`, apenas `aria-label`.",
+                        "Arrastrar es solo con puntero; quien usa teclado depende de las teclas anteriores. No hay soporte para `aria-labelledby`, solo `aria-label`.",
+                    ),
+                ],
+            },
             code: `import { Slider } from "vaiperui";
 
 const [volume, setVolume] = useState([40]);
@@ -562,6 +792,65 @@ const [price, setPrice] = useState([200, 800]);
                 'O Upload só **captura** os arquivos: listar, validar o tamanho e enviar para um servidor ficam com você. `onFilesChange` recebe `File[]` puro com os arquivos recém-escolhidos, não a soma com os anteriores, então junte-os no seu próprio estado para acumular. É um `<input type="file">` de verdade escondido só visualmente (Tab para focar, Enter ou Espaço para abrir), e o `accept` também filtra arquivos arrastados, o que o navegador não faz sozinho. Sem `multiple`, só o primeiro arquivo da seleção é mantido. Valide sempre de novo no servidor.',
                 'El Upload solo **captura** los archivos: listarlos, validar el tamaño y enviarlos a un servidor depende de ti. `onFilesChange` recibe `File[]` puro con los archivos recién elegidos, no la suma con los anteriores, así que únelos en tu propio estado para acumular. Es un `<input type="file">` real oculto solo visualmente (Tab para enfocar, Enter o Espacio para abrir), y `accept` también filtra los archivos arrastrados, lo que el navegador no hace solo. Sin `multiple`, solo se conserva el primer archivo de la selección. Valida siempre de nuevo en el servidor.',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'A native `<input type="file">` (visually hidden) is the real control; the dashed area is a `<label htmlFor>` for it.',
+                        'Um `<input type="file">` nativo (oculto visualmente) é o controle real; a área tracejada é um `<label htmlFor>` dele.',
+                        'Un `<input type="file">` nativo (oculto visualmente) es el control real; el área punteada es un `<label htmlFor>` suyo.',
+                    ),
+                    t(
+                        "The input is focusable and the focus ring shows on the drop area (`peer-focus-visible`), so keyboard focus is visible.",
+                        "O input recebe foco e o anel de foco aparece na área de soltar (`peer-focus-visible`), então o foco por teclado fica visível.",
+                        "El input recibe el foco y el anillo de foco aparece en el área de soltar (`peer-focus-visible`), así que el foco con teclado es visible.",
+                    ),
+                    t(
+                        "The accessible name is the `title` text inside the area, plus `label` when you pass one (the input has both labels).",
+                        "O nome acessível é o texto de `title` dentro da área, mais o `label` quando você passa um (o input tem os dois rótulos).",
+                        "El nombre accesible es el texto de `title` dentro del área, más `label` si lo pasas (el input tiene ambas etiquetas).",
+                    ),
+                    t(
+                        '`errorMessage` sets `aria-invalid="true"`; `aria-describedby` points to the error, or to `helperText` when there is no error.',
+                        '`errorMessage` define `aria-invalid="true"`; `aria-describedby` aponta para o erro, ou para o `helperText` quando não há erro.',
+                        '`errorMessage` define `aria-invalid="true"`; `aria-describedby` apunta al error, o al `helperText` si no hay error.',
+                    ),
+                    t(
+                        "Drag and drop is an extra path: keyboard and screen reader users open the system picker through the native input. The upload icon is `aria-hidden`.",
+                        "Arrastar e soltar é um caminho extra: usuários de teclado e leitor de tela abrem o seletor do sistema pelo input nativo. O ícone de upload é `aria-hidden`.",
+                        "Arrastrar y soltar es una vía adicional: quienes usan teclado y lector de pantalla abren el selector del sistema con el input nativo. El icono de subida es `aria-hidden`.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Tab",
+                        action: t(
+                            "Focuses the file input.",
+                            "Foca o input de arquivo.",
+                            "Enfoca el input de archivo.",
+                        ),
+                    },
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            "Opens the system file picker (native input behavior).",
+                            "Abre o seletor de arquivos do sistema (comportamento nativo do input).",
+                            "Abre el selector de archivos del sistema (comportamiento nativo del input).",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "Files rejected by `accept` are dropped silently, with no message or live region; validate and tell the user in `errorMessage`.",
+                        "Arquivos recusados por `accept` são descartados em silêncio, sem mensagem nem live region; valide e avise o usuário via `errorMessage`.",
+                        "Los archivos rechazados por `accept` se descartan en silencio, sin mensaje ni live region; valida y avisa al usuario con `errorMessage`.",
+                    ),
+                    t(
+                        "Selected files are not listed by the component; render the list yourself and make it readable by assistive tech.",
+                        "Os arquivos escolhidos não são listados pelo componente; renderize a lista você mesmo e deixe-a acessível a tecnologias assistivas.",
+                        "Los archivos elegidos no los lista el componente; renderiza la lista tú mismo y hazla accesible para tecnologías asistivas.",
+                    ),
+                ],
+            },
             code: `import { Upload } from "vaiperui";
 
 const [files, setFiles] = useState<File[]>([]);
@@ -690,6 +979,53 @@ const [files, setFiles] = useState<File[]>([]);
                 'Um checkbox nativo exposto como `role="switch"`, então funciona em formulários, com `ref` e teclado (Espaço). Use para ajustes que valem na hora; use `Checkbox` para escolhas enviadas depois.',
                 'Un checkbox nativo expuesto como `role="switch"`, así que funciona en formularios, con `ref` y teclado (Espacio). Úsalo para ajustes que se aplican al instante; usa `Checkbox` para elecciones que se envían después.',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'Renders a native `<input type="checkbox" role="switch">` (visually hidden), so Space toggles it and the checked state is exposed natively.',
+                        'Renderiza um `<input type="checkbox" role="switch">` nativo (oculto visualmente), então Space alterna e o estado marcado é exposto nativamente.',
+                        'Renderiza un `<input type="checkbox" role="switch">` nativo (oculto visualmente), así que Space lo alterna y el estado marcado se expone de forma nativa.',
+                    ),
+                    t(
+                        "The `<label>` wraps the input, so the label text names the switch and the whole row is clickable.",
+                        "O `<label>` envolve o input, então o texto do rótulo dá o nome ao switch e a linha inteira é clicável.",
+                        "El `<label>` envuelve el input, así que el texto de la etiqueta nombra al switch y toda la fila es clicable.",
+                    ),
+                    t(
+                        '`errorMessage` sets `aria-invalid="true"`; `aria-describedby` points to the error, or to `helperText` when there is no error.',
+                        '`errorMessage` define `aria-invalid="true"`; `aria-describedby` aponta para o erro, ou para o `helperText` quando não há erro.',
+                        '`errorMessage` define `aria-invalid="true"`; `aria-describedby` apunta al error, o al `helperText` si no hay error.',
+                    ),
+                    t(
+                        "`disabled` is the native attribute: the switch leaves the tab order and the row dims.",
+                        "`disabled` é o atributo nativo: o switch sai da ordem de Tab e a linha fica esmaecida.",
+                        "`disabled` es el atributo nativo: el switch sale del orden de Tab y la fila se atenúa.",
+                    ),
+                    t(
+                        "The track and thumb are `aria-hidden`; the on/off state is not conveyed by color alone to assistive tech.",
+                        "A trilha e o thumb são `aria-hidden`; o estado ligado/desligado não depende só da cor para tecnologias assistivas.",
+                        "La pista y el thumb son `aria-hidden`; el estado encendido/apagado no depende solo del color para las tecnologías asistivas.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Space",
+                        action: t("Toggles the switch.", "Alterna o switch.", "Alterna el switch."),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "Without `label`, pass `aria-label`; the control has no other name.",
+                        "Sem `label`, passe `aria-label`; o controle não tem outro nome.",
+                        "Sin `label`, pasa `aria-label`; el control no tiene otro nombre.",
+                    ),
+                    t(
+                        "Use it for settings that apply immediately; for choices submitted later with a form, prefer `Checkbox`.",
+                        "Use para ajustes que valem na hora; para escolhas enviadas depois num formulário, prefira `Checkbox`.",
+                        "Úsalo para ajustes que se aplican al instante; para opciones enviadas luego en un formulario, prefiere `Checkbox`.",
+                    ),
+                ],
+            },
             code: `import { Switch } from "vaiperui";
 
 <Switch label="Wi-Fi" />

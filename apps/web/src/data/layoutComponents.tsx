@@ -63,6 +63,32 @@ export function getLayoutComponents(locale: Locale): ComponentEntry[] {
                 "Envolva uma página ou seção para o conteúdo nunca ficar largo demais. Ele aplica 16px de padding lateral no mobile, 24px a partir de `sm` e 32px a partir de `lg`. É apresentacional, então funciona também em Server Components.",
                 "Envuelve una página o sección para que el contenido nunca quede demasiado ancho. Aplica 16px de padding lateral en móvil, 24px desde `sm` y 32px desde `lg`. Es presentacional, por lo que funciona también en Server Components.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        "Renders a plain `<div>` by default, with no role of its own.",
+                        "Renderiza um `<div>` simples por padrão, sem papel próprio.",
+                        "Renderiza un `<div>` simple por defecto, sin rol propio.",
+                    ),
+                    t(
+                        "Use `as` to give it a landmark element such as `main`, `section`, `header` or `footer`.",
+                        "Use `as` para dar a ele um elemento de landmark como `main`, `section`, `header` ou `footer`.",
+                        "Usa `as` para darle un elemento de landmark como `main`, `section`, `header` o `footer`.",
+                    ),
+                    t(
+                        "It only sets width and padding: it has no focus, keyboard or ARIA behavior, and extra props such as `aria-label` go to the element.",
+                        "Só define largura e padding: não tem foco, teclado nem comportamento ARIA, e props extras como `aria-label` vão para o elemento.",
+                        "Solo define ancho y padding: no tiene foco, teclado ni comportamiento ARIA, y las props extra como `aria-label` van al elemento.",
+                    ),
+                ],
+                caveats: [
+                    t(
+                        "A `section` only becomes a landmark when it has an accessible name: pass `aria-label` or `aria-labelledby`.",
+                        "Um `section` só vira landmark quando tem nome acessível: passe `aria-label` ou `aria-labelledby`.",
+                        "Un `section` solo se vuelve landmark cuando tiene nombre accesible: pasa `aria-label` o `aria-labelledby`.",
+                    ),
+                ],
+            },
             code: `import { Container } from "vaiperui";
 
 <Container size="md" as="main">
@@ -116,6 +142,37 @@ export function getLayoutComponents(locale: Locale): ComponentEntry[] {
                 "`columns` aceita um número (1 a 12) ou um objeto por breakpoint (`base`, `sm`, `md`, `lg`, `xl`), mobile first: `{ base: 1, md: 2, lg: 4 }`. Use `GridItem` quando uma célula precisa ocupar mais de uma coluna ou linha.",
                 "`columns` acepta un número (1 a 12) o un objeto por breakpoint (`base`, `sm`, `md`, `lg`, `xl`), mobile first: `{ base: 1, md: 2, lg: 4 }`. Usa `GridItem` cuando una celda debe ocupar más de una columna o fila.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        "`Grid` and `GridItem` render plain `<div>`s by default, with no role; `as` changes the element (for example `ul`/`li`).",
+                        "`Grid` e `GridItem` renderizam `<div>`s simples por padrão, sem papel; `as` troca o elemento (por exemplo `ul`/`li`).",
+                        "`Grid` y `GridItem` renderizan `<div>` simples por defecto, sin rol; `as` cambia el elemento (por ejemplo `ul`/`li`).",
+                    ),
+                    t(
+                        "They are purely visual: no focus, keyboard or ARIA behavior is added, and extra props reach the element.",
+                        "São puramente visuais: nenhum foco, teclado ou comportamento ARIA é adicionado, e props extras chegam ao elemento.",
+                        "Son puramente visuales: no se añade foco, teclado ni comportamiento ARIA, y las props extra llegan al elemento.",
+                    ),
+                    t(
+                        "Screen readers and Tab follow DOM order, not the visual position.",
+                        "Leitores de tela e Tab seguem a ordem do DOM, não a posição visual.",
+                        "Los lectores de pantalla y Tab siguen el orden del DOM, no la posición visual.",
+                    ),
+                ],
+                caveats: [
+                    t(
+                        "`colSpan`/`rowSpan` and responsive `columns` change the layout only; keep the source order meaningful at every breakpoint.",
+                        "`colSpan`/`rowSpan` e `columns` responsivo mudam só o layout; mantenha a ordem do código fazendo sentido em todos os breakpoints.",
+                        "`colSpan`/`rowSpan` y `columns` responsivo solo cambian el layout; mantén el orden del código con sentido en todos los breakpoints.",
+                    ),
+                    t(
+                        'It adds no list semantics: use `as="ul"` and `as="li"` on `GridItem` when the items are a list.',
+                        'Não adiciona semântica de lista: use `as="ul"` e `as="li"` no `GridItem` quando os itens forem uma lista.',
+                        'No añade semántica de lista: usa `as="ul"` y `as="li"` en `GridItem` cuando los elementos sean una lista.',
+                    ),
+                ],
+            },
             code: `import { Grid, GridItem } from "vaiperui";
 
 <Grid columns={{ base: 1, md: 2, lg: 4 }} gap={4}>
@@ -164,6 +221,37 @@ export function getLayoutComponents(locale: Locale): ComponentEntry[] {
                 "Alinha os filhos na vertical (padrão) ou na horizontal. `direction` pode mudar por breakpoint: `{ base: 'vertical', md: 'horizontal' }`. `divider` é renderizado entre cada par de filhos, nunca antes do primeiro nem depois do último.",
                 "Alinea los hijos en vertical (por defecto) u horizontal. `direction` puede cambiar por breakpoint: `{ base: 'vertical', md: 'horizontal' }`. `divider` se renderiza entre cada par de hijos, nunca antes del primero ni después del último.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        "Renders a plain `<div>` (flex) by default, with no role; `as` changes the element (for example `ul`, `nav`, `section`).",
+                        "Renderiza um `<div>` (flex) simples por padrão, sem papel; `as` troca o elemento (por exemplo `ul`, `nav`, `section`).",
+                        "Renderiza un `<div>` (flex) simple por defecto, sin rol; `as` cambia el elemento (por ejemplo `ul`, `nav`, `section`).",
+                    ),
+                    t(
+                        "It adds no focus, keyboard or ARIA behavior; extra props reach the element.",
+                        "Não adiciona foco, teclado nem comportamento ARIA; props extras chegam ao elemento.",
+                        "No añade foco, teclado ni comportamiento ARIA; las props extra llegan al elemento.",
+                    ),
+                    t(
+                        "Responsive `direction` only changes how it looks; reading and Tab order stay the DOM order.",
+                        "`direction` responsivo só muda a aparência; a ordem de leitura e de Tab continua sendo a do DOM.",
+                        "`direction` responsivo solo cambia la apariencia; el orden de lectura y de Tab sigue siendo el del DOM.",
+                    ),
+                    t(
+                        "The `divider` prop is inserted between children as given, so a `Divider` there is announced as a separator unless it is `decorative`.",
+                        "A prop `divider` é inserida entre os filhos como foi passada, então um `Divider` ali é anunciado como separador, a menos que seja `decorative`.",
+                        "La prop `divider` se inserta entre los hijos tal como se pasa, así que un `Divider` ahí se anuncia como separador salvo que sea `decorative`.",
+                    ),
+                ],
+                caveats: [
+                    t(
+                        'With `as="ul"`, a divider between items becomes a non-`li` child of the list, which is invalid HTML.',
+                        'Com `as="ul"`, um divider entre os itens vira filho do `ul` que não é `li`, o que é HTML inválido.',
+                        'Con `as="ul"`, un divider entre los elementos pasa a ser un hijo del `ul` que no es `li`, lo que es HTML inválido.',
+                    ),
+                ],
+            },
             code: `import { Divider, Stack } from "vaiperui";
 
 <Stack direction={{ base: "vertical", md: "horizontal" }} gap={3} align="center"
@@ -240,6 +328,42 @@ export function getLayoutComponents(locale: Locale): ComponentEntry[] {
                 'Renderiza `role="separator"` com `aria-orientation`. Leitores de tela o anunciam, então use só quando a separação tem significado; para decoração pura use `decorative`. Um divisor vertical estica até a altura de um pai flex.',
                 'Renderiza `role="separator"` con `aria-orientation`. Los lectores de pantalla lo anuncian, así que úsalo solo cuando la separación tenga significado; para decoración pura usa `decorative`. Un divisor vertical se estira a la altura de un padre flex.',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'Without `label` it renders an `<hr>`; with `label` it renders a `<div>`. Both get `role="separator"` and `aria-orientation` matching `orientation`.',
+                        'Sem `label` renderiza um `<hr>`; com `label`, um `<div>`. Ambos recebem `role="separator"` e `aria-orientation` igual a `orientation`.',
+                        'Sin `label` renderiza un `<hr>`; con `label`, un `<div>`. Ambos reciben `role="separator"` y `aria-orientation` igual a `orientation`.',
+                    ),
+                    t(
+                        "`decorative` switches the role to `presentation` and drops `aria-orientation`, so assistive tech ignores it.",
+                        "`decorative` troca o papel para `presentation` e remove `aria-orientation`, então tecnologias assistivas o ignoram.",
+                        "`decorative` cambia el rol a `presentation` y quita `aria-orientation`, así que las tecnologías de asistencia lo ignoran.",
+                    ),
+                    t(
+                        "The label text stays readable; the lines beside it are `aria-hidden`.",
+                        "O texto do label continua legível; as linhas ao lado dele são `aria-hidden`.",
+                        "El texto del label sigue siendo legible; las líneas a su lado son `aria-hidden`.",
+                    ),
+                    t(
+                        "It is not focusable and has no keyboard behavior.",
+                        "Não é focável e não tem comportamento de teclado.",
+                        "No es enfocable y no tiene comportamiento de teclado.",
+                    ),
+                ],
+                caveats: [
+                    t(
+                        "Use `decorative` when the line is only visual, so screen readers do not announce a separator between every item.",
+                        "Use `decorative` quando a linha for só visual, para os leitores de tela não anunciarem um separador entre cada item.",
+                        "Usa `decorative` cuando la línea sea solo visual, para que los lectores de pantalla no anuncien un separador entre cada elemento.",
+                    ),
+                    t(
+                        "Color and `variant` are visual only: do not rely on them to convey meaning.",
+                        "Cor e `variant` são só visuais: não dependa deles para transmitir significado.",
+                        "El color y `variant` son solo visuales: no dependas de ellos para transmitir significado.",
+                    ),
+                ],
+            },
             code: `import { Divider } from "vaiperui";
 
 <Divider />

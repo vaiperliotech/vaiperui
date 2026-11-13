@@ -118,6 +118,86 @@ export function getNavigationComponents(locale: Locale): ComponentEntry[] {
                 'Componha `Tabs` com um `TabList` de `Tab`s e um `TabPanel` por aba; aba e painel são ligados pelo `value`. Funciona não controlado (`defaultValue`) ou controlado (`value` + `onValueChange`). Setas, Home e End movem entre as abas e ignoram as desabilitadas; use `activation="manual"` para exigir Enter ou Espaço.',
                 'Compón `Tabs` con un `TabList` de `Tab`s y un `TabPanel` por pestaña; pestaña y panel se enlazan por `value`. Funciona no controlado (`defaultValue`) o controlado (`value` + `onValueChange`). Las flechas, Home y End se mueven entre pestañas y omiten las deshabilitadas; usa `activation="manual"` para exigir Enter o Espacio.',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        '`TabList` has `role="tablist"` and `aria-orientation`; each `Tab` is a button with `role="tab"`; each `TabPanel` has `role="tabpanel"`.',
+                        '`TabList` tem `role="tablist"` e `aria-orientation`; cada `Tab` é um botão com `role="tab"`; cada `TabPanel` tem `role="tabpanel"`.',
+                        '`TabList` tiene `role="tablist"` y `aria-orientation`; cada `Tab` es un botón con `role="tab"`; cada `TabPanel` tiene `role="tabpanel"`.',
+                    ),
+                    t(
+                        "`aria-selected` marks the active tab; `aria-controls` and `aria-labelledby` pair each tab with its panel by `value`.",
+                        "`aria-selected` marca a aba ativa; `aria-controls` e `aria-labelledby` ligam cada aba ao seu painel pelo `value`.",
+                        "`aria-selected` marca la pestaña activa; `aria-controls` y `aria-labelledby` enlazan cada pestaña con su panel por `value`.",
+                    ),
+                    t(
+                        "Roving tabindex: only the active tab is in the Tab order (`tabIndex=0`); the others use `-1`.",
+                        "Roving tabindex: só a aba ativa entra na ordem do Tab (`tabIndex=0`); as demais usam `-1`.",
+                        "Roving tabindex: solo la pestaña activa entra en el orden de Tab (`tabIndex=0`); las demás usan `-1`.",
+                    ),
+                    t(
+                        "Arrows follow the orientation (Left/Right horizontal, Up/Down vertical) and wrap around; disabled tabs are skipped.",
+                        "As setas seguem a orientação (Esquerda/Direita na horizontal, Cima/Baixo na vertical) e dão a volta; abas desabilitadas são ignoradas.",
+                        "Las flechas siguen la orientación (Izquierda/Derecha en horizontal, Arriba/Abajo en vertical) y dan la vuelta; las pestañas deshabilitadas se omiten.",
+                    ),
+                    t(
+                        'With `activation="auto"` (default) focus selects the tab; with `"manual"` focus only moves and Enter or Space selects.',
+                        'Com `activation="auto"` (padrão) o foco seleciona a aba; com `"manual"` o foco só se move e Enter ou Espaço seleciona.',
+                        'Con `activation="auto"` (por defecto) el foco selecciona la pestaña; con `"manual"` el foco solo se mueve y Enter o Espacio selecciona.',
+                    ),
+                    t(
+                        "Inactive panels get `hidden`; the panel is focusable (`tabIndex=0`) so keyboard users can reach its content.",
+                        "Painéis inativos recebem `hidden`; o painel é focável (`tabIndex=0`) para que quem usa teclado alcance o conteúdo.",
+                        "Los paneles inactivos reciben `hidden`; el panel es enfocable (`tabIndex=0`) para que quien usa teclado llegue a su contenido.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Tab",
+                        action: t(
+                            "Moves focus into the active tab, then into its panel.",
+                            "Move o foco para a aba ativa e depois para o painel.",
+                            "Mueve el foco a la pestaña activa y luego a su panel.",
+                        ),
+                    },
+                    {
+                        keys: "Arrow keys",
+                        action: t(
+                            "Moves focus to the previous/next tab along the orientation.",
+                            "Move o foco para a aba anterior/próxima conforme a orientação.",
+                            "Mueve el foco a la pestaña anterior/siguiente según la orientación.",
+                        ),
+                    },
+                    {
+                        keys: "Home / End",
+                        action: t(
+                            "Moves focus to the first/last enabled tab.",
+                            "Move o foco para a primeira/última aba habilitada.",
+                            "Mueve el foco a la primera/última pestaña habilitada.",
+                        ),
+                    },
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            'Selects the focused tab (only needed with `activation="manual"`).',
+                            'Seleciona a aba focada (necessário só com `activation="manual"`).',
+                            'Selecciona la pestaña enfocada (necesario solo con `activation="manual"`).',
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "Pass `value` or `defaultValue`; with neither, no tab is selected and every tab has `tabIndex=-1`, so the list is unreachable by keyboard.",
+                        "Informe `value` ou `defaultValue`; sem nenhum dos dois, nenhuma aba fica selecionada e todas têm `tabIndex=-1`, e a lista não é alcançável pelo teclado.",
+                        "Indica `value` o `defaultValue`; sin ninguno, ninguna pestaña queda seleccionada y todas tienen `tabIndex=-1`, así que la lista no es alcanzable con teclado.",
+                    ),
+                    t(
+                        "Give the `TabList` an `aria-label` or `aria-labelledby`; the component does not add one.",
+                        "Dê ao `TabList` um `aria-label` ou `aria-labelledby`; o componente não adiciona um.",
+                        "Da al `TabList` un `aria-label` o `aria-labelledby`; el componente no añade ninguno.",
+                    ),
+                ],
+            },
             code: `import { Tab, TabList, TabPanel, Tabs } from "vaiperui";
 
 <Tabs defaultValue="general">
@@ -223,6 +303,81 @@ export function getNavigationComponents(locale: Locale): ComponentEntry[] {
                 "Coloque `SegmentedItem`s dentro de um `SegmentedControl`. É um `radiogroup`: um item fica sempre selecionado, as setas movem e selecionam (ignorando os desabilitados) e o `aria-label` é obrigatório. Funciona controlado (`value`) ou não (`defaultValue`). Para navegar entre seções use `Tabs`.",
                 "Coloca `SegmentedItem`s dentro de un `SegmentedControl`. Es un `radiogroup`: siempre hay un item seleccionado, las flechas mueven y seleccionan (omitiendo los deshabilitados) y `aria-label` es obligatorio. Funciona controlado (`value`) o no (`defaultValue`). Para navegar entre secciones usa `Tabs`.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'The container has `role="radiogroup"`, and `aria-disabled` when the whole control is `disabled`.',
+                        'O contêiner tem `role="radiogroup"` e `aria-disabled` quando o controle inteiro está `disabled`.',
+                        'El contenedor tiene `role="radiogroup"` y `aria-disabled` cuando todo el control está `disabled`.',
+                    ),
+                    t(
+                        'Each `SegmentedItem` is a button with `role="radio"` and `aria-checked`.',
+                        'Cada `SegmentedItem` é um botão com `role="radio"` e `aria-checked`.',
+                        'Cada `SegmentedItem` es un botón con `role="radio"` y `aria-checked`.',
+                    ),
+                    t(
+                        "Roving tabindex: only the selected item is in the Tab order (`tabIndex=0`).",
+                        "Roving tabindex: só o item selecionado entra na ordem do Tab (`tabIndex=0`).",
+                        "Roving tabindex: solo el ítem seleccionado entra en el orden de Tab (`tabIndex=0`).",
+                    ),
+                    t(
+                        "Arrow keys move focus and select at once, wrap around, and skip disabled items.",
+                        "As setas movem o foco e selecionam ao mesmo tempo, dão a volta e ignoram itens desabilitados.",
+                        "Las flechas mueven el foco y seleccionan a la vez, dan la vuelta y omiten ítems deshabilitados.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Tab",
+                        action: t(
+                            "Moves focus into and out of the group (to the selected item).",
+                            "Move o foco para dentro e para fora do grupo (no item selecionado).",
+                            "Mueve el foco hacia dentro y fuera del grupo (al ítem seleccionado).",
+                        ),
+                    },
+                    {
+                        keys: "Right / Down",
+                        action: t(
+                            "Selects the next enabled item.",
+                            "Seleciona o próximo item habilitado.",
+                            "Selecciona el siguiente ítem habilitado.",
+                        ),
+                    },
+                    {
+                        keys: "Left / Up",
+                        action: t(
+                            "Selects the previous enabled item.",
+                            "Seleciona o item anterior habilitado.",
+                            "Selecciona el ítem anterior habilitado.",
+                        ),
+                    },
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            "Selects the focused item (native button click).",
+                            "Seleciona o item focado (clique nativo do botão).",
+                            "Selecciona el ítem enfocado (clic nativo del botón).",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "Pass an `aria-label` or `aria-labelledby` on `SegmentedControl`; the component does not add a name to the group.",
+                        "Passe `aria-label` ou `aria-labelledby` no `SegmentedControl`; o componente não dá nome ao grupo.",
+                        "Pasa `aria-label` o `aria-labelledby` en `SegmentedControl`; el componente no da nombre al grupo.",
+                    ),
+                    t(
+                        "Pass `value` or `defaultValue`; with no selected item every item has `tabIndex=-1` and the group is unreachable by keyboard.",
+                        "Informe `value` ou `defaultValue`; sem item selecionado todos têm `tabIndex=-1` e o grupo não é alcançável pelo teclado.",
+                        "Indica `value` o `defaultValue`; sin ítem seleccionado todos tienen `tabIndex=-1` y el grupo no es alcanzable con teclado.",
+                    ),
+                    t(
+                        "Home and End are not handled.",
+                        "Home e End não são tratados.",
+                        "Home y End no están implementados.",
+                    ),
+                ],
+            },
             code: `import { SegmentedControl, SegmentedItem } from "vaiperui";
 
 <SegmentedControl aria-label="${t("View", "Visualização", "Vista")}" defaultValue="list">
@@ -315,6 +470,65 @@ export function getNavigationComponents(locale: Locale): ComponentEntry[] {
                 'Um `nav` com uma lista ordenada de `BreadcrumbItem`s. Dê `href` aos itens anteriores e marque o último como `current` (vira texto com `aria-current="page"`). Para usar o link de um roteador, passe-o como filho com `asChild`. Use `maxItems` para recolher trilhas longas atrás de um botão de reticências e `separator` para trocar o divisor.',
                 'Un `nav` con una lista ordenada de `BreadcrumbItem`s. Da `href` a los items anteriores y marca el último como `current` (pasa a ser texto con `aria-current="page"`). Para usar un enlace de router, pásalo como hijo con `asChild`. Usa `maxItems` para colapsar rutas largas tras un botón de puntos suspensivos y `separator` para cambiar el divisor.',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'Renders a `<nav>` with `aria-label` (default "Breadcrumb") wrapping an ordered list (`<ol>`/`<li>`).',
+                        'Renderiza um `<nav>` com `aria-label` (padrão "Breadcrumb") envolvendo uma lista ordenada (`<ol>`/`<li>`).',
+                        'Renderiza un `<nav>` con `aria-label` (por defecto "Breadcrumb") que envuelve una lista ordenada (`<ol>`/`<li>`).',
+                    ),
+                    t(
+                        '`BreadcrumbItem current` renders a `<span>` with `aria-current="page"` instead of a link.',
+                        '`BreadcrumbItem current` renderiza um `<span>` com `aria-current="page"` em vez de link.',
+                        '`BreadcrumbItem current` renderiza un `<span>` con `aria-current="page"` en lugar de un enlace.',
+                    ),
+                    t(
+                        "Separators are `aria-hidden`, so screen readers do not announce them.",
+                        "Os separadores são `aria-hidden`, então leitores de tela não os anunciam.",
+                        "Los separadores son `aria-hidden`, así que los lectores de pantalla no los anuncian.",
+                    ),
+                    t(
+                        "Items with `href` are real links; an item without `href` is plain text, not focusable.",
+                        "Itens com `href` são links reais; um item sem `href` é texto simples, não focável.",
+                        "Los ítems con `href` son enlaces reales; un ítem sin `href` es texto simple, no enfocable.",
+                    ),
+                    t(
+                        "With `maxItems`, the hidden middle becomes a button labeled by `expandLabel` that reveals all items.",
+                        "Com `maxItems`, o meio oculto vira um botão rotulado por `expandLabel` que revela todos os itens.",
+                        "Con `maxItems`, el medio oculto se convierte en un botón con la etiqueta `expandLabel` que muestra todos los ítems.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Tab",
+                        action: t(
+                            "Moves through the links and the expand button in order.",
+                            "Percorre os links e o botão de expandir em ordem.",
+                            "Recorre los enlaces y el botón de expandir en orden.",
+                        ),
+                    },
+                    {
+                        keys: "Enter",
+                        action: t(
+                            "Follows the focused link; Enter or Space activates the expand button.",
+                            "Segue o link focado; Enter ou Espaço ativa o botão de expandir.",
+                            "Sigue el enlace enfocado; Enter o Espacio activa el botón de expandir.",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "Translate `expandLabel` and `aria-label`; their defaults are in English.",
+                        "Traduza `expandLabel` e `aria-label`; os padrões estão em inglês.",
+                        "Traduce `expandLabel` y `aria-label`; sus valores por defecto están en inglés.",
+                    ),
+                    t(
+                        "Mark the last item with `current`; the component does not infer the current page.",
+                        "Marque o último item com `current`; o componente não deduz a página atual.",
+                        "Marca el último ítem con `current`; el componente no deduce la página actual.",
+                    ),
+                ],
+            },
             code: `import { Breadcrumb, BreadcrumbItem } from "vaiperui";
 
 <Breadcrumb>
@@ -408,6 +622,65 @@ export function getNavigationComponents(locale: Locale): ComponentEntry[] {
                 "Um componente controlado: passe `page` (começando em 1), `pageCount` e `onPageChange`. Com muitas páginas mostra a primeira, a última, a atual e `siblingCount` vizinhas com reticências, mantendo a barra com a mesma largura. Todo texto embutido pode ser trocado (`previousLabel`, `nextLabel`, `pageLabel`, `aria-label`). Se cada página tem sua URL, prefira links reais.",
                 "Un componente controlado: pasa `page` (desde 1), `pageCount` y `onPageChange`. Con muchas páginas muestra la primera, la última, la actual y `siblingCount` vecinas con puntos suspensivos, manteniendo el mismo ancho. Todo texto integrado se puede cambiar (`previousLabel`, `nextLabel`, `pageLabel`, `aria-label`). Si cada página tiene su URL, prefiere enlaces reales.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'Renders a `<nav>` with `aria-label` (default "Pagination") containing a list (`<ul>`/`<li>`) of native buttons.',
+                        'Renderiza um `<nav>` com `aria-label` (padrão "Pagination") contendo uma lista (`<ul>`/`<li>`) de botões nativos.',
+                        'Renderiza un `<nav>` con `aria-label` (por defecto "Pagination") que contiene una lista (`<ul>`/`<li>`) de botones nativos.',
+                    ),
+                    t(
+                        'The current page button has `aria-current="page"` and does nothing when clicked.',
+                        'O botão da página atual tem `aria-current="page"` e não faz nada ao ser clicado.',
+                        'El botón de la página actual tiene `aria-current="page"` y no hace nada al hacer clic.',
+                    ),
+                    t(
+                        "Each button has an `aria-label` from `previousLabel`, `nextLabel` and `pageLabel(n)`; the chevron icons are `aria-hidden`.",
+                        "Cada botão tem um `aria-label` vindo de `previousLabel`, `nextLabel` e `pageLabel(n)`; os ícones de seta são `aria-hidden`.",
+                        "Cada botón tiene un `aria-label` de `previousLabel`, `nextLabel` y `pageLabel(n)`; los iconos de flecha son `aria-hidden`.",
+                    ),
+                    t(
+                        "Previous is disabled on the first page and next on the last; `disabled` disables every button.",
+                        "Anterior fica desabilitado na primeira página e próximo na última; `disabled` desabilita todos os botões.",
+                        "Anterior se deshabilita en la primera página y siguiente en la última; `disabled` deshabilita todos los botones.",
+                    ),
+                    t(
+                        'The "…" ellipses are `aria-hidden` and not focusable.',
+                        'As reticências "…" são `aria-hidden` e não focáveis.',
+                        'Los puntos suspensivos "…" son `aria-hidden` y no enfocables.',
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Tab / Shift+Tab",
+                        action: t(
+                            "Moves through the enabled buttons in order.",
+                            "Percorre os botões habilitados em ordem.",
+                            "Recorre los botones habilitados en orden.",
+                        ),
+                    },
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            "Activates the focused button (native behavior).",
+                            "Ativa o botão focado (comportamento nativo).",
+                            "Activa el botón enfocado (comportamiento nativo).",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "Translate `previousLabel`, `nextLabel`, `pageLabel` and `aria-label`; their defaults are in English.",
+                        "Traduza `previousLabel`, `nextLabel`, `pageLabel` e `aria-label`; os padrões estão em inglês.",
+                        "Traduce `previousLabel`, `nextLabel`, `pageLabel` y `aria-label`; sus valores por defecto están en inglés.",
+                    ),
+                    t(
+                        "Changing page does not move focus or announce anything; handle that in `onPageChange` if needed.",
+                        "Trocar de página não move o foco nem anuncia nada; trate isso em `onPageChange` se necessário.",
+                        "Cambiar de página no mueve el foco ni anuncia nada; gestiónalo en `onPageChange` si hace falta.",
+                    ),
+                ],
+            },
             code: `import { Pagination } from "vaiperui";
 
 const [page, setPage] = useState(1);
@@ -510,6 +783,65 @@ const [page, setPage] = useState(1);
                 'Coloque `Step`s dentro de um `Stepper` e defina `current` (base zero): as etapas anteriores ficam concluídas (check), a atual fica destacada com `aria-current="step"` e as seguintes ficam pendentes. Ele só exibe o progresso; sua tela cuida de avançar e validar. Passe `onStepClick` para transformar etapas concluídas em botões que voltam. Use `orientation="vertical"` com `description` em cada etapa.',
                 'Pon `Step`s dentro de un `Stepper` y define `current` (base cero): los pasos anteriores quedan completados (check), el actual se resalta con `aria-current="step"` y los siguientes quedan pendientes. Solo muestra el progreso; tu pantalla se encarga de avanzar y validar. Pasa `onStepClick` para convertir los pasos completados en botones que retroceden. Usa `orientation="vertical"` con `description` en cada paso.',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        "Renders an ordered list (`<ol>`) with one `<li>` per step, in reading order.",
+                        "Renderiza uma lista ordenada (`<ol>`) com um `<li>` por etapa, em ordem de leitura.",
+                        "Renderiza una lista ordenada (`<ol>`) con un `<li>` por paso, en orden de lectura.",
+                    ),
+                    t(
+                        'The current step\'s `<li>` has `aria-current="step"`.',
+                        'O `<li>` da etapa atual tem `aria-current="step"`.',
+                        'El `<li>` del paso actual tiene `aria-current="step"`.',
+                    ),
+                    t(
+                        'Completed steps include visually hidden text from `completedLabel` (default "Completed").',
+                        'Etapas concluídas incluem texto visualmente oculto vindo de `completedLabel` (padrão "Completed").',
+                        'Los pasos completados incluyen texto visualmente oculto de `completedLabel` (por defecto "Completed").',
+                    ),
+                    t(
+                        "The number, check icon and connector lines are `aria-hidden`.",
+                        "O número, o ícone de check e as linhas de conexão são `aria-hidden`.",
+                        "El número, el icono de check y las líneas de conexión son `aria-hidden`.",
+                    ),
+                    t(
+                        "With `onStepClick`, only completed steps become native buttons; current and upcoming steps are plain text.",
+                        "Com `onStepClick`, só as etapas concluídas viram botões nativos; etapa atual e futuras são texto simples.",
+                        "Con `onStepClick`, solo los pasos completados se vuelven botones nativos; el paso actual y los futuros son texto simple.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Tab",
+                        action: t(
+                            "Moves through completed steps when `onStepClick` is set.",
+                            "Percorre as etapas concluídas quando `onStepClick` está definido.",
+                            "Recorre los pasos completados cuando `onStepClick` está definido.",
+                        ),
+                    },
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            "Activates the focused completed step.",
+                            "Ativa a etapa concluída focada.",
+                            "Activa el paso completado enfocado.",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "Translate `completedLabel`; its default is in English.",
+                        "Traduza `completedLabel`; o padrão está em inglês.",
+                        "Traduce `completedLabel`; su valor por defecto está en inglés.",
+                    ),
+                    t(
+                        "It is a progress indicator, not a navigation widget: it adds no `aria-label` to the list and does not let users jump to future steps.",
+                        "É um indicador de progresso, não um widget de navegação: não adiciona `aria-label` à lista e não permite pular para etapas futuras.",
+                        "Es un indicador de progreso, no un widget de navegación: no añade `aria-label` a la lista y no permite saltar a pasos futuros.",
+                    ),
+                ],
+            },
             code: `import { Step, Stepper } from "vaiperui";
 
 <Stepper current={1} aria-label="${t("Signup steps", "Etapas do cadastro", "Pasos del registro")}">

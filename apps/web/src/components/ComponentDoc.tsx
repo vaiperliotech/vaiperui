@@ -190,6 +190,70 @@ export function ComponentDoc({
                     </tbody>
                 </table>
             </div>
+
+            {component.accessibility ? (
+                <section className="mt-16">
+                    <h2
+                        id={slugify(labels.accessibility)}
+                        className="scroll-mt-24 font-display text-lg font-semibold text-ink"
+                    >
+                        {labels.accessibility}
+                    </h2>
+                    <ul className="mt-4 max-w-2xl list-disc space-y-2 pl-5 text-ink-dim marker:text-ink-faint">
+                        {component.accessibility.notes.map((note) => (
+                            <li key={note}>{note}</li>
+                        ))}
+                    </ul>
+                    {component.accessibility.keys?.length ? (
+                        <>
+                            <h3 className="mt-8 font-display text-base font-semibold text-ink">
+                                {labels.a11yKeyboard}
+                            </h3>
+                            <div className="mt-3 overflow-x-auto rounded-xl border border-line">
+                                <table className="w-full min-w-120 border-collapse text-sm">
+                                    <thead>
+                                        <tr className="border-b border-line bg-bg-2 text-left font-mono text-xs text-ink-faint">
+                                            <th className="px-4 py-2.5 font-medium">
+                                                {labels.a11yCols.key}
+                                            </th>
+                                            <th className="px-4 py-2.5 font-medium">
+                                                {labels.a11yCols.action}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {component.accessibility.keys.map((row) => (
+                                            <tr
+                                                key={row.keys}
+                                                className="border-b border-line last:border-0"
+                                            >
+                                                <td className="px-4 py-3 align-top font-mono text-xs text-accent-blue">
+                                                    {row.keys}
+                                                </td>
+                                                <td className="px-4 py-3 align-top text-ink-dim">
+                                                    {row.action}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </>
+                    ) : null}
+                    {component.accessibility.caveats?.length ? (
+                        <>
+                            <h3 className="mt-8 font-display text-base font-semibold text-ink">
+                                {labels.a11yCaveats}
+                            </h3>
+                            <ul className="mt-3 max-w-2xl list-disc space-y-2 pl-5 text-ink-dim marker:text-ink-faint">
+                                {component.accessibility.caveats.map((caveat) => (
+                                    <li key={caveat}>{caveat}</li>
+                                ))}
+                            </ul>
+                        </>
+                    ) : null}
+                </section>
+            ) : null}
         </article>
     );
 }

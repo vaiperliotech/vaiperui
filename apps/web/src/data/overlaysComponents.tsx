@@ -114,6 +114,70 @@ export function getOverlaysComponents(locale: Locale): ComponentEntry[] {
                 "Renderizado em um portal com `aria-modal`, nomeado por `title`. O foco entra ao abrir e volta ao gatilho ao fechar; o Tab fica dentro e a página atrás não rola. Passe `trigger` no caso não controlado, ou `open` + `onOpenChange` para controlar. Envolva um botão do rodapé em `ModalClose` para fechar.",
                 "Renderizado en un portal con `aria-modal`, nombrado por `title`. El foco entra al abrir y vuelve al disparador al cerrar; el Tab queda dentro y la página de atrás no se desplaza. Pasa `trigger` en el caso no controlado, o `open` + `onOpenChange` para controlarlo. Envuelve un botón del pie en `ModalClose` para cerrar.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'The panel is rendered in a portal on `document.body` with `role="dialog"` and `aria-modal="true"`.',
+                        'O painel é renderizado em um portal no `document.body` com `role="dialog"` e `aria-modal="true"`.',
+                        'El panel se renderiza en un portal en `document.body` con `role="dialog"` y `aria-modal="true"`.',
+                    ),
+                    t(
+                        "`title` is rendered as an `h2` and linked through `aria-labelledby`; the body is linked through `aria-describedby`.",
+                        "`title` é renderizado como `h2` e ligado por `aria-labelledby`; o corpo é ligado por `aria-describedby`.",
+                        "`title` se renderiza como `h2` y se enlaza con `aria-labelledby`; el cuerpo se enlaza con `aria-describedby`.",
+                    ),
+                    t(
+                        "On open, focus moves to the first focusable element in the panel (or the panel itself) and returns to the previously focused element on close, if it is still in the DOM.",
+                        "Ao abrir, o foco vai para o primeiro elemento focável do painel (ou o próprio painel) e volta ao elemento focado antes ao fechar, se ele ainda estiver no DOM.",
+                        "Al abrir, el foco va al primer elemento enfocable del panel (o al propio panel) y vuelve al elemento enfocado antes al cerrar, si sigue en el DOM.",
+                    ),
+                    t(
+                        "Tab and Shift+Tab are trapped inside the panel while it is open, and the body scroll is locked.",
+                        "Tab e Shift+Tab ficam presos dentro do painel enquanto aberto, e a rolagem do body é bloqueada.",
+                        "Tab y Shift+Tab quedan atrapados dentro del panel mientras está abierto, y el scroll del body se bloquea.",
+                    ),
+                    t(
+                        'The trigger gets `aria-haspopup="dialog"` and `aria-expanded`.',
+                        'O gatilho recebe `aria-haspopup="dialog"` e `aria-expanded`.',
+                        'El disparador recibe `aria-haspopup="dialog"` y `aria-expanded`.',
+                    ),
+                    t(
+                        'The close button has `aria-label` from `closeLabel` (default "Close"); the backdrop is `aria-hidden`.',
+                        'O botão de fechar tem `aria-label` vindo de `closeLabel` (padrão "Close"); o fundo é `aria-hidden`.',
+                        'El botón de cerrar tiene `aria-label` de `closeLabel` (por defecto "Close"); el fondo es `aria-hidden`.',
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Tab / Shift+Tab",
+                        action: t(
+                            "Moves focus between elements inside the panel, wrapping at the ends",
+                            "Move o foco entre os elementos do painel, voltando ao início/fim",
+                            "Mueve el foco entre los elementos del panel, volviendo al inicio/fin",
+                        ),
+                    },
+                    {
+                        keys: "Esc",
+                        action: t(
+                            "Closes it (disabled with `closeOnEscape={false}`)",
+                            "Fecha (desativado com `closeOnEscape={false}`)",
+                            "Cierra (se desactiva con `closeOnEscape={false}`)",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "`title` is required and must describe the dialog; translate `closeLabel` since its default is English.",
+                        "`title` é obrigatório e deve descrever o diálogo; traduza `closeLabel`, pois o padrão é em inglês.",
+                        "`title` es obligatorio y debe describir el diálogo; traduce `closeLabel`, ya que su valor por defecto está en inglés.",
+                    ),
+                    t(
+                        "The page behind is not marked `inert` or `aria-hidden`; it relies on `aria-modal` and the Tab trap. Clicking the backdrop closes it unless `closeOnBackdropClick={false}`.",
+                        "La página de fondo no se marca como `inert` ni `aria-hidden`; depende de `aria-modal` y de la trampa de Tab. Clicar no fundo fecha, salvo con `closeOnBackdropClick={false}`.",
+                        "La página de fondo no se marca como `inert` ni `aria-hidden`; depende de `aria-modal` y de la trampa de Tab. Hacer clic en el fondo cierra, salvo con `closeOnBackdropClick={false}`.",
+                    ),
+                ],
+            },
             code: `import { Button, Modal, ModalClose } from "vaiperui";
 
 <Modal
@@ -181,6 +245,70 @@ export function getOverlaysComponents(locale: Locale): ComponentEntry[] {
                 "Mesma acessibilidade do `Modal` (foco preso, bloqueio de rolagem, Esc, fundo). `side` escolhe a borda: painéis esquerdo/direito têm até 400px de largura, topo/base ocupam a largura e até 80% da altura. Use `DrawerClose` em volta de um botão para fechar por dentro.",
                 "Misma accesibilidad que `Modal` (foco atrapado, bloqueo de scroll, Esc, fondo). `side` elige el borde: los paneles izquierdo/derecho miden hasta 400px, los de arriba/abajo ocupan el ancho y hasta 80% del alto. Usa `DrawerClose` alrededor de un botón para cerrar desde dentro.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'The panel is rendered in a portal on `document.body` with `role="dialog"` and `aria-modal="true"`.',
+                        'O painel é renderizado em um portal no `document.body` com `role="dialog"` e `aria-modal="true"`.',
+                        'El panel se renderiza en un portal en `document.body` con `role="dialog"` y `aria-modal="true"`.',
+                    ),
+                    t(
+                        "`title` is rendered as an `h2` and linked through `aria-labelledby`; the body is linked through `aria-describedby`.",
+                        "`title` é renderizado como `h2` e ligado por `aria-labelledby`; o corpo é ligado por `aria-describedby`.",
+                        "`title` se renderiza como `h2` y se enlaza con `aria-labelledby`; el cuerpo se enlaza con `aria-describedby`.",
+                    ),
+                    t(
+                        "On open, focus moves to the first focusable element in the panel (or the panel itself) and returns to the previously focused element on close, if it is still in the DOM.",
+                        "Ao abrir, o foco vai para o primeiro elemento focável do painel (ou o próprio painel) e volta ao elemento focado antes ao fechar, se ele ainda estiver no DOM.",
+                        "Al abrir, el foco va al primer elemento enfocable del panel (o al propio panel) y vuelve al elemento enfocado antes al cerrar, si sigue en el DOM.",
+                    ),
+                    t(
+                        "Tab and Shift+Tab are trapped inside the panel while it is open, and the body scroll is locked.",
+                        "Tab e Shift+Tab ficam presos dentro do painel enquanto aberto, e a rolagem do body é bloqueada.",
+                        "Tab y Shift+Tab quedan atrapados dentro del panel mientras está abierto, y el scroll del body se bloquea.",
+                    ),
+                    t(
+                        'The trigger gets `aria-haspopup="dialog"` and `aria-expanded`.',
+                        'O gatilho recebe `aria-haspopup="dialog"` e `aria-expanded`.',
+                        'El disparador recibe `aria-haspopup="dialog"` y `aria-expanded`.',
+                    ),
+                    t(
+                        'The close button has `aria-label` from `closeLabel` (default "Close"); the backdrop is `aria-hidden`.',
+                        'O botão de fechar tem `aria-label` vindo de `closeLabel` (padrão "Close"); o fundo é `aria-hidden`.',
+                        'El botón de cerrar tiene `aria-label` de `closeLabel` (por defecto "Close"); el fondo es `aria-hidden`.',
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Tab / Shift+Tab",
+                        action: t(
+                            "Moves focus between elements inside the panel, wrapping at the ends",
+                            "Move o foco entre os elementos do painel, voltando ao início/fim",
+                            "Mueve el foco entre los elementos del panel, volviendo al inicio/fin",
+                        ),
+                    },
+                    {
+                        keys: "Esc",
+                        action: t(
+                            "Closes it (disabled with `closeOnEscape={false}`)",
+                            "Fecha (desativado com `closeOnEscape={false}`)",
+                            "Cierra (se desactiva con `closeOnEscape={false}`)",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "`title` is required and must describe the dialog; translate `closeLabel` since its default is English.",
+                        "`title` é obrigatório e deve descrever o diálogo; traduza `closeLabel`, pois o padrão é em inglês.",
+                        "`title` es obligatorio y debe describir el diálogo; traduce `closeLabel`, ya que su valor por defecto está en inglés.",
+                    ),
+                    t(
+                        "The page behind is not marked `inert` or `aria-hidden`; it relies on `aria-modal` and the Tab trap. Clicking the backdrop closes it unless `closeOnBackdropClick={false}`.",
+                        "La página de fondo no se marca como `inert` ni `aria-hidden`; depende de `aria-modal` y de la trampa de Tab. Clicar no fundo fecha, salvo con `closeOnBackdropClick={false}`.",
+                        "La página de fondo no se marca como `inert` ni `aria-hidden`; depende de `aria-modal` y de la trampa de Tab. Hacer clic en el fondo cierra, salvo con `closeOnBackdropClick={false}`.",
+                    ),
+                ],
+            },
             code: `import { Button, Drawer, DrawerClose } from "vaiperui";
 
 <Drawer
@@ -238,6 +366,60 @@ export function getOverlaysComponents(locale: Locale): ComponentEntry[] {
                 'O gatilho recebe `aria-expanded` e `aria-controls`; o painel é um `role="dialog"` nomeado por `label`. O foco entra no painel ao abrir e volta ao gatilho com Esc. Pode ter conteúdo interativo; use `PopoverClose` para um botão de fechar interno. Para dicas curtas use `Tooltip`.',
                 'El disparador recibe `aria-expanded` y `aria-controls`; el panel es un `role="dialog"` nombrado por `label`. El foco entra al panel al abrir y vuelve al disparador con Esc. Puede tener contenido interactivo; usa `PopoverClose` para un botón de cierre interno. Para pistas cortas usa `Tooltip`.',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'The panel is a `role="dialog"` named by `label` (required), rendered in a portal.',
+                        'O painel é um `role="dialog"` nomeado por `label` (obrigatório), renderizado em um portal.',
+                        'El panel es un `role="dialog"` nombrado por `label` (obligatorio), renderizado en un portal.',
+                    ),
+                    t(
+                        'The trigger gets `aria-haspopup="dialog"`, `aria-expanded` and, while open, `aria-controls` pointing to the panel.',
+                        'O gatilho recebe `aria-haspopup="dialog"`, `aria-expanded` e, enquanto aberto, `aria-controls` apontando para o painel.',
+                        'El disparador recibe `aria-haspopup="dialog"`, `aria-expanded` y, mientras está abierto, `aria-controls` apuntando al panel.',
+                    ),
+                    t(
+                        "On open, focus moves to the first focusable element in the panel (or the panel itself).",
+                        "Ao abrir, o foco vai para o primeiro elemento focável do painel (ou o próprio painel).",
+                        "Al abrir, el foco va al primer elemento enfocable del panel (o al propio panel).",
+                    ),
+                    t(
+                        "Esc closes it and returns focus to the trigger; a click outside also closes it.",
+                        "Esc fecha e devolve o foco ao gatilho; um clique fora também fecha.",
+                        "Esc cierra y devuelve el foco al disparador; un clic fuera también cierra.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            "On the trigger, toggles the panel (native button click)",
+                            "No gatilho, alterna o painel (clique nativo do botão)",
+                            "En el disparador, alterna el panel (clic nativo del botón)",
+                        ),
+                    },
+                    {
+                        keys: "Esc",
+                        action: t(
+                            "Closes the panel and focuses the trigger",
+                            "Fecha o painel e foca o gatilho",
+                            "Cierra el panel y enfoca el disparador",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "It is non-modal: Tab is not trapped, focus leaving the panel does not close it, and the page does not lock scrolling. Tab order follows the DOM, and the panel is at the end of `body`.",
+                        "Não é modal: o Tab não fica preso, sair do foco do painel não o fecha e a página não tem a rolagem bloqueada. A ordem do Tab segue o DOM, e o painel fica no fim do `body`.",
+                        "No es modal: el Tab no queda atrapado, perder el foco del panel no lo cierra y la página no bloquea el scroll. El orden del Tab sigue el DOM, y el panel queda al final del `body`.",
+                    ),
+                    t(
+                        "Focus is not restored to the trigger when closing by outside click or `PopoverClose`; the `trigger` must be a focusable element that forwards `ref` and `onClick`.",
+                        "O foco não volta ao gatilho ao fechar por clique fora ou `PopoverClose`; o `trigger` deve ser um elemento focável que aceite `ref` e `onClick`.",
+                        "El foco no vuelve al disparador al cerrar por clic fuera o `PopoverClose`; el `trigger` debe ser un elemento enfocable que acepte `ref` y `onClick`.",
+                    ),
+                ],
+            },
             code: `import { Button, Popover, PopoverClose } from "vaiperui";
 
 <Popover trigger={<Button variant="outlined">${t("Details", "Detalhes", "Detalles")}</Button>} label="${t("Details", "Detalhes", "Detalles")}">
@@ -298,6 +480,110 @@ export function getOverlaysComponents(locale: Locale): ComponentEntry[] {
                 'A lista é `role="menu"` com botões `menuitem`. Setas, Home e End movem entre itens (desabilitados são pulados), digitar uma letra salta para um item correspondente, Enter/Espaço seleciona, Esc fecha e devolve o foco ao gatilho. `onSelect` roda no clique e no teclado; chame `event.preventDefault()` nele para manter o menu aberto. Monte com `MenuItem`, `MenuLabel` e `MenuSeparator`.',
                 'La lista es `role="menu"` con botones `menuitem`. Flechas, Home y End mueven entre ítems (los deshabilitados se saltan), escribir una letra salta a una coincidencia, Enter/Espacio selecciona, Esc cierra y devuelve el foco al disparador. `onSelect` corre al hacer clic y con teclado; llama `event.preventDefault()` ahí para mantener el menú abierto. Se compone con `MenuItem`, `MenuLabel` y `MenuSeparator`.',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'The list is `role="menu"` named by `label`; each `MenuItem` is a `button` with `role="menuitem"`.',
+                        'A lista é `role="menu"` nomeada por `label`; cada `MenuItem` é um `button` com `role="menuitem"`.',
+                        'La lista es `role="menu"` nombrada por `label`; cada `MenuItem` es un `button` con `role="menuitem"`.',
+                    ),
+                    t(
+                        'The trigger gets `aria-haspopup="menu"`, `aria-expanded` and, while open, `aria-controls`.',
+                        'O gatilho recebe `aria-haspopup="menu"`, `aria-expanded` e, enquanto aberto, `aria-controls`.',
+                        'El disparador recibe `aria-haspopup="menu"`, `aria-expanded` y, mientras está abierto, `aria-controls`.',
+                    ),
+                    t(
+                        "On open, focus moves to the first enabled item; disabled items are skipped by the arrow keys.",
+                        "Ao abrir, o foco vai para o primeiro item habilitado; itens desabilitados são pulados pelas setas.",
+                        "Al abrir, el foco va al primer ítem habilitado; los ítems deshabilitados se saltan con las flechas.",
+                    ),
+                    t(
+                        "Arrow navigation wraps around, and typing letters within 500ms jumps to the next item whose text starts with them.",
+                        "A navegação por setas é circular, e digitar letras em até 500ms salta para o próximo item cujo texto começa com elas.",
+                        "La navegación con flechas es circular, y escribir letras en menos de 500ms salta al siguiente ítem cuyo texto empieza con ellas.",
+                    ),
+                    t(
+                        "Selecting an item closes the menu and returns focus to the trigger, unless `onSelect` calls `event.preventDefault()`.",
+                        "Selecionar um item fecha o menu e devolve o foco ao gatilho, a menos que `onSelect` chame `event.preventDefault()`.",
+                        "Seleccionar un ítem cierra el menú y devuelve el foco al disparador, salvo que `onSelect` llame a `event.preventDefault()`.",
+                    ),
+                    t(
+                        '`MenuSeparator` is `role="separator"`, `MenuLabel` is `role="presentation"` and item icons are `aria-hidden`.',
+                        '`MenuSeparator` é `role="separator"`, `MenuLabel` é `role="presentation"` e os ícones dos itens são `aria-hidden`.',
+                        '`MenuSeparator` es `role="separator"`, `MenuLabel` es `role="presentation"` y los íconos de los ítems son `aria-hidden`.',
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "ArrowDown",
+                        action: t(
+                            "On the closed trigger, opens the menu; inside, moves to the next item",
+                            "No gatilho fechado, abre o menu; dentro, vai ao próximo item",
+                            "En el disparador cerrado, abre el menú; dentro, va al siguiente ítem",
+                        ),
+                    },
+                    {
+                        keys: "ArrowUp",
+                        action: t(
+                            "Moves to the previous item",
+                            "Vai ao item anterior",
+                            "Va al ítem anterior",
+                        ),
+                    },
+                    {
+                        keys: "Home / End",
+                        action: t(
+                            "Moves to the first / last item",
+                            "Vai ao primeiro / último item",
+                            "Va al primer / último ítem",
+                        ),
+                    },
+                    {
+                        keys: "A-Z",
+                        action: t(
+                            "Typeahead: jumps to the item whose text starts with the typed letters",
+                            "Busca por digitação: salta ao item cujo texto começa com as letras digitadas",
+                            "Búsqueda al escribir: salta al ítem cuyo texto empieza con las letras escritas",
+                        ),
+                    },
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            "Activates the focused item",
+                            "Ativa o item focado",
+                            "Activa el ítem enfocado",
+                        ),
+                    },
+                    {
+                        keys: "Esc",
+                        action: t(
+                            "Closes the menu and focuses the trigger",
+                            "Fecha o menu e foca o gatilho",
+                            "Cierra el menú y enfoca el disparador",
+                        ),
+                    },
+                    {
+                        keys: "Tab",
+                        action: t(
+                            "Closes the menu and lets focus move on",
+                            "Fecha o menu e deixa o foco seguir",
+                            "Cierra el menú y deja que el foco siga",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "Menu items must be plain actions; this is not a menu bar and there are no checkable (`menuitemcheckbox`/`menuitemradio`) or nested submenu items.",
+                        "Os itens devem ser ações simples; não é uma barra de menu e não há itens marcáveis (`menuitemcheckbox`/`menuitemradio`) nem submenus.",
+                        "Los ítems deben ser acciones simples; no es una barra de menú y no hay ítems marcables (`menuitemcheckbox`/`menuitemradio`) ni submenús.",
+                    ),
+                    t(
+                        "Pass `label` so the menu has an accessible name; the trigger needs a visible text or its own `aria-label`.",
+                        "Passe `label` para o menu ter nome acessível; o gatilho precisa de texto visível ou do próprio `aria-label`.",
+                        "Pasa `label` para que el menú tenga nombre accesible; el disparador necesita texto visible o su propio `aria-label`.",
+                    ),
+                ],
+            },
             code: `import { Button, Menu, MenuItem, MenuLabel, MenuSeparator } from "vaiperui";
 
 <Menu trigger={<Button variant="outlined">${t("Actions", "Ações", "Acciones")}</Button>} label="${t("Actions", "Ações", "Acciones")}">
@@ -375,6 +661,56 @@ export function getOverlaysComponents(locale: Locale): ComponentEntry[] {
                 "O filho recebe `aria-describedby` enquanto o tooltip está aberto. Abre após `delayDuration` no hover (na hora no foco) e fecha ao sair, perder o foco ou com Esc. Não é interativo e tem até 240px de largura, então não ponha links ou botões dentro nem dependa dele para informação essencial (telas de toque não têm hover).",
                 "El hijo recibe `aria-describedby` mientras el tooltip está abierto. Abre tras `delayDuration` al pasar el mouse (al instante con foco) y cierra al salir, perder el foco o con Esc. No es interactivo y mide hasta 240px, así que no pongas enlaces o botones dentro ni dependas de él para información esencial (las pantallas táctiles no tienen hover).",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'The bubble has `role="tooltip"` and the child gets `aria-describedby` pointing to it only while it is open.',
+                        'O balão tem `role="tooltip"` e o filho recebe `aria-describedby` apontando para ele apenas enquanto aberto.',
+                        'El globo tiene `role="tooltip"` y el hijo recibe `aria-describedby` apuntando a él solo mientras está abierto.',
+                    ),
+                    t(
+                        "It opens on hover after `delayDuration` (default 200ms) and immediately on keyboard focus.",
+                        "Abre no hover após `delayDuration` (padrão 200ms) e imediatamente ao receber foco do teclado.",
+                        "Abre al pasar el mouse tras `delayDuration` (por defecto 200ms) e inmediatamente al recibir foco del teclado.",
+                    ),
+                    t(
+                        "It closes on mouse leave, blur or Esc; Esc is listened on the document only while it is open.",
+                        "Fecha ao sair o mouse, ao perder o foco ou com Esc; o Esc é escutado no document apenas enquanto aberto.",
+                        "Cierra al salir el mouse, al perder el foco o con Esc; el Esc se escucha en el document solo mientras está abierto.",
+                    ),
+                    t(
+                        "The arrow is `aria-hidden`, and the bubble is `pointer-events-none`, so it is never a target.",
+                        "A seta é `aria-hidden`, e o balão tem `pointer-events-none`, então nunca é alvo.",
+                        "La flecha es `aria-hidden`, y el globo tiene `pointer-events-none`, así que nunca es objetivo.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Tab (focus)",
+                        action: t(
+                            "Focusing the child shows the tooltip; blur hides it",
+                            "Focar o filho mostra o tooltip; perder o foco o oculta",
+                            "Enfocar el hijo muestra el tooltip; perder el foco lo oculta",
+                        ),
+                    },
+                    {
+                        keys: "Esc",
+                        action: t("Closes the tooltip", "Fecha o tooltip", "Cierra el tooltip"),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "The child must be focusable (button, link, input) for keyboard and screen reader users to reach the tooltip.",
+                        "O filho precisa ser focável (botão, link, input) para que usuários de teclado e leitor de tela alcancem o tooltip.",
+                        "El hijo debe ser enfocable (botón, enlace, input) para que usuarios de teclado y lector de pantalla alcancen el tooltip.",
+                    ),
+                    t(
+                        "Keep it short and non-interactive, and never put essential information in it: touch screens have no hover, and the bubble cannot be hovered or clicked.",
+                        "Mantenha-o curto e não interativo, e nunca ponha informação essencial nele: telas de toque não têm hover, e o balão não pode receber hover nem clique.",
+                        "Mantenlo corto y no interactivo, y nunca pongas información esencial en él: las pantallas táctiles no tienen hover, y el globo no recibe hover ni clic.",
+                    ),
+                ],
+            },
             code: `import { Button, Tooltip } from "vaiperui";
 
 <Tooltip content="${t("Save your changes", "Salve suas alterações", "Guarda tus cambios")}" title="${t("Shortcut", "Atalho", "Atajo")}">

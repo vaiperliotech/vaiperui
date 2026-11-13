@@ -204,6 +204,10 @@ export const en = {
         },
         onThisPage: "On this page",
         howToUse: "How to use",
+        accessibility: "Accessibility",
+        a11yKeyboard: "Keyboard",
+        a11yCols: { key: "Key", action: "Action" },
+        a11yCaveats: "Keep in mind",
         props: "Props",
         propsCols: {
             prop: "Prop",

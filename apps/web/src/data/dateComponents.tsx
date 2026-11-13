@@ -207,6 +207,115 @@ export function getDateComponents(locale: Locale): ComponentEntry[] {
                 'A base do `DatePicker` e do `DateRangePicker`, que também funciona sozinha (agendas, filtros, painéis). Os valores são `Date` do JavaScript que representam um dia: a hora é ignorada. Com `mode="range"`, o `value` é um objeto `{ from, to }`: o primeiro clique define o início, o segundo o fim, e um clique antes do início ou num intervalo completo recomeça.',
                 'La base de `DatePicker` y `DateRangePicker`, que también funciona sola (agendas, filtros, paneles). Los valores son `Date` de JavaScript que representan un día: la hora se ignora. Con `mode="range"`, `value` es un objeto `{ from, to }`: el primer clic define el inicio, el segundo el fin, y un clic antes del inicio o en un intervalo completo empieza de nuevo.',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'The grid is a `<table role="grid">` named by the month title, with `role="gridcell"` cells and `<th scope="col">` weekday headers.',
+                        'A grade é uma `<table role="grid">` nomeada pelo título do mês, com células `role="gridcell"` e cabeçalhos de dia da semana `<th scope="col">`.',
+                        'La cuadrícula es una `<table role="grid">` nombrada por el título del mes, con celdas `role="gridcell"` y encabezados de día `<th scope="col">`.',
+                    ),
+                    t(
+                        "Each day is a real `<button>` with `aria-label` holding the full date (for example weekday, day, month, year) in the `locale`.",
+                        "Cada dia é um `<button>` real, com `aria-label` contendo a data completa (por exemplo dia da semana, dia, mês, ano) no `locale`.",
+                        "Cada día es un `<button>` real, con `aria-label` que contiene la fecha completa (por ejemplo día de la semana, día, mes, año) en el `locale`.",
+                    ),
+                    t(
+                        "Roving tabindex: only the focused day has `tabIndex=0`, so Tab goes through the calendar in a single stop.",
+                        "Roving tabindex: só o dia em foco tem `tabIndex=0`, então o Tab passa pelo calendário em uma única parada.",
+                        "Roving tabindex: solo el día enfocado tiene `tabIndex=0`, así que Tab recorre el calendario en una sola parada.",
+                    ),
+                    t(
+                        'Selected days (and every day inside a range) set `aria-selected` on the cell; today gets `aria-current="date"`.',
+                        'Dias selecionados (e todos os dias dentro de um intervalo) recebem `aria-selected` na célula; o dia de hoje recebe `aria-current="date"`.',
+                        'Los días seleccionados (y todos los días dentro de un intervalo) reciben `aria-selected` en la celda; hoy recibe `aria-current="date"`.',
+                    ),
+                    t(
+                        'The month title is an `aria-live="polite"` region, so a month change is announced.',
+                        'O título do mês é uma região `aria-live="polite"`, então a troca de mês é anunciada.',
+                        'El título del mes es una región `aria-live="polite"`, así que el cambio de mes se anuncia.',
+                    ),
+                    t(
+                        "Days outside `minDate`/`maxDate` are `disabled` buttons; the previous/next buttons are disabled when the month would be out of range.",
+                        "Dias fora de `minDate`/`maxDate` são botões `disabled`; os botões anterior/próximo ficam desabilitados quando o mês estaria fora do limite.",
+                        "Los días fuera de `minDate`/`maxDate` son botones `disabled`; los botones anterior/siguiente se deshabilitan cuando el mes quedaría fuera del límite.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Tab / Shift+Tab",
+                        action: t(
+                            "Enters and leaves the grid (one stop on the focused day); also reaches the previous/next month buttons.",
+                            "Entra e sai da grade (uma parada no dia em foco); também alcança os botões de mês anterior/próximo.",
+                            "Entra y sale de la cuadrícula (una parada en el día enfocado); también llega a los botones de mes anterior/siguiente.",
+                        ),
+                    },
+                    {
+                        keys: "Arrow Left / Right",
+                        action: t(
+                            "Moves focus one day back / forward.",
+                            "Move o foco um dia para trás / para frente.",
+                            "Mueve el foco un día atrás / adelante.",
+                        ),
+                    },
+                    {
+                        keys: "Arrow Up / Down",
+                        action: t(
+                            "Moves focus one week back / forward.",
+                            "Move o foco uma semana para trás / para frente.",
+                            "Mueve el foco una semana atrás / adelante.",
+                        ),
+                    },
+                    {
+                        keys: "Home / End",
+                        action: t(
+                            "Moves focus to the first / last day of the week (according to `weekStartsOn`).",
+                            "Move o foco para o primeiro / último dia da semana (conforme `weekStartsOn`).",
+                            "Mueve el foco al primer / último día de la semana (según `weekStartsOn`).",
+                        ),
+                    },
+                    {
+                        keys: "Page Up / Page Down",
+                        action: t(
+                            "Moves focus one month back / forward.",
+                            "Move o foco um mês para trás / para frente.",
+                            "Mueve el foco un mes atrás / adelante.",
+                        ),
+                    },
+                    {
+                        keys: "Shift + Page Up / Page Down",
+                        action: t(
+                            "Moves focus one year back / forward.",
+                            "Move o foco um ano para trás / para frente.",
+                            "Mueve el foco un año atrás / adelante.",
+                        ),
+                    },
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            "Selects the focused day (native button click).",
+                            "Seleciona o dia em foco (clique nativo do botão).",
+                            "Selecciona el día enfocado (clic nativo del botón).",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "Pass `previousMonthLabel` and `nextMonthLabel` translated; the defaults are in English.",
+                        "Passe `previousMonthLabel` e `nextMonthLabel` traduzidos; os padrões estão em inglês.",
+                        "Pasa `previousMonthLabel` y `nextMonthLabel` traducidos; los valores por defecto están en inglés.",
+                    ),
+                    t(
+                        "Set `locale` to the language of the page: it drives the month title, weekday names and the day `aria-label`.",
+                        "Defina `locale` com o idioma da página: ele controla o título do mês, os nomes dos dias e o `aria-label` de cada dia.",
+                        "Define `locale` con el idioma de la página: controla el título del mes, los nombres de los días y el `aria-label` de cada día.",
+                    ),
+                    t(
+                        "Keys that move to another month change the shown month, clamped to `minDate`/`maxDate`; the previous/next buttons change the month without moving focus to a day.",
+                        "Teclas que levam a outro mês trocam o mês exibido, limitadas a `minDate`/`maxDate`; os botões anterior/próximo trocam o mês sem mover o foco para um dia.",
+                        "Las teclas que llevan a otro mes cambian el mes mostrado, limitadas a `minDate`/`maxDate`; los botones anterior/siguiente cambian el mes sin mover el foco a un día.",
+                    ),
+                ],
+            },
             code: code(`import { Calendar } from "vaiperui";
 
 const [date, setDate] = useState<Date>();
@@ -284,6 +393,83 @@ const [period, setPeriod] = useState<DateRange>({});
                 'Um botão com cara de `Input` mostra o dia escolhido e abre um `Calendar`; escolher um dia fecha. A data não é digitada (para data digitada, use um `Input` com `mask="date"`). Com `name`, o formulário recebe `yyyy-mm-dd`. O foco entra no dia ao abrir e volta ao campo no `Esc`.',
                 'Un botón con aspecto de `Input` muestra el día elegido y abre un `Calendar`; elegir un día lo cierra. La fecha no se escribe (para una fecha escrita, usa un `Input` con `mask="date"`). Con `name`, el formulario recibe `yyyy-mm-dd`. El foco entra en el día al abrir y vuelve al campo con `Esc`.',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'The trigger is a `<button>` with `aria-haspopup="dialog"` and `aria-expanded` reflecting the panel state.',
+                        'O gatilho é um `<button>` com `aria-haspopup="dialog"` e `aria-expanded` refletindo o estado do painel.',
+                        'El disparador es un `<button>` con `aria-haspopup="dialog"` y `aria-expanded` que refleja el estado del panel.',
+                    ),
+                    t(
+                        "`label` is linked with `htmlFor`; without `label`, the trigger uses `aria-label`.",
+                        "O `label` é ligado por `htmlFor`; sem `label`, o gatilho usa `aria-label`.",
+                        "El `label` se enlaza con `htmlFor`; sin `label`, el disparador usa `aria-label`.",
+                    ),
+                    t(
+                        "`errorMessage` sets `aria-invalid` and `aria-describedby` to the message; otherwise `helperText` is linked through `aria-describedby`.",
+                        "`errorMessage` define `aria-invalid` e `aria-describedby` apontando para a mensagem; sem erro, o `helperText` é ligado por `aria-describedby`.",
+                        "`errorMessage` define `aria-invalid` y `aria-describedby` apuntando al mensaje; sin error, `helperText` se enlaza con `aria-describedby`.",
+                    ),
+                    t(
+                        'The panel is a `role="dialog"` named by `panelLabel`, rendered in a portal on `document.body`.',
+                        'O painel é um `role="dialog"` nomeado por `panelLabel`, renderizado em um portal no `document.body`.',
+                        'El panel es un `role="dialog"` nombrado por `panelLabel`, renderizado en un portal en `document.body`.',
+                    ),
+                    t(
+                        "`disabled` disables the button; `readOnly` keeps it focusable but the panel never opens.",
+                        "`disabled` desabilita o botão; `readOnly` mantém o foco possível, mas o painel nunca abre.",
+                        "`disabled` deshabilita el botón; `readOnly` mantiene el foco posible, pero el panel nunca se abre.",
+                    ),
+                    t(
+                        "Opening the panel focuses the selected day (or today) in the `Calendar`, which follows its grid pattern.",
+                        "Ao abrir, o foco vai para o dia selecionado (ou hoje) no `Calendar`, que segue o padrão de grade.",
+                        "Al abrir, el foco va al día seleccionado (o hoy) en el `Calendar`, que sigue su patrón de cuadrícula.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            "Opens or closes the panel from the trigger.",
+                            "Abre ou fecha o painel a partir do gatilho.",
+                            "Abre o cierra el panel desde el disparador.",
+                        ),
+                    },
+                    {
+                        keys: "Arrow keys, Home, End, Page Up/Down",
+                        action: t(
+                            "Navigate the days inside the open panel (see Calendar); Enter or Space on a day picks it and closes the panel.",
+                            "Navegam pelos dias dentro do painel aberto (veja Calendar); Enter ou Espaço em um dia o escolhe e fecha o painel.",
+                            "Navegan por los días dentro del panel abierto (ver Calendar); Enter o Espacio en un día lo elige y cierra el panel.",
+                        ),
+                    },
+                    {
+                        keys: "Esc",
+                        action: t(
+                            "Closes the panel and returns focus to the trigger.",
+                            "Fecha o painel e devolve o foco ao gatilho.",
+                            "Cierra el panel y devuelve el foco al disparador.",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "The panel does not trap focus: Tab leaves it, and because it is rendered at the end of `<body>`, Tab from the trigger does not enter it on its own.",
+                        "O painel não prende o foco: o Tab sai dele e, como ele é renderizado no fim do `<body>`, o Tab a partir do gatilho não entra nele sozinho.",
+                        "El panel no atrapa el foco: Tab sale de él y, como se renderiza al final de `<body>`, Tab desde el disparador no entra en él por sí solo.",
+                    ),
+                    t(
+                        "Clicking outside closes the panel without moving focus back; only Esc restores focus to the trigger.",
+                        "Clicar fora fecha o painel sem devolver o foco; só o Esc restaura o foco no gatilho.",
+                        "Hacer clic fuera cierra el panel sin devolver el foco; solo Esc restaura el foco en el disparador.",
+                    ),
+                    t(
+                        'The date cannot be typed: the only way to set it is the calendar. Use `Input` with `mask="date"` for typed dates.',
+                        'A data não pode ser digitada: a única forma de definir é o calendário. Use `Input` com `mask="date"` para datas digitadas.',
+                        'La fecha no se puede escribir: la única forma de definirla es el calendario. Usa `Input` con `mask="date"` para fechas escritas.',
+                    ),
+                ],
+            },
             code: code(`import { DatePicker } from "vaiperui";
 
 const [date, setDate] = useState<Date>();
@@ -350,6 +536,93 @@ const [date, setDate] = useState<Date>();
                 "Mostra `início – fim` e abre um `Calendar` em modo intervalo; o painel fecha após o segundo clique. `onValueChange` roda duas vezes por intervalo: primeiro só com `from`, depois com `from` e `to`. `presets` adiciona uma coluna de atalhos (Hoje, Últimos 7 dias...) que define o intervalo todo; passe `true` para os padrões ou sua própria lista, a partir de `getDatePresets()`.",
                 "Muestra `inicio – fin` y abre un `Calendar` en modo intervalo; el panel se cierra tras el segundo clic. `onValueChange` se ejecuta dos veces por intervalo: primero solo con `from`, luego con `from` y `to`. `presets` añade una columna de atajos (Hoy, Últimos 7 días...) que fijan todo el intervalo; pasa `true` para los predeterminados o tu propia lista, a partir de `getDatePresets()`.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'The trigger is a `<button>` with `aria-haspopup="dialog"` and `aria-expanded` reflecting the panel state.',
+                        'O gatilho é um `<button>` com `aria-haspopup="dialog"` e `aria-expanded` refletindo o estado do painel.',
+                        'El disparador es un `<button>` con `aria-haspopup="dialog"` y `aria-expanded` que refleja el estado del panel.',
+                    ),
+                    t(
+                        "`label` is linked with `htmlFor`; without `label`, the trigger uses `aria-label`.",
+                        "O `label` é ligado por `htmlFor`; sem `label`, o gatilho usa `aria-label`.",
+                        "El `label` se enlaza con `htmlFor`; sin `label`, el disparador usa `aria-label`.",
+                    ),
+                    t(
+                        "`errorMessage` sets `aria-invalid` and `aria-describedby` to the message; otherwise `helperText` is linked through `aria-describedby`.",
+                        "`errorMessage` define `aria-invalid` e `aria-describedby` apontando para a mensagem; sem erro, o `helperText` é ligado por `aria-describedby`.",
+                        "`errorMessage` define `aria-invalid` y `aria-describedby` apuntando al mensaje; sin error, `helperText` se enlaza con `aria-describedby`.",
+                    ),
+                    t(
+                        'The panel is a `role="dialog"` named by `panelLabel`, rendered in a portal on `document.body`.',
+                        'O painel é um `role="dialog"` nomeado por `panelLabel`, renderizado em um portal no `document.body`.',
+                        'El panel es un `role="dialog"` nombrado por `panelLabel`, renderizado en un portal en `document.body`.',
+                    ),
+                    t(
+                        "`disabled` disables the button; `readOnly` keeps it focusable but the panel never opens.",
+                        "`disabled` desabilita o botão; `readOnly` mantém o foco possível, mas o painel nunca abre.",
+                        "`disabled` deshabilita el botón; `readOnly` mantiene el foco posible, pero el panel nunca se abre.",
+                    ),
+                    t(
+                        "The trigger text reads as `start – end`; while only the start is chosen it shows `start – …`.",
+                        "O texto do gatilho aparece como `início – fim`; enquanto só o início foi escolhido, mostra `início – …`.",
+                        "El texto del disparador se muestra como `inicio – fin`; mientras solo se eligió el inicio, muestra `inicio – …`.",
+                    ),
+                    t(
+                        "Presets are `<button>`s with `aria-pressed` when they match the current range, and `disabled` when they fall outside `minDate`/`maxDate`.",
+                        "Os presets são `<button>`s com `aria-pressed` quando coincidem com o intervalo atual e `disabled` quando ficam fora de `minDate`/`maxDate`.",
+                        "Los presets son `<button>`s con `aria-pressed` cuando coinciden con el intervalo actual y `disabled` cuando quedan fuera de `minDate`/`maxDate`.",
+                    ),
+                    t(
+                        "Opening the panel focuses a day in the range `Calendar`, which follows its grid pattern.",
+                        "Ao abrir, o foco vai para um dia no `Calendar` de intervalo, que segue o padrão de grade.",
+                        "Al abrir, el foco va a un día en el `Calendar` de intervalo, que sigue su patrón de cuadrícula.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            "Opens or closes the panel from the trigger.",
+                            "Abre ou fecha o painel a partir do gatilho.",
+                            "Abre o cierra el panel desde el disparador.",
+                        ),
+                    },
+                    {
+                        keys: "Arrow keys, Home, End, Page Up/Down",
+                        action: t(
+                            "Navigate the days inside the open panel (see Calendar); Enter or Space picks the start, then the end, which closes the panel.",
+                            "Navegam pelos dias dentro do painel aberto (veja Calendar); Enter ou Espaço escolhe o início e depois o fim, que fecha o painel.",
+                            "Navegan por los días dentro del panel abierto (ver Calendar); Enter o Espacio elige el inicio y luego el fin, que cierra el panel.",
+                        ),
+                    },
+                    {
+                        keys: "Esc",
+                        action: t(
+                            "Closes the panel and returns focus to the trigger.",
+                            "Fecha o painel e devolve o foco ao gatilho.",
+                            "Cierra el panel y devuelve el foco al disparador.",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "The panel does not trap focus: Tab leaves it, and because it is rendered at the end of `<body>`, Tab from the trigger does not enter it on its own.",
+                        "O painel não prende o foco: o Tab sai dele e, como ele é renderizado no fim do `<body>`, o Tab a partir do gatilho não entra nele sozinho.",
+                        "El panel no atrapa el foco: Tab sale de él y, como se renderiza al final de `<body>`, Tab desde el disparador no entra en él por sí solo.",
+                    ),
+                    t(
+                        "Clicking outside closes the panel without moving focus back; only Esc restores focus to the trigger.",
+                        "Clicar fora fecha o painel sem devolver o foco; só o Esc restaura o foco no gatilho.",
+                        "Hacer clic fuera cierra el panel sin devolver el foco; solo Esc restaura el foco en el disparador.",
+                    ),
+                    t(
+                        "Pass `presetLabels` (or your own `presets`) translated when using presets; the defaults are in English. The dates cannot be typed.",
+                        "Passe `presetLabels` (ou seus próprios `presets`) traduzidos ao usar presets; os padrões estão em inglês. As datas não podem ser digitadas.",
+                        "Pasa `presetLabels` (o tus propios `presets`) traducidos al usar presets; los valores por defecto están en inglés. Las fechas no se pueden escribir.",
+                    ),
+                ],
+            },
             code: code(`import { DateRangePicker, getDatePresets } from "vaiperui";
 
 const [period, setPeriod] = useState<DateRange>({});
@@ -438,6 +711,104 @@ const [period, setPeriod] = useState<DateRange>({});
                 'O valor é uma string `"HH:mm"` em 24h (`"14:30"`), mesmo com `hour12`, que só muda como aparece e adiciona uma coluna AM/PM. O painel fica aberto enquanto você escolhe: escolha a hora, depois o minuto, e feche com `Esc` ou clicando fora. `minuteStep` limita os minutos (ex.: 15).',
                 'El valor es una cadena `"HH:mm"` en 24h (`"14:30"`), también con `hour12`, que solo cambia cómo se muestra y añade una columna AM/PM. El panel queda abierto mientras eliges: elige la hora, luego el minuto, y cierra con `Esc` o haciendo clic fuera. `minuteStep` limita los minutos (p. ej. 15).',
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'The trigger is a `<button>` with `aria-haspopup="dialog"` and `aria-expanded` reflecting the panel state.',
+                        'O gatilho é um `<button>` com `aria-haspopup="dialog"` e `aria-expanded` refletindo o estado do painel.',
+                        'El disparador es un `<button>` con `aria-haspopup="dialog"` y `aria-expanded` que refleja el estado del panel.',
+                    ),
+                    t(
+                        "`label` is linked with `htmlFor`; without `label`, the trigger uses `aria-label`.",
+                        "O `label` é ligado por `htmlFor`; sem `label`, o gatilho usa `aria-label`.",
+                        "El `label` se enlaza con `htmlFor`; sin `label`, el disparador usa `aria-label`.",
+                    ),
+                    t(
+                        "`errorMessage` sets `aria-invalid` and `aria-describedby` to the message; otherwise `helperText` is linked through `aria-describedby`.",
+                        "`errorMessage` define `aria-invalid` e `aria-describedby` apontando para a mensagem; sem erro, o `helperText` é ligado por `aria-describedby`.",
+                        "`errorMessage` define `aria-invalid` y `aria-describedby` apuntando al mensaje; sin error, `helperText` se enlaza con `aria-describedby`.",
+                    ),
+                    t(
+                        'The panel is a `role="dialog"` named by `panelLabel`, rendered in a portal on `document.body`.',
+                        'O painel é um `role="dialog"` nomeado por `panelLabel`, renderizado em um portal no `document.body`.',
+                        'El panel es un `role="dialog"` nombrado por `panelLabel`, renderizado en un portal en `document.body`.',
+                    ),
+                    t(
+                        "`disabled` disables the button; `readOnly` keeps it focusable but the panel never opens.",
+                        "`disabled` desabilita o botão; `readOnly` mantém o foco possível, mas o painel nunca abre.",
+                        "`disabled` deshabilita el botón; `readOnly` mantiene el foco posible, pero el panel nunca se abre.",
+                    ),
+                    t(
+                        'Hours, minutes and (with `hour12`) AM/PM are columns, each a `role="group"` named by `labels.hours`, `labels.minutes` and `labels.period`.',
+                        'Horas, minutos e (com `hour12`) AM/PM são colunas, cada uma um `role="group"` nomeado por `labels.hours`, `labels.minutes` e `labels.period`.',
+                        'Horas, minutos y (con `hour12`) AM/PM son columnas, cada una un `role="group"` nombrado por `labels.hours`, `labels.minutes` y `labels.period`.',
+                    ),
+                    t(
+                        "Each option is a `<button>` with `aria-pressed` on the selected one; the selected option is scrolled into view when the panel opens.",
+                        "Cada opção é um `<button>` com `aria-pressed` na selecionada; a opção selecionada é rolada para a vista ao abrir o painel.",
+                        "Cada opción es un `<button>` con `aria-pressed` en la seleccionada; la opción seleccionada se desplaza a la vista al abrir el panel.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            "Opens or closes the panel from the trigger.",
+                            "Abre ou fecha o painel a partir do gatilho.",
+                            "Abre o cierra el panel desde el disparador.",
+                        ),
+                    },
+                    {
+                        keys: "Arrow Up / Down",
+                        action: t(
+                            "Inside a column, moves focus to the previous / next option.",
+                            "Dentro de uma coluna, move o foco para a opção anterior / seguinte.",
+                            "Dentro de una columna, mueve el foco a la opción anterior / siguiente.",
+                        ),
+                    },
+                    {
+                        keys: "Tab",
+                        action: t(
+                            "Moves between the options of the panel (every option is a tab stop).",
+                            "Move entre as opções do painel (cada opção é uma parada do Tab).",
+                            "Se mueve entre las opciones del panel (cada opción es una parada de Tab).",
+                        ),
+                    },
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            "Picks the focused option; the panel stays open.",
+                            "Escolhe a opção em foco; o painel continua aberto.",
+                            "Elige la opción enfocada; el panel sigue abierto.",
+                        ),
+                    },
+                    {
+                        keys: "Esc",
+                        action: t(
+                            "Closes the panel and returns focus to the trigger.",
+                            "Fecha o painel e devolve o foco ao gatilho.",
+                            "Cierra el panel y devuelve el foco al disparador.",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "Focus is not moved into the panel on open and the panel stays open after a pick: close it with Esc or by clicking outside.",
+                        "O foco não vai para o painel ao abrir e o painel continua aberto após a escolha: feche com Esc ou clicando fora.",
+                        "El foco no pasa al panel al abrir y el panel sigue abierto tras elegir: ciérralo con Esc o haciendo clic fuera.",
+                    ),
+                    t(
+                        "Clicking outside closes the panel without moving focus back; only Esc restores focus to the trigger.",
+                        "Clicar fora fecha o painel sem devolver o foco; só o Esc restaura o foco no gatilho.",
+                        "Hacer clic fuera cierra el panel sin devolver el foco; solo Esc restaura el foco en el disparador.",
+                    ),
+                    t(
+                        "The time is only picked from the columns (no typing, no `minuteStep` outside the listed minutes). Pass `labels` and `panelLabel` translated; the defaults are in English.",
+                        "A hora só é escolhida nas colunas (sem digitação; só os minutos listados por `minuteStep`). Passe `labels` e `panelLabel` traduzidos; os padrões estão em inglês.",
+                        "La hora solo se elige en las columnas (sin escribir; solo los minutos listados por `minuteStep`). Pasa `labels` y `panelLabel` traducidos; los valores por defecto están en inglés.",
+                    ),
+                ],
+            },
             code: code(`import { TimePicker } from "vaiperui";
 
 const [time, setTime] = useState("14:30");
@@ -500,6 +871,104 @@ const [time, setTime] = useState("14:30");
                 "Combina o `Calendar` e as colunas do `TimePicker` num só painel. O valor é um `Date` com o dia e o horário (segundos são ignorados). Escolher um dia mantém o horário; escolher um horário antes de um dia usa hoje. O painel fica aberto até `OK`, `Esc` ou um clique fora. Com `name`, o formulário recebe `yyyy-mm-ddTHH:mm`.",
                 "Combina el `Calendar` y las columnas del `TimePicker` en un solo panel. El valor es un `Date` con el día y la hora (los segundos se ignoran). Elegir un día mantiene la hora; elegir una hora antes de un día usa hoy. El panel queda abierto hasta `OK`, `Esc` o un clic fuera. Con `name`, el formulario recibe `yyyy-mm-ddTHH:mm`.",
             ),
+            accessibility: {
+                notes: [
+                    t(
+                        'The trigger is a `<button>` with `aria-haspopup="dialog"` and `aria-expanded` reflecting the panel state.',
+                        'O gatilho é um `<button>` com `aria-haspopup="dialog"` e `aria-expanded` refletindo o estado do painel.',
+                        'El disparador es un `<button>` con `aria-haspopup="dialog"` y `aria-expanded` que refleja el estado del panel.',
+                    ),
+                    t(
+                        "`label` is linked with `htmlFor`; without `label`, the trigger uses `aria-label`.",
+                        "O `label` é ligado por `htmlFor`; sem `label`, o gatilho usa `aria-label`.",
+                        "El `label` se enlaza con `htmlFor`; sin `label`, el disparador usa `aria-label`.",
+                    ),
+                    t(
+                        "`errorMessage` sets `aria-invalid` and `aria-describedby` to the message; otherwise `helperText` is linked through `aria-describedby`.",
+                        "`errorMessage` define `aria-invalid` e `aria-describedby` apontando para a mensagem; sem erro, o `helperText` é ligado por `aria-describedby`.",
+                        "`errorMessage` define `aria-invalid` y `aria-describedby` apuntando al mensaje; sin error, `helperText` se enlaza con `aria-describedby`.",
+                    ),
+                    t(
+                        'The panel is a `role="dialog"` named by `panelLabel`, rendered in a portal on `document.body`.',
+                        'O painel é um `role="dialog"` nomeado por `panelLabel`, renderizado em um portal no `document.body`.',
+                        'El panel es un `role="dialog"` nombrado por `panelLabel`, renderizado en un portal en `document.body`.',
+                    ),
+                    t(
+                        "`disabled` disables the button; `readOnly` keeps it focusable but the panel never opens.",
+                        "`disabled` desabilita o botão; `readOnly` mantém o foco possível, mas o painel nunca abre.",
+                        "`disabled` deshabilita el botón; `readOnly` mantiene el foco posible, pero el panel nunca se abre.",
+                    ),
+                    t(
+                        'The panel holds a `Calendar` (focused on open, grid pattern) and the time columns, each a `role="group"` named by `labels`.',
+                        'O painel contém um `Calendar` (com foco ao abrir, padrão de grade) e as colunas de hora, cada uma um `role="group"` nomeado por `labels`.',
+                        'El panel contiene un `Calendar` (con foco al abrir, patrón de cuadrícula) y las columnas de hora, cada una un `role="group"` nombrado por `labels`.',
+                    ),
+                    t(
+                        "Time options are `<button>`s with `aria-pressed` on the selected one; a final confirm button (`confirmLabel`) closes the panel.",
+                        "As opções de hora são `<button>`s com `aria-pressed` na selecionada; um botão final de confirmação (`confirmLabel`) fecha o painel.",
+                        "Las opciones de hora son `<button>`s con `aria-pressed` en la seleccionada; un botón final de confirmación (`confirmLabel`) cierra el panel.",
+                    ),
+                ],
+                keys: [
+                    {
+                        keys: "Enter / Space",
+                        action: t(
+                            "Opens or closes the panel from the trigger.",
+                            "Abre ou fecha o painel a partir do gatilho.",
+                            "Abre o cierra el panel desde el disparador.",
+                        ),
+                    },
+                    {
+                        keys: "Arrow keys, Home, End, Page Up/Down",
+                        action: t(
+                            "In the calendar, navigate the days (see Calendar); picking a day keeps the chosen time and does not close the panel.",
+                            "No calendário, navegam pelos dias (veja Calendar); escolher um dia mantém a hora escolhida e não fecha o painel.",
+                            "En el calendario, navegan por los días (ver Calendar); elegir un día mantiene la hora elegida y no cierra el panel.",
+                        ),
+                    },
+                    {
+                        keys: "Arrow Up / Down",
+                        action: t(
+                            "In a time column, moves focus to the previous / next option.",
+                            "Em uma coluna de hora, move o foco para a opção anterior / seguinte.",
+                            "En una columna de hora, mueve el foco a la opción anterior / siguiente.",
+                        ),
+                    },
+                    {
+                        keys: "Tab",
+                        action: t(
+                            "Moves from the calendar to the time options and the confirm button.",
+                            "Passa do calendário para as opções de hora e o botão de confirmação.",
+                            "Pasa del calendario a las opciones de hora y al botón de confirmación.",
+                        ),
+                    },
+                    {
+                        keys: "Esc",
+                        action: t(
+                            "Closes the panel and returns focus to the trigger.",
+                            "Fecha o painel e devolve o foco ao gatilho.",
+                            "Cierra el panel y devuelve el foco al disparador.",
+                        ),
+                    },
+                ],
+                caveats: [
+                    t(
+                        "The panel does not trap focus: Tab leaves it, and because it is rendered at the end of `<body>`, Tab from the trigger does not enter it on its own.",
+                        "O painel não prende o foco: o Tab sai dele e, como ele é renderizado no fim do `<body>`, o Tab a partir do gatilho não entra nele sozinho.",
+                        "El panel no atrapa el foco: Tab sale de él y, como se renderiza al final de `<body>`, Tab desde el disparador no entra en él por sí solo.",
+                    ),
+                    t(
+                        "Clicking outside closes the panel without moving focus back; only Esc restores focus to the trigger.",
+                        "Clicar fora fecha o painel sem devolver o foco; só o Esc restaura o foco no gatilho.",
+                        "Hacer clic fuera cierra el panel sin devolver el foco; solo Esc restaura el foco en el disparador.",
+                    ),
+                    t(
+                        "Date and time cannot be typed. Pass `labels`, `confirmLabel`, `panelLabel` and the month button labels translated; the defaults are in English.",
+                        "Data e hora não podem ser digitadas. Passe `labels`, `confirmLabel`, `panelLabel` e os rótulos dos botões de mês traduzidos; os padrões estão em inglês.",
+                        "La fecha y la hora no se pueden escribir. Pasa `labels`, `confirmLabel`, `panelLabel` y las etiquetas de los botones de mes traducidos; los valores por defecto están en inglés.",
+                    ),
+                ],
+            },
             code: code(`import { DateTimePicker } from "vaiperui";
 
 const [when, setWhen] = useState<Date>();
