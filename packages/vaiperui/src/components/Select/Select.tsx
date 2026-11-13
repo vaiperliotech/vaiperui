@@ -25,6 +25,11 @@ export function Select({
     onValueChange,
     placeholder = "Select an option",
     emptyMessage = "No options found",
+    loading = false,
+    loadingMessage = "Loading...",
+    onReachEnd,
+    hasMore = true,
+    onSearchChange,
     searchable = false,
     searchPlaceholder = "Search...",
     noResultsMessage = (query) => `No results for "${query}"`,
@@ -55,15 +60,23 @@ export function Select({
     const [query, setQuery] = React.useState("");
     const filteredOptions = React.useMemo(() => {
         const trimmed = query.trim().toLowerCase();
-        if (!searchable || trimmed === "") return options;
+        if (!searchable || trimmed === "" || onSearchChange) return options;
         return options.filter((option) => option.label.toLowerCase().includes(trimmed));
-    }, [options, searchable, query]);
+    }, [options, searchable, query, onSearchChange]);
 
     const selectedIndex = React.useMemo(
         () => options.findIndex((option) => option.value === currentValue),
         [options, currentValue],
     );
-    const selectedOption = selectedIndex >= 0 ? options[selectedIndex] : undefined;
+    // Remembered so the trigger keeps its label when a server-side search drops the option.
+    const lastSelected = React.useRef<SelectOption | undefined>(undefined);
+    if (selectedIndex >= 0) lastSelected.current = options[selectedIndex];
+    const selectedOption =
+        selectedIndex >= 0
+            ? options[selectedIndex]
+            : lastSelected.current?.value === currentValue
+              ? lastSelected.current
+              : undefined;
 
     const [activeIndex, setActiveIndex] = React.useState(selectedIndex >= 0 ? selectedIndex : 0);
 
@@ -110,15 +123,34 @@ export function Select({
 
     const openList = React.useCallback(
         (startIndex?: number) => {
-            if (disabled || options.length === 0) return;
+            if (disabled || (options.length === 0 && !loading)) return;
             window.clearTimeout(closeTimeout.current);
             setClosing(false);
             setOpen(true);
             setQuery("");
+            if (query !== "") onSearchChange?.("");
             setActiveIndex(startIndex ?? (selectedIndex >= 0 ? selectedIndex : 0));
         },
-        [disabled, options.length, selectedIndex],
+        [disabled, loading, options.length, selectedIndex, query, onSearchChange],
     );
+
+    const listRef = React.useRef<HTMLDivElement>(null);
+    const onReachEndRef = React.useRef(onReachEnd);
+    onReachEndRef.current = onReachEnd;
+    // No scrollbar means onScroll can never fire: ask for more until the options overflow.
+    // biome-ignore lint/correctness/useExhaustiveDependencies: options.length re-runs the check after each page is appended
+    React.useEffect(() => {
+        const el = listRef.current;
+        if (
+            open &&
+            hasMore &&
+            !loading &&
+            el &&
+            el.clientHeight > 0 &&
+            el.scrollHeight <= el.clientHeight
+        )
+            onReachEndRef.current?.();
+    }, [open, hasMore, loading, options.length]);
 
     const closeList = React.useCallback(() => {
         if (!open) return;
@@ -263,6 +295,7 @@ export function Select({
 
     function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
         setQuery(event.target.value);
+        onSearchChange?.(event.target.value);
     }
 
     function handleSearchKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -480,6 +513,7 @@ export function Select({
                                                       type="button"
                                                       onClick={() => {
                                                           setQuery("");
+                                                          onSearchChange?.("");
                                                           searchInputRef.current?.focus();
                                                       }}
                                                       aria-label={clearSearchLabel}
@@ -510,13 +544,24 @@ export function Select({
 
                                   <div
                                       id={listboxId}
+                                      ref={listRef}
                                       role="listbox"
+                                      aria-busy={loading || undefined}
+                                      onScroll={(event) => {
+                                          const el = event.currentTarget;
+                                          if (
+                                              hasMore &&
+                                              !loading &&
+                                              el.scrollHeight - el.scrollTop - el.clientHeight < 24
+                                          )
+                                              onReachEnd?.();
+                                      }}
                                       className={cn(
                                           "max-h-60 overflow-auto p-1",
                                           isDetailed && "flex flex-col gap-1 p-2",
                                       )}
                                   >
-                                      {noMatches ? (
+                                      {noMatches && !loading ? (
                                           <div
                                               role="presentation"
                                               className={cn(
@@ -636,6 +681,38 @@ export function Select({
                                               );
                                           })
                                       )}
+                                      {loading ? (
+                                          <div
+                                              role="presentation"
+                                              className={cn(
+                                                  "flex items-center gap-2 text-[var(--vpd-text-placeholder)]",
+                                                  isDetailed ? detailedSize.option : sizing.option,
+                                              )}
+                                          >
+                                              <svg
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  aria-hidden="true"
+                                                  className="h-3.5 w-3.5 animate-spin"
+                                              >
+                                                  <circle
+                                                      cx="12"
+                                                      cy="12"
+                                                      r="9"
+                                                      stroke="currentColor"
+                                                      strokeWidth={3}
+                                                      opacity={0.25}
+                                                  />
+                                                  <path
+                                                      d="M21 12a9 9 0 0 0-9-9"
+                                                      stroke="currentColor"
+                                                      strokeWidth={3}
+                                                      strokeLinecap="round"
+                                                  />
+                                              </svg>
+                                              {loadingMessage}
+                                          </div>
+                                      ) : null}
                                   </div>
                               </div>
                           </div>,

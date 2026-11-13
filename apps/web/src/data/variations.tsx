@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { Button, Input, Select } from "vaiperui";
-
+import { SelectAsyncDemo } from "@/components/SelectAsyncDemo";
 import type { Locale } from "@/i18n/config";
 import { makeT, samples, selectLabels } from "./samples";
 
@@ -322,11 +322,32 @@ export function getVariations(locale: Locale): Record<string, VariationGroup[]> 
 <Input mask="creditCard" label="${s.creditCard}" />
 <Input mask="cardExpiry" label="${s.expiry}" />
 <Input mask="date" label="${s.date}" />
-<Input mask="time" label="${s.time}" />`,
-                items: MASKS.map((mask) => ({
-                    label: mask,
-                    node: <Input mask={mask} label={mask} />,
-                })),
+<Input mask="time" label="${s.time}" />
+<Input
+  mask="custom"
+  maskRegex={/[0-9a-f]/i}
+  maskFormat={(v) => (v ? "#" + v.slice(0, 6) : "")}
+  placeholder="#ff6600"
+  label="Hex color"
+/>`,
+                items: [
+                    ...MASKS.map((mask) => ({
+                        label: mask,
+                        node: <Input mask={mask} label={mask} />,
+                    })),
+                    {
+                        label: "custom",
+                        node: (
+                            <Input
+                                mask="custom"
+                                maskRegex={/[0-9a-f]/i}
+                                maskFormat={(v) => (v ? "#" + v.slice(0, 6) : "")}
+                                placeholder="#ff6600"
+                                label="custom (hex color)"
+                            />
+                        ),
+                    },
+                ],
             },
             {
                 title: sizesTitle,
@@ -486,6 +507,57 @@ export function getVariations(locale: Locale): Record<string, VariationGroup[]> 
                         node: countrySelect({ searchable: true, searchStyle: "full" }),
                     },
                     { label: s.noSearch, node: countrySelect() },
+                ],
+            },
+            {
+                title: t("Async loading", "Carregamento assíncrono", "Carga asíncrona"),
+                file: t("async.tsx", "assincrono.tsx", "asincrono.tsx"),
+                description: t(
+                    "`loading` shows a spinner row, `onReachEnd` asks for the next page when the user scrolls to the end (stop it with `hasMore={false}`), and `onSearchChange` moves the search to the server.",
+                    "`loading` mostra uma linha com spinner, `onReachEnd` pede a próxima página quando o usuário rola até o fim (pare com `hasMore={false}`) e `onSearchChange` leva a busca para o servidor.",
+                    "`loading` muestra una fila con spinner, `onReachEnd` pide la siguiente página cuando el usuario llega al final (deténgalo con `hasMore={false}`) y `onSearchChange` lleva la búsqueda al servidor.",
+                ),
+                code: `// Infinite scroll
+<Select
+  options={options}
+  loading={loading}
+  hasMore={hasMore}
+  onReachEnd={() => {
+    setLoading(true);
+    fetchNextPage().then(() => setLoading(false));
+  }}
+/>
+
+// Server-side search (debounce it yourself)
+<Select
+  searchable
+  options={options}
+  loading={loading}
+  onSearchChange={(query) => search(query)}
+/>`,
+                items: [
+                    {
+                        label: t("infinite scroll", "scroll infinito", "scroll infinito"),
+                        node: (
+                            <SelectAsyncDemo
+                                mode="scroll"
+                                label={s.country}
+                                loadingMessage={selectLabels(locale).loadingMessage}
+                                searchPlaceholder={selectLabels(locale).searchPlaceholder}
+                            />
+                        ),
+                    },
+                    {
+                        label: t("server search", "busca no servidor", "búsqueda en el servidor"),
+                        node: (
+                            <SelectAsyncDemo
+                                mode="search"
+                                label={s.country}
+                                loadingMessage={selectLabels(locale).loadingMessage}
+                                searchPlaceholder={selectLabels(locale).searchPlaceholder}
+                            />
+                        ),
+                    },
                 ],
             },
             {

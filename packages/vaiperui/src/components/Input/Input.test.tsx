@@ -220,4 +220,23 @@ describe("Input", () => {
         expect(input.className).toContain("focus:border-[var(--vpd-accent)]");
         expect(input.style.getPropertyValue("--vpd-accent")).toBe("#a78bfa");
     });
+
+    it("custom mask drops characters that do not match maskRegex", () => {
+        render(<Input aria-label="Hex" mask="custom" maskRegex={/[0-9a-f]/gi} />);
+        const input = screen.getByRole("textbox", { name: "Hex" });
+        fireEvent.change(input, { target: { value: "xA1-zf9" } });
+        expect(input).toHaveValue("A1f9");
+    });
+
+    it("custom mask applies maskFormat, e.g. an auto-filled # for hex colors", () => {
+        const hex = (v: string) => (v ? `#${v.slice(0, 6)}` : "");
+        render(<Input aria-label="Color" mask="custom" maskRegex={/[0-9a-f]/i} maskFormat={hex} />);
+        const input = screen.getByRole("textbox", { name: "Color" });
+        fireEvent.change(input, { target: { value: "f" } });
+        expect(input).toHaveValue("#f");
+        fireEvent.change(input, { target: { value: "#ff66009z9" } });
+        expect(input).toHaveValue("#ff6600");
+        fireEvent.change(input, { target: { value: "" } });
+        expect(input).toHaveValue("");
+    });
 });

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 
 import { Select } from "./Select";
 
@@ -7,6 +8,12 @@ const OPTIONS = [
     { value: "us", label: "Estados Unidos" },
     { value: "pt", label: "Portugal", disabled: true },
 ];
+
+const makePage = (start: number) =>
+    Array.from({ length: 10 }, (_, i) => ({
+        value: String(start + i),
+        label: `Item ${start + i + 1}`,
+    }));
 
 const DETAILED_OPTIONS = [
     {
@@ -91,6 +98,62 @@ export const Searchable: Story = {
 
 export const SearchableFull: Story = {
     args: { searchable: true, searchStyle: "full", searchPlaceholder: "Buscar país..." },
+};
+
+export const Loading: Story = {
+    args: { loading: true, loadingMessage: "Carregando..." },
+};
+
+// Appends 10 more options each time the user reaches the end, until 50.
+export const InfiniteScroll: Story = {
+    render: (args) => {
+        const [options, setOptions] = useState(() => makePage(0));
+        const [loading, setLoading] = useState(false);
+        return (
+            <Select
+                {...args}
+                options={options}
+                loading={loading}
+                hasMore={options.length < 50}
+                onReachEnd={() => {
+                    setLoading(true);
+                    setTimeout(() => {
+                        setOptions((prev) => [...prev, ...makePage(prev.length)]);
+                        setLoading(false);
+                    }, 800);
+                }}
+            />
+        );
+    },
+};
+
+const COUNTRIES = ["Brasil", "Argentina", "Chile", "Colômbia", "Peru", "Uruguai", "Paraguai"];
+
+// Fake server: filters on a timer, like a request would.
+export const ServerSearch: Story = {
+    render: (args) => {
+        const [options, setOptions] = useState(COUNTRIES.map((label) => ({ value: label, label })));
+        const [loading, setLoading] = useState(false);
+        return (
+            <Select
+                {...args}
+                searchable
+                options={options}
+                loading={loading}
+                onSearchChange={(query) => {
+                    setLoading(true);
+                    setTimeout(() => {
+                        setOptions(
+                            COUNTRIES.filter((c) =>
+                                c.toLowerCase().includes(query.toLowerCase()),
+                            ).map((label) => ({ value: label, label })),
+                        );
+                        setLoading(false);
+                    }, 600);
+                }}
+            />
+        );
+    },
 };
 
 export const Detailed: Story = {

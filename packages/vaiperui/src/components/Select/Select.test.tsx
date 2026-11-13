@@ -130,4 +130,70 @@ describe("Select", () => {
         );
         expect(container.querySelector('input[type="hidden"]')).toHaveValue("br");
     });
+
+    it("shows a loading row after the options and marks the list busy", () => {
+        render(<Select options={OPTIONS} loading loadingMessage="Carregando..." />);
+        fireEvent.click(screen.getByRole("combobox"));
+        expect(screen.getAllByRole("option")).toHaveLength(3);
+        expect(screen.getByText("Carregando...")).toBeInTheDocument();
+        expect(screen.getByRole("listbox")).toHaveAttribute("aria-busy", "true");
+    });
+
+    it("shows loading instead of the empty message when there are no options yet", () => {
+        render(<Select options={[]} loading />);
+        fireEvent.click(screen.getByRole("combobox"));
+        expect(screen.getByText("Loading...")).toBeInTheDocument();
+        expect(screen.queryByText("No options found")).not.toBeInTheDocument();
+    });
+
+    it("calls onReachEnd near the end of the list, but not while loading", () => {
+        const onReachEnd = vi.fn();
+        const { rerender } = render(<Select options={OPTIONS} onReachEnd={onReachEnd} />);
+        fireEvent.click(screen.getByRole("combobox"));
+        const list = screen.getByRole("listbox");
+        // jsdom has no layout: fake a scrolled-to-bottom list.
+        Object.defineProperty(list, "scrollHeight", { value: 300, configurable: true });
+        Object.defineProperty(list, "clientHeight", { value: 240, configurable: true });
+        Object.defineProperty(list, "scrollTop", { value: 60, configurable: true });
+        fireEvent.scroll(list);
+        expect(onReachEnd).toHaveBeenCalledTimes(1);
+        rerender(<Select options={OPTIONS} onReachEnd={onReachEnd} loading />);
+        fireEvent.scroll(screen.getByRole("listbox"));
+        expect(onReachEnd).toHaveBeenCalledTimes(1);
+    });
+
+    it("asks for more options while they do not fill the menu, until hasMore is false", () => {
+        const onReachEnd = vi.fn();
+        const spy = vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(240);
+        const spy2 = vi.spyOn(HTMLElement.prototype, "scrollHeight", "get").mockReturnValue(100);
+        const { rerender } = render(<Select options={OPTIONS} onReachEnd={onReachEnd} />);
+        fireEvent.click(screen.getByRole("combobox"));
+        expect(onReachEnd).toHaveBeenCalledTimes(1);
+        rerender(<Select options={OPTIONS} onReachEnd={onReachEnd} hasMore={false} />);
+        rerender(
+            <Select
+                options={[...OPTIONS, { value: "x", label: "X" }]}
+                onReachEnd={onReachEnd}
+                hasMore={false}
+            />,
+        );
+        expect(onReachEnd).toHaveBeenCalledTimes(1);
+        spy.mockRestore();
+        spy2.mockRestore();
+    });
+
+    it("onSearchChange turns off the local filter and reports the query", () => {
+        const onSearchChange = vi.fn();
+        render(<Select options={OPTIONS} searchable onSearchChange={onSearchChange} />);
+        fireEvent.click(screen.getByRole("combobox"));
+        fireEvent.change(screen.getByRole("textbox"), { target: { value: "zzz" } });
+        expect(onSearchChange).toHaveBeenCalledWith("zzz");
+        expect(screen.getAllByRole("option")).toHaveLength(3);
+    });
+
+    it("keeps the selected label when a server search removes it from options", () => {
+        const { rerender } = render(<Select options={OPTIONS} defaultValue="br" />);
+        rerender(<Select options={[{ value: "us", label: "Estados Unidos" }]} defaultValue="br" />);
+        expect(screen.getByRole("combobox")).toHaveTextContent("Brasil");
+    });
 });

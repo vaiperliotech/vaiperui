@@ -169,6 +169,7 @@ export function selectLabels(locale: Locale) {
             "No se encontraron opciones",
         ),
         clearSearchLabel: t("Clear search", "Limpar busca", "Borrar búsqueda"),
+        loadingMessage: t("Loading...", "Carregando...", "Cargando..."),
         noResultsMessage: (query: string) =>
             t(
                 `No results for "${query}"`,

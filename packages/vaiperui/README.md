@@ -127,6 +127,27 @@ already-masked value, and it works controlled or uncontrolled.
 | `cnpj`       | `12.345.678/0001-99` (Brazil)                                       |
 | `cei`        | `12.345.67890/12` (Brazil)                                          |
 | `cep`        | `12345-678` (Brazil)                                                |
+| `custom`     | Your own rules, see below                                           |
+
+#### Custom mask
+
+With `mask="custom"`, `maskRegex` keeps only the characters that match it (each typed or pasted
+character is tested on its own) and the optional `maskFormat` turns the kept characters into the
+displayed text. Example: a hex color that fills the `#` by itself.
+
+```tsx
+<Input
+  label="Color"
+  mask="custom"
+  maskRegex={/[0-9a-f]/i}
+  maskFormat={(value) => (value ? `#${value.slice(0, 6)}` : "")}
+  placeholder="#ff6600"
+/>
+```
+
+Return `""` from `maskFormat` when there is nothing typed, otherwise a fixed prefix can't be
+deleted. Without `maskFormat` the kept characters are shown as they are, and `g`/`y` flags on the
+regex are ignored.
 
 `phone` formats Brazilian (`+55`) and North American (`+1`) numbers and groups any other country
 code in blocks of three digits.
@@ -160,9 +181,41 @@ portal, so it is never clipped by an `overflow: hidden` parent.
 | `variant`                                 | `default` · `detailed` (larger rows with a `description` line)          |
 | `variantColor` / `customColor`            | Same as the other components                                            |
 | `size` / `radius` / `animation`           | `sm`·`md`·`lg` / `none`…`full` / `none`·`smooth`·`fast`·`bounce`        |
+| `loading` / `loadingMessage`              | Spinner row at the end of the list (default text `Loading...`)          |
+| `onReachEnd`                              | Called when the user scrolls near the end of the list (not while `loading`) |
+| `hasMore`                                 | `true` (default) · `false` after the last page                          |
+| `onSearchChange`                          | Server-side search: receives the typed text, turns the local filter off |
 | `disabled`                                | Disables the whole select                                               |
 | `name`                                    | Mirrors the value in a hidden input, so it is submitted with a `<form>` |
 | `label` / `aria-label`                    | Visible label, or an accessible name when there is no label             |
+
+### Loading, infinite scroll and server-side search
+
+Load options in pages: `onReachEnd` fires when the user scrolls near the end, you fetch the next
+page, append it to `options` and show the spinner with `loading` meanwhile. Set `hasMore={false}`
+after the last page. While `hasMore` is true, `onReachEnd` also fires when the options don't fill
+the menu (no scrollbar), until they do.
+
+```tsx
+<Select
+  options={options}
+  loading={loading}
+  hasMore={hasMore}
+  onReachEnd={() => {
+    setLoading(true); // set it synchronously so the event can't fire twice
+    fetchNextPage().then(() => setLoading(false));
+  }}
+/>
+```
+
+For server-side search, `onSearchChange` (needs `searchable`) receives the typed text and turns the
+local filter off, so `options` should already be the matches. It is called on every keystroke:
+debounce it yourself. The selected option keeps its label on the button even when a search removes
+it from `options`.
+
+```tsx
+<Select searchable options={options} loading={loading} onSearchChange={(q) => search(q)} />
+```
 
 ### Translating the built-in texts
 
@@ -176,6 +229,7 @@ The few texts the Select shows itself can be replaced:
   emptyMessage="Nenhuma opção encontrada"
   noResultsMessage={(query) => `Nenhum resultado para "${query}"`}
   clearSearchLabel="Limpar busca"
+  loadingMessage="Carregando..."
   options={options}
 />
 ```

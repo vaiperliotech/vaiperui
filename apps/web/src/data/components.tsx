@@ -163,6 +163,26 @@ export function getComponents(locale: Locale): ComponentEntry[] {
                     ),
                 },
                 {
+                    prop: "maskRegex",
+                    values: "RegExp",
+                    defaultValue: none,
+                    description: t(
+                        'With mask="custom": each typed character must match this regex or it is dropped (e.g. /[0-9a-f]/i for a hex color)',
+                        'Com mask="custom": cada caractere digitado precisa casar com este regex, senão é descartado (ex.: /[0-9a-f]/i para cor hex)',
+                        'Con mask="custom": cada carácter escrito debe coincidir con este regex o se descarta (p. ej. /[0-9a-f]/i para color hex)',
+                    ),
+                },
+                {
+                    prop: "maskFormat",
+                    values: "(value: string) => string",
+                    defaultValue: none,
+                    description: t(
+                        'With mask="custom": receives the characters kept by maskRegex and returns the displayed text (e.g. prefix "#" for hex colors)',
+                        'Com mask="custom": recebe os caracteres mantidos pelo maskRegex e devolve o texto exibido (ex.: prefixo "#" para cores hex)',
+                        'Con mask="custom": recibe los caracteres que mantiene maskRegex y devuelve el texto mostrado (p. ej. prefijo "#" para colores hex)',
+                    ),
+                },
+                {
                     prop: t("(native)", "(nativas)", "(nativas)"),
                     values: "ButtonHTMLAttributes<HTMLButtonElement>",
                     defaultValue: none,
@@ -308,7 +328,7 @@ export function getComponents(locale: Locale): ComponentEntry[] {
                 },
                 {
                     prop: "mask",
-                    values: "cpf | cnpj | cei | cep | phone | creditCard | cardExpiry | date | time",
+                    values: "cpf | cnpj | cei | cep | phone | creditCard | cardExpiry | date | time | custom",
                     defaultValue: none,
                     description: t(
                         "Formats the value automatically as the user types (controlled or not); onChange emits the already-masked string",
@@ -428,6 +448,56 @@ ${countriesCode}
                         "Text when a search has no matches; receives the typed query",
                         "Texto quando a busca não tem resultados; recebe o termo digitado",
                         "Texto cuando la búsqueda no tiene resultados; recibe el término escrito",
+                    ),
+                },
+                {
+                    prop: "loading",
+                    values: "boolean",
+                    defaultValue: "false",
+                    description: t(
+                        "Shows a spinner row at the end of the list while options load",
+                        "Mostra uma linha com spinner no fim da lista enquanto as opções carregam",
+                        "Muestra una fila con spinner al final de la lista mientras cargan las opciones",
+                    ),
+                },
+                {
+                    prop: "loadingMessage",
+                    values: "string",
+                    defaultValue: '"Loading..."',
+                    description: t(
+                        "Text shown next to the spinner",
+                        "Texto exibido ao lado do spinner",
+                        "Texto mostrado junto al spinner",
+                    ),
+                },
+                {
+                    prop: "onReachEnd",
+                    values: "() => void",
+                    defaultValue: none,
+                    description: t(
+                        "Fires when the user scrolls near the end of the list (not while loading): fetch the next page and append it to options",
+                        "Dispara quando o usuário rola perto do fim da lista (não enquanto carrega): busque a próxima página e some às options",
+                        "Se dispara cuando el usuario se acerca al final de la lista (no mientras carga): pida la siguiente página y añádala a options",
+                    ),
+                },
+                {
+                    prop: "hasMore",
+                    values: "boolean",
+                    defaultValue: "true",
+                    description: t(
+                        "Set false after the last page. While true, onReachEnd also fires when the options don't fill the menu, until they do",
+                        "Use false após a última página. Enquanto true, onReachEnd também dispara quando as opções não preenchem o menu, até preencherem",
+                        "Use false tras la última página. Mientras sea true, onReachEnd también se dispara si las opciones no llenan el menú, hasta que lo hagan",
+                    ),
+                },
+                {
+                    prop: "onSearchChange",
+                    values: "(query: string) => void",
+                    defaultValue: none,
+                    description: t(
+                        "Server-side search (needs searchable): called with the typed text and turns off the local filter, so options should already be the matches. Debounce it yourself",
+                        "Busca no servidor (exige searchable): chamado com o texto digitado e desliga o filtro local, então options já deve ser o resultado. Faça o debounce por conta própria",
+                        "Búsqueda en el servidor (requiere searchable): se llama con el texto escrito y apaga el filtro local, así que options ya debe ser el resultado. Haga el debounce usted mismo",
                     ),
                 },
                 {

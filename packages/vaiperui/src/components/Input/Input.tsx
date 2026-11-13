@@ -6,7 +6,7 @@ import { animations } from "./consts/animations";
 import { radiusStyles } from "./consts/radius";
 import { sizeStyles } from "./consts/sizes";
 import { customVariantStyles, errorStyles, variantStyles } from "./consts/variants";
-import { applyMask, MASK_DIGIT_LIMIT, MASK_PLACEHOLDER, onlyDigits } from "./mask";
+import { applyMask, filterByRegex, MASK_DIGIT_LIMIT, MASK_PLACEHOLDER, onlyDigits } from "./mask";
 import type { InputProps } from "./types";
 
 const baseStyles =
@@ -27,6 +27,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Inp
         leadingIcon,
         trailingIcon,
         mask,
+        maskRegex,
+        maskFormat,
         id,
         disabled,
         value,
@@ -53,22 +55,34 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Inp
           : undefined;
 
     const isMaskControlled = mask !== undefined && value !== undefined;
-    const [rawDigits, setRawDigits] = React.useState(() =>
-        mask ? onlyDigits(String(defaultValue ?? value ?? "")) : "",
+    // `raw` is what the mask keeps from the text (digits, or regex-matching chars for "custom").
+    const sanitize = (text: string) =>
+        mask === "custom"
+            ? maskRegex
+                ? filterByRegex(text, maskRegex)
+                : text
+            : mask
+              ? onlyDigits(text)
+              : "";
+    const format = (raw: string) =>
+        mask === "custom" ? (maskFormat?.(raw) ?? raw) : mask ? applyMask(raw, mask) : raw;
+    const [rawState, setRawState] = React.useState(() =>
+        mask ? sanitize(String(defaultValue ?? value ?? "")) : "",
     );
-    const digits = mask ? (isMaskControlled ? onlyDigits(String(value)) : rawDigits) : "";
-    const maskedValue = mask ? applyMask(digits, mask) : undefined;
+    const raw = mask ? (isMaskControlled ? sanitize(String(value)) : rawState) : "";
+    const maskedValue = mask ? format(raw) : undefined;
 
     function handleMaskedChange(event: React.ChangeEvent<HTMLInputElement>) {
         if (!mask) return;
         const input = event.target;
         const cursorFromEnd = input.value.length - (input.selectionEnd ?? input.value.length);
-        const nextDigits = onlyDigits(input.value).slice(0, MASK_DIGIT_LIMIT[mask]);
-        const nextMasked = applyMask(nextDigits, mask);
+        const sanitized = sanitize(input.value);
+        const nextRaw = mask === "custom" ? sanitized : sanitized.slice(0, MASK_DIGIT_LIMIT[mask]);
+        const nextMasked = format(nextRaw);
         input.value = nextMasked;
         const nextPos = Math.max(0, nextMasked.length - cursorFromEnd);
         input.setSelectionRange(nextPos, nextPos);
-        if (!isMaskControlled) setRawDigits(nextDigits);
+        if (!isMaskControlled) setRawState(nextRaw);
         onChange?.(event);
     }
 
@@ -108,8 +122,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Inp
                         trailingIcon && "pr-9",
                         className,
                     )}
-                    placeholder={placeholder ?? (mask ? MASK_PLACEHOLDER[mask] : undefined)}
-                    inputMode={mask ? "numeric" : undefined}
+                    placeholder={
+                        placeholder ??
+                        (mask && mask !== "custom" ? MASK_PLACEHOLDER[mask] : undefined)
+                    }
+                    inputMode={mask && mask !== "custom" ? "numeric" : undefined}
                     value={mask ? maskedValue : value}
                     defaultValue={mask ? undefined : defaultValue}
                     onChange={mask ? handleMaskedChange : onChange}

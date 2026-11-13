@@ -18,7 +18,9 @@ export type InputMask =
     | "creditCard"
     | "cardExpiry"
     | "date"
-    | "time";
+    | "time"
+    // Free-form: allowed characters come from `maskRegex`
+    | "custom";
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "color"> {
     variant?: InputVariant;
@@ -34,4 +36,8 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
     leadingIcon?: ReactNode;
     trailingIcon?: ReactNode;
     mask?: InputMask;
+    /** With `mask="custom"`: each typed character must match this regex or it is dropped (e.g. `/[a-z0-9]/i`). */
+    maskRegex?: RegExp;
+    /** With `mask="custom"`: receives the characters kept by `maskRegex` and returns the displayed text (e.g. add a prefix or separators). */
+    maskFormat?: (value: string) => string;
 }

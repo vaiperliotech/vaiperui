@@ -7,7 +7,7 @@ import { makeT } from "@/data/samples";
 import { Pills } from "../games/shared";
 import { type AppProps, CopyButton, Label, Pane } from "./kit";
 
-const MASKS: InputMask[] = [
+const MASKS: Exclude<InputMask, "custom">[] = [
     "phone",
     "creditCard",
     "cardExpiry",
@@ -19,7 +19,7 @@ const MASKS: InputMask[] = [
     "cep",
 ];
 
-const SAMPLES: Record<InputMask, string> = {
+const SAMPLES: Record<Exclude<InputMask, "custom">, string> = {
     phone: "5511987654321",
     creditCard: "4111111111111111",
     cardExpiry: "1228",
@@ -48,7 +48,7 @@ function Row({ name, value, locale }: { name: string; value: string; locale: App
 // An Input with each mask in turn: what you type, and what the mask makes of it.
 export function MaskLab({ locale }: AppProps) {
     const t = makeT(locale);
-    const [mask, setMask] = useState<InputMask>("phone");
+    const [mask, setMask] = useState<Exclude<InputMask, "custom">>("phone");
     const [value, setValue] = useState("");
     const digits = value.replace(/\D/g, "");
     // the text the field shows is what onChange would emit, also after "fill an example"
