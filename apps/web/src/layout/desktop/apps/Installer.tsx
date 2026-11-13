@@ -12,7 +12,7 @@ import { Pane } from "./kit";
 
 const PM = {
     npm: ["npm install vaiperui", "added 3 packages in 2s"],
-    pnpm: ["pnpm add vaiperui", "+ vaiperui 1.0.0-beta · Done in 1.4s"],
+    pnpm: ["pnpm add vaiperui", "+ vaiperui 1.0.0 · Done in 1.4s"],
     yarn: ["yarn add vaiperui", "success Saved 3 new dependencies."],
     bun: ["bun add vaiperui", "installed vaiperui · 3 packages [0.9s]"],
 } as const;

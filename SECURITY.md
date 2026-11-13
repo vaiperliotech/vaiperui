@@ -2,12 +2,12 @@
 
 ## Supported versions
 
-vaiperui is in beta. Only the latest published version receives security fixes.
+Only the latest published version of vaiperui receives security fixes.
 
-| Version             | Supported |
-| ------------------- | :-------: |
-| 1.0.0-beta (latest) |    ✅     |
-| Older versions      |    ❌     |
+| Version        | Supported |
+| -------------- | :-------: |
+| 1.0.0 (latest) |    ✅     |
+| Older versions |    ❌     |
 
 ## Reporting a vulnerability
 

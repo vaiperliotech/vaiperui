@@ -1,7 +1,7 @@
 {
     "name": "vaiperui",
     "displayName": "vaiperui",
-    "version": "1.0.0-beta",
+    "version": "1.0.0",
     "description": "Agent skill and MCP server for vaiperui, the React component library for Tailwind CSS v4: exact props, value shapes, accessibility notes, examples and tested recipes for 44 components.",
     "author": { "name": "Vaiperliotech", "url": "https://github.com/vaiperliotech" },
     "homepage": "https://vaiperui.vercel.app",
