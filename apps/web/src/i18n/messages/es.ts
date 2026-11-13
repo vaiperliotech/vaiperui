@@ -192,7 +192,15 @@ export const es: Dictionary = {
     docs: {
         sidebarAria: "Documentación",
         components: "componentes",
-        groups: { forms: "formularios" },
+        groups: {
+            forms: "formularios",
+            dataDisplay: "visualización de datos",
+            feedback: "feedback",
+            navigation: "navegación",
+            overlays: "superposiciones",
+            layout: "diseño",
+            media: "multimedia",
+        },
         paginationAria: "Navegación entre guías",
         previous: "anterior",
         next: "siguiente",
@@ -228,7 +236,7 @@ export const es: Dictionary = {
             },
             components: {
                 title: "Componentes",
-                body: "La referencia de <c>Button</c>, <c>Input</c> y <c>Select</c> está en la barra lateral. Cada página trae ejemplos en vivo, el código y la tabla de props.",
+                body: "La referencia de todos los componentes está en la barra lateral. Cada página trae ejemplos en vivo, el código y la tabla de props.",
             },
         },
         installation: {

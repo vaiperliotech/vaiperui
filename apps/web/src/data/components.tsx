@@ -3,6 +3,14 @@ import type { ReactNode } from "react";
 import { Button, Input, Select } from "vaiperui";
 
 import type { Locale } from "@/i18n/config";
+import { getDataDisplayComponents } from "./dataDisplayComponents";
+import { getDateComponents } from "./dateComponents";
+import { getFeedbackComponents } from "./feedbackComponents";
+import { getFormComponents } from "./formComponents";
+import { getLayoutComponents } from "./layoutComponents";
+import { getMediaComponents } from "./mediaComponents";
+import { getNavigationComponents } from "./navigationComponents";
+import { getOverlaysComponents } from "./overlaysComponents";
 import { makeT, samples, selectLabels } from "./samples";
 
 export type PropRow = {
@@ -22,7 +30,52 @@ export type ComponentEntry = {
     props: PropRow[];
 };
 
-export const COMPONENT_SLUGS = ["button", "input", "select"] as const;
+export const COMPONENT_SLUGS = [
+    "button",
+    "input",
+    "select",
+    "textarea",
+    "checkbox",
+    "radio",
+    "switch",
+    "slider",
+    "upload",
+    "calendar",
+    "date-picker",
+    "date-range-picker",
+    "time-picker",
+    "date-time-picker",
+    "avatar",
+    "badge",
+    "tag",
+    "card",
+    "list",
+    "table",
+    "accordion",
+    "alert",
+    "banner",
+    "toast",
+    "skeleton",
+    "tabs",
+    "segmented-control",
+    "breadcrumb",
+    "pagination",
+    "stepper",
+    "modal",
+    "drawer",
+    "popover",
+    "menu",
+    "tooltip",
+    "container",
+    "grid",
+    "stack",
+    "divider",
+    "audio-player",
+    "video-player",
+    "gallery",
+    "lightbox",
+    "carousel",
+] as const;
 
 export function getComponents(locale: Locale): ComponentEntry[] {
     const t = makeT(locale);
@@ -642,6 +695,14 @@ ${countriesCode}
                 },
             ],
         },
+        ...getFormComponents(locale),
+        ...getDateComponents(locale),
+        ...getDataDisplayComponents(locale),
+        ...getFeedbackComponents(locale),
+        ...getNavigationComponents(locale),
+        ...getOverlaysComponents(locale),
+        ...getLayoutComponents(locale),
+        ...getMediaComponents(locale),
     ];
 }
 

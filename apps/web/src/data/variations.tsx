@@ -3,6 +3,14 @@ import type { ReactNode } from "react";
 import { Button, Input, Select } from "vaiperui";
 import { SelectAsyncDemo } from "@/components/SelectAsyncDemo";
 import type { Locale } from "@/i18n/config";
+import { getDataDisplayVariations } from "./dataDisplayComponents";
+import { getDateVariations } from "./dateComponents";
+import { getFeedbackVariations } from "./feedbackComponents";
+import { getFormVariations } from "./formComponents";
+import { getLayoutVariations } from "./layoutComponents";
+import { getMediaVariations } from "./mediaComponents";
+import { getNavigationVariations } from "./navigationComponents";
+import { getOverlaysVariations } from "./overlaysComponents";
 import { makeT, samples, selectLabels } from "./samples";
 
 export type VariationItem = {
@@ -104,6 +112,14 @@ export function getVariations(locale: Locale): Record<string, VariationGroup[]> 
     );
 
     return {
+        ...getFormVariations(locale),
+        ...getDateVariations(locale),
+        ...getDataDisplayVariations(locale),
+        ...getFeedbackVariations(locale),
+        ...getNavigationVariations(locale),
+        ...getOverlaysVariations(locale),
+        ...getLayoutVariations(locale),
+        ...getMediaVariations(locale),
         button: [
             {
                 title: colorsTitle,
@@ -341,7 +357,7 @@ export function getVariations(locale: Locale): Record<string, VariationGroup[]> 
                             <Input
                                 mask="custom"
                                 maskRegex={/[0-9a-f]/i}
-                                maskFormat={(v) => (v ? "#" + v.slice(0, 6) : "")}
+                                maskFormat={(v) => (v ? `#${v.slice(0, 6)}` : "")}
                                 placeholder="#ff6600"
                                 label="custom (hex color)"
                             />
