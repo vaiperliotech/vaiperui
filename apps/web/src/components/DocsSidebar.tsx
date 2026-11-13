@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { COMPONENT_NAMES, GUIDE_PATHS } from "@/data/guides";
+import { COMPONENT_GROUPS, COMPONENT_NAMES, GUIDE_PATHS } from "@/data/guides";
 import { type Locale, localePath, stripLocale } from "@/i18n/config";
 
 export type SidebarLabels = {
     aria: string;
     components: string;
+    groups: Record<(typeof COMPONENT_GROUPS)[number]["key"], string>;
     guides: Record<(typeof GUIDE_PATHS)[number]["key"], string>;
 };
 
@@ -42,22 +43,43 @@ export function DocsSidebar({ locale, labels }: { locale: Locale; labels: Sideba
             </ul>
 
             <p className="mt-8 mb-3 font-mono text-xs text-ink-faint">{labels.components}</p>
-            <ul className="flex flex-col gap-0.5 border-l border-line">
-                {Object.entries(COMPONENT_NAMES).map(([slug, name]) => {
-                    const isActive = pathname === `/docs/${slug}`;
-                    return (
-                        <li key={slug}>
-                            <Link
-                                href={localePath(locale, `/docs/${slug}`)}
-                                aria-current={isActive ? "page" : undefined}
-                                className={linkClass(isActive)}
-                            >
-                                {name}
-                            </Link>
-                        </li>
-                    );
-                })}
-            </ul>
+            {COMPONENT_GROUPS.map((group) => (
+                <details key={group.key} open className="group mt-5">
+                    <summary className="mb-2 flex cursor-pointer list-none items-center gap-1.5 font-mono text-xs text-ink-faint/70 transition-colors hover:text-ink [&::-webkit-details-marker]:hidden">
+                        <svg
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            aria-hidden="true"
+                            className="h-3 w-3 transition-transform group-open:rotate-90"
+                        >
+                            <path
+                                d="M6 3.5 10.5 8 6 12.5"
+                                stroke="currentColor"
+                                strokeWidth={1.75}
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                        </svg>
+                        {labels.groups[group.key]}
+                    </summary>
+                    <ul className="flex flex-col gap-0.5 border-l border-line">
+                        {group.slugs.map((slug) => {
+                            const isActive = pathname === `/docs/${slug}`;
+                            return (
+                                <li key={slug}>
+                                    <Link
+                                        href={localePath(locale, `/docs/${slug}`)}
+                                        aria-current={isActive ? "page" : undefined}
+                                        className={linkClass(isActive)}
+                                    >
+                                        {COMPONENT_NAMES[slug]}
+                                    </Link>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </details>
+            ))}
         </nav>
     );
 }

@@ -185,6 +185,7 @@ export const en = {
     docs: {
         sidebarAria: "Documentation",
         components: "components",
+        groups: { forms: "forms" },
         paginationAria: "Guide navigation",
         previous: "previous",
         next: "next",

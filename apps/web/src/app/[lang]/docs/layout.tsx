@@ -26,6 +26,7 @@ export default async function DocsLayout({
                     labels={{
                         aria: docs.sidebarAria,
                         components: docs.components,
+                        groups: docs.groups,
                         guides: docs.guides,
                     }}
                 />

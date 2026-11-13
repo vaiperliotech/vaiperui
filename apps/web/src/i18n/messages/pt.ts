@@ -192,6 +192,7 @@ export const pt: Dictionary = {
     docs: {
         sidebarAria: "Documentação",
         components: "componentes",
+        groups: { forms: "formulários" },
         paginationAria: "Navegação entre guias",
         previous: "anterior",
         next: "próximo",
