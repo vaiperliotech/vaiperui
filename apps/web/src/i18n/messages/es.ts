@@ -208,6 +208,7 @@ export const es: Dictionary = {
             intro: "Introducción",
             installation: "Instalación",
             gettingStarted: "Primeros pasos",
+            ai: "Usar con IA",
         },
         onThisPage: "En esta página",
         howToUse: "Cómo usar",
@@ -307,6 +308,69 @@ export function Guardar() {
                 title: "A dónde ir ahora",
                 callout: "siguiente paso",
                 body: "Esta guía cubrió lo esencial con <c>Button</c> e <c>Input</c>, pero la librería no se detiene ahí. Consulta la referencia completa de <link:button>Button</link>, <link:input>Input</link> o <link:select>Select</link>.",
+            },
+        },
+        ai: {
+            crumb: "docs / usar con ia",
+            description:
+                "Haz que tu agente de IA use vaiperui correctamente: un plugin de Claude Code, un servidor MCP alojado y una Agent Skill, todo generado a partir de estos docs.",
+            what: {
+                title: "Qué recibes",
+                body: "Tres piezas, generadas de los mismos datos de este sitio, así que nunca lo contradicen. La <c>skill</c> enseña las convenciones de antemano (las props compartidas, cómo funciona el valor de cada componente, qué componente elegir) y trae un archivo de referencia por componente. El <c>servidor MCP</c> responde en vivo: busca en los docs y lee las props, los ejemplos y las notas de accesibilidad de cualquier componente. El <c>plugin</c> instala ambos de una vez en Claude Code.",
+            },
+            plugin: {
+                title: "Plugin de Claude Code (recomendado)",
+                body: "Añade este repositorio como marketplace e instala el plugin. Instala la skill y conecta el servidor MCP:",
+                after: "La skill se carga sola cuando trabajas con <c>vaiperui</c>; también puedes llamarla con <c>/vaiperui:vaiperui</c>. Si no aparece de inmediato, ejecuta <c>/reload-plugins</c>.",
+            },
+            mcp: {
+                title: "Servidor MCP",
+                body: "El servidor está alojado en este sitio, así que nada corre en tu máquina: es público, de solo lectura y no necesita cuenta. Añádelo a Claude Code con:",
+                clients:
+                    "Otros clientes usan la misma URL. Cursor y VS Code quedan así; en cualquier otro cliente, añade un servidor MCP remoto (HTTP) con la URL <c>{url}</c> en sus ajustes de MCP. Revisa la documentación de tu cliente, porque los nombres de archivo cambian entre versiones.",
+                browser: "Abrir <c>{url}</c> en el navegador también muestra estas instrucciones.",
+            },
+            tools: {
+                title: "Qué responde el servidor",
+                body: "Cuatro herramientas de solo lectura. Cada una acepta un <c>locale</c> opcional (<c>en</c>, <c>pt</c> o <c>es</c>):",
+                items: [
+                    {
+                        name: "list_components",
+                        text: "Todos los componentes con una línea de descripción, por grupo.",
+                    },
+                    {
+                        name: "search_docs",
+                        text: "Encuentra el componente para una necesidad (dropdown, scroll infinito en un select, máscara de teléfono). Busca en componentes, props, ejemplos, notas de accesibilidad y guías.",
+                    },
+                    {
+                        name: "get_component",
+                        text: "La referencia completa de un componente: import, uso, cada prop con valores y valor por defecto, accesibilidad y, bajo petición, todos los ejemplos. El nombre es flexible: Button, DatePicker, date-picker.",
+                    },
+                    {
+                        name: "get_setup",
+                        text: "Comando de instalación, imports de CSS, modo oscuro y tema.",
+                    },
+                ],
+                resources:
+                    "Cada componente también es un recurso (<c>vaiperui://component/slug</c>) para clientes que adjuntan documentos como contexto.",
+            },
+            skill: {
+                title: "Solo la skill",
+                body: "Sin el plugin, copia la skill que viene dentro del paquete a tu proyecto, o a <c>~/.claude/skills</c> para usarla en todos los proyectos:",
+                after: "Funciona con cualquier agente que soporte Agent Skills. En los demás, apunta al agente hacia <c>SKILL.md</c> y los archivos de <c>references/</c>: son Markdown simple.",
+            },
+            prompts: {
+                title: "Pruébalo",
+                body: "Pide pantallas enteras: el agente consulta cada componente en lugar de adivinar sus props.",
+                items: [
+                    "Crea un formulario de reserva con vaiperui: teléfono con máscara, select de país con búsqueda, un rango de fechas con atajos y un toast de éxito.",
+                    "Añade una tabla de usuarios con avatar, badge de estado, un menú de acciones por fila, un modal de confirmación de borrado y paginación.",
+                    "Haz que el select cargue usuarios de mi API, con scroll infinito y búsqueda en el servidor.",
+                ],
+            },
+            trust: {
+                title: "Cómo se mantiene correcto",
+                body: "La skill, sus referencias y el servidor se generan de los mismos datos de estas páginas. Las pruebas comprueban que cada prop que declara un componente está documentada, que cada ejemplo importa exports reales, que las recetas de la skill compilan y que el endpoint habla el protocolo. Cuando los docs cambian, el servidor cambia con el siguiente despliegue.",
             },
         },
     },
